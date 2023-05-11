@@ -54,8 +54,10 @@ class RecObj:
         self.hobj.draw()
         self.img.draw()
 
-    def changeImg(self, n_img):
-        self.img.image = NORBd.imghandler(n_img)
+    def changeImg(self, n_img, gaussian=0, saltpepper=0, poisson=0, speckle=0, blur=0,
+                   lowcontrast=0, bars=0, vignette=0, tearing=0):
+        self.img.image = NORBd.imghandler(n_img, gaussian, saltpepper, poisson, speckle, blur,
+                   lowcontrast, bars, vignette, tearing)
         # if self.hobj.opacity != 0.0:
         #    self.hobj.opacity = 0.0
 

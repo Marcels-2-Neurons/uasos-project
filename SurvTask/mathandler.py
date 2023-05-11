@@ -34,13 +34,13 @@ class NORB:
             imgHandler = imt.specklenoise(imgHandler, speckle)
         elif blur != 0:  # Default 0.4
             imgHandler = imt.blur(imgHandler, blur)
-        elif lowcontrast != 0: # Default 1
+        elif lowcontrast != 0: # Default 1 ON/OFF
             imgHandler = imt.lowcontrast(imgHandler, lowcontrast)
         elif bars != 0: # Default 0.85
             imgHandler = imt.bars(imgHandler, bars)
-        elif vignette != 0:  # Default 1
+        elif vignette != 0:  # Default 1 ON/OFF
             imgHandler = imt.vignette(imgHandler, vignette)
-        elif tearing != 0:  # Default 1
+        elif tearing != 0:  # Default 1 ON/OFF
             imgHandler = imt.tearing(imgHandler)
 
         imgHandler = np.flipud((imgHandler / 255)*2 - 1.0)  # Image Matrix Normalization
