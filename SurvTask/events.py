@@ -3,6 +3,8 @@
 # Imported in Main as library
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
+import time
+from random import *
 
 global win
 # global sprites
@@ -17,14 +19,13 @@ saveLog: list = [0 for i in range(9)]
 from psychopy import visual, core, event
 import stimuli as stim
 import settings as s
-from pyglet.window import key
 
 
 class Window(visual.Window):
     # Initialization of the class
     def __init__(self):
         from settings import wsize
-        super(Window, self).__init__(size=wsize, fullscr=False, color=(-1, -1, -1))
+        super(Window, self).__init__(size=wsize, fullscr=False, color=(-1, -1, -1), allowGUI=True)
 
         self.alive = 1
 
@@ -44,6 +45,9 @@ class Window(visual.Window):
     def run(self):
         from stimuli import Rects
         stim.drw_matrix()
+        start_time = time.time()
+        elapsed_time = 0  # seconds
+        duration = 2  # seconds
         while self.alive:
             # Get key event
             keys = event.getKeys()
@@ -78,11 +82,19 @@ class Window(visual.Window):
                     Rects[2].highlight()
                 elif symbol == 'escape':
                     self.close()
+                    core.quit()
                 else:
                     pass
+            # Random Change of the image: DEMO Test
+            time.sleep(1/60) # 60 Hz refresh
+            # Time WatchDog for the refresh of the image: DEMO
+            if elapsed_time >= duration:
+                [Rects[i].changeImg(randint(1, 29160)) for i in range(0, 9)]
+                start_time = time.time()
+            else: pass
 
+            elapsed_time = time.time() - start_time
             self.render()
-
 
 
 win = Window()

@@ -6,9 +6,9 @@
 
 from typing import Tuple
 from psychopy import visual, core, event
-
+from mathandler import NORBd
 from settings import n_num, m_num
-
+from random import *
 
 class Colors:
     red: Tuple[int, int, int] = [255, 0, 0]
@@ -19,16 +19,15 @@ class Colors:
 
 # in PsychoPy, x,y,width and height are defined in % of screen width/height
 class RecObj:
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, n_img, width, height):
         from events import win
         self.hobj = visual.Rect(win, pos=(x, y),
                                 size=(width, height),
                                 fillColor=Colors.blue,
                                 opacity=0.0,
                                 colorSpace='rgb255')
-        self.img = visual.ImageStim(win, image='.\lenna.png',
-                                    pos=(x, y),
-                                    size=(width*0.95, height*0.95))
+        self.img = visual.ImageStim(win, image=NORBd.imghandler(n_img), #'.\lenna.png',
+                                    pos=(x, y), size=(width*0.95, height*0.95), interpolate=False)
 
     def show(self):
         self.hobj.visible = True
@@ -41,19 +40,24 @@ class RecObj:
 
     def correct(self):
         # update hobj color to green
-        self.hobj.visible = False
+        self.hobj.opacity = 0.0
         self.hobj.color = Colors.green
-        self.hobj.visible = True
+        self.hobj.opacity = 1.0
 
     def wrong(self):
         # update hobj color to red
-        self.hobj.visible = False
+        self.hobj.opacity = 0.0
         self.hobj.color = Colors.red
-        self.hobj.visible = True
+        self.hobj.opacity = 1.0
 
     def draw(self):
         self.hobj.draw()
         self.img.draw()
+
+    def changeImg(self, n_img):
+        self.img.image = NORBd.imghandler(n_img)
+        # if self.hobj.opacity != 0.0:
+        #    self.hobj.opacity = 0.0
 
 
 global Rects
@@ -84,5 +88,5 @@ def drw_matrix(n_num=n_num, m_num=m_num):
 
     # Now I should add defined number of rectangles and draw with the Window Class
     for i in range(0, n_num * m_num):
-        Rects[i] = RecObj(xr[i], yr[i], w_rect, h_rect)
+        Rects[i] = RecObj(xr[i], yr[i],randint(1, 29160),w_rect, h_rect)
         Rects[i].draw()
