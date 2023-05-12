@@ -34,8 +34,8 @@ def saltpeppernoise(imghandler, perc=0.0):
     pepper_coords = [np.random.randint(0, i - 1, int(num_pepper)) for i in imghandler.shape]
     #Change of Pixel Color in the imghandler
     outImg = imghandler.copy()
-    outImg[salt_coords] = 255
-    outImg[pepper_coords] = 0
+    outImg[tuple(salt_coords)] = 255
+    outImg[tuple(pepper_coords)] = 0
     return outImg
 
 

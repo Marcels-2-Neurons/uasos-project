@@ -25,9 +25,10 @@ import settings as s
 class Window(visual.Window):
     # Initialization of the class
     def __init__(self):
-        from settings import wsize
-        super(Window, self).__init__(size=wsize, fullscr=False, color=(-1, -1, -1), allowGUI=True)
-
+        if len(s.mon) == 2:
+            super(Window, self).__init__(size=s.wsize[1], screen=1, fullscr=s.Fullscreen, color=(-1, -1, -1), allowGUI=True)
+        else:
+            super(Window, self).__init__(size=s.wsize[0], screen=0, fullscr=s.Fullscreen, color=(-1, -1, -1), allowGUI=True)
         self.alive = 1
 
     # Drawing of the stimuli
@@ -45,14 +46,24 @@ class Window(visual.Window):
 
     def run(self):
         from stimuli import Rects
+        changed = False
+
         stim.drw_matrix()
         # For DEMO PURPOSE ONLY
         filters = ['Gaussian','SaltAndPepper','Poisson','Speckle','Blur','Tearing','None']
         start_time = time.time()
         elapsed_time = 0  # seconds
         duration = 2  # seconds
+        clock = core.Clock() # for analysis of the image change
+        watchdog = core.Clock()
+        fps = 1/60  # Fixed at 60 Hz
         while self.alive:
+            #Start Watchdog for reset the frame time
+            watchdog.reset()
             # Get key event
+            if changed:
+                duration = 1 + random()
+                changed = False
             keys = event.getKeys()
 
             for symbol in keys:
@@ -89,30 +100,37 @@ class Window(visual.Window):
                 else:
                     pass
             # Random Change of the image: DEMO Test
-            time.sleep(1/60) # 60 Hz refresh
+            r_time = fps-watchdog.getTime()
+            if r_time > 0:
+                core.wait(r_time)
+            # time.sleep(1/30) # 30 Hz refresh (Putting the actual refresh of the monitor is CRITICAL)
             # Time WatchDog for the refresh of the image: DEMO
             if elapsed_time >= duration:
-                i = randint(0,9)
+                i = randint(0,8)
                 s_filt = choice(filters)
                 if s_filt == 'None':
-                   Rects[i].changeImg(randint(1, 29160))
+                   Rects[i].changeImg(randint(0, 29159))
                 elif s_filt == 'Gaussian':
-                   Rects[i].changeImg(randint(1, 29160), gaussian=0.5)
+                   Rects[i].changeImg(randint(0, 29159), gaussian=0.5)
                 elif s_filt == 'SaltAndPepper':
-                   Rects[i].changeImg(randint(1, 29160), saltpepper=0.2)
+                   Rects[i].changeImg(randint(0, 29159), saltpepper=0.2)
                 elif s_filt == 'Poisson':
-                   Rects[i].changeImg(randint(1, 29160), poisson=1)
+                   Rects[i].changeImg(randint(0, 29159), poisson=1)
                 elif s_filt == 'Speckle':
-                   Rects[i].changeImg(randint(1, 29160), speckle=0.1)
+                   Rects[i].changeImg(randint(0, 29159), speckle=0.1)
                 elif s_filt == 'Blur':
-                   Rects[i].changeImg(randint(1, 29160), blur=0.4)
+                   Rects[i].changeImg(randint(0, 29159), blur=0.4)
                 elif s_filt == 'Tearing':
-                   Rects[i].changeImg(randint(1, 29160), tearing=1)
+                   Rects[i].changeImg(randint(0, 29159), tearing=1)
                    # Removed LowContrast,Bars and Vignette for compatibility issue with NORB DB
-                start_time = time.time()
-            else: pass
+                changed = True
+                print('Image changed in ', "%.3f" % (elapsed_time),' sec')
+                clock.reset()  # to reset the clock
+            else:
+                pass
 
-            elapsed_time = time.time() - start_time
+            elapsed_time = clock.getTime()
+
             self.render()
 
 
