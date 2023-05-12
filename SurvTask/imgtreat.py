@@ -103,7 +103,7 @@ def vignette(imghandler, perc=0.0):
     kernel_x = cv.getGaussianKernel(int(cols), 25)
     kernel_y = cv.getGaussianKernel(int(rows), 25)
     kernel = kernel_y * kernel_x.T
-    mask = 255 * ((kernel / np.linalg.norm(kernel))*perc)
+    mask = 255 * (kernel / np.linalg.norm(kernel))
     # Applying Mask
     outImg = imghandler*mask
     return outImg

@@ -13,6 +13,7 @@ from random import *
 class Colors:
     red: Tuple[int, int, int] = [255, 0, 0]
     green: Tuple[int, int, int] = [0, 255, 0]
+    black: Tuple[int, int, int] = [0, 0, 0]
     blue: Tuple[int, int, int] = [51, 153, 255]
     white: Tuple[int, int, int] = [255, 255, 255]
 
@@ -23,9 +24,10 @@ class RecObj:
         from events import win
         self.hobj = visual.Rect(win, pos=(x, y),
                                 size=(width, height),
-                                fillColor=Colors.blue,
+                                fillColor=Colors.white,
                                 opacity=0.0,
                                 colorSpace='rgb255')
+
         self.img = visual.ImageStim(win, image=NORBd.imghandler(n_img), #'.\lenna.png',
                                     pos=(x, y), size=(width*0.95, height*0.95), interpolate=False)
 
@@ -54,10 +56,8 @@ class RecObj:
         self.hobj.draw()
         self.img.draw()
 
-    def changeImg(self, n_img, gaussian=0, saltpepper=0, poisson=0, speckle=0, blur=0,
-                   lowcontrast=0, bars=0, vignette=0, tearing=0):
-        self.img.image = NORBd.imghandler(n_img, gaussian, saltpepper, poisson, speckle, blur,
-                   lowcontrast, bars, vignette, tearing)
+    def changeImg(self, n_img, gaussian=0, saltpepper=0, poisson=0, speckle=0, blur=0, tearing=0):
+        self.img.image = NORBd.imghandler(n_img, gaussian, saltpepper, poisson, speckle, blur, tearing)
         # if self.hobj.opacity != 0.0:
         #    self.hobj.opacity = 0.0
 

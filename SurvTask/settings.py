@@ -16,7 +16,7 @@ scrn = 0 # 0 to use main screen, 1 to use external screen
 global mon
 global wsize
 global ratio
-wsize = (800,600) # (widthPix, heightPix)
+wsize = (1920,1080) # (widthPix, heightPix)
 ratio = wsize[0]/wsize[1]
 mon = monitors.Monitor(monitorname)
 mon.setSizePix((widthPix, heightPix))

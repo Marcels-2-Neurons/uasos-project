@@ -47,7 +47,7 @@ class Window(visual.Window):
         from stimuli import Rects
         stim.drw_matrix()
         # For DEMO PURPOSE ONLY
-        filters = ['Gaussian','SaltAndPepper','Poisson','Speckle','Blur','LowContrast','Bars','Vignette','Tearing','None']
+        filters = ['Gaussian','SaltAndPepper','Poisson','Speckle','Blur','Tearing','None']
         start_time = time.time()
         elapsed_time = 0  # seconds
         duration = 2  # seconds
@@ -92,29 +92,23 @@ class Window(visual.Window):
             time.sleep(1/60) # 60 Hz refresh
             # Time WatchDog for the refresh of the image: DEMO
             if elapsed_time >= duration:
-                for i in range(0, 9):
-                    s_filt = choice(filters)
-                    if s_filt == 'None':
-                        Rects[i].changeImg(randint(1, 29160))
-                    elif s_filt == 'Gaussian':
-                        Rects[i].changeImg(randint(1, 29160), gaussian=0.5)
-                    elif s_filt == 'SaltAndPepper':
-                        Rects[i].changeImg(randint(1, 29160), saltpepper=0.2)
-                    elif s_filt == 'Poisson':
-                        Rects[i].changeImg(randint(1, 29160), poisson=1)
-                    elif s_filt == 'Speckle':
-                        Rects[i].changeImg(randint(1, 29160), speckle=0.1)
-                    elif s_filt == 'Blur':
-                        Rects[i].changeImg(randint(1, 29160), blur=0.4)
-                    elif s_filt == 'LowContrast':
-                        Rects[i].changeImg(randint(1, 29160), lowcontrast=1)
-                    elif s_filt == 'Bars':
-                        Rects[i].changeImg(randint(1, 29160), bars=0.6)
-                    elif s_filt == 'Vignette':
-                        Rects[i].changeImg(randint(1, 29160), vignette=1)
-                    elif s_filt == 'Tearing':
-                        Rects[i].changeImg(randint(1, 29160), tearing=1)
-
+                i = randint(0,9)
+                s_filt = choice(filters)
+                if s_filt == 'None':
+                   Rects[i].changeImg(randint(1, 29160))
+                elif s_filt == 'Gaussian':
+                   Rects[i].changeImg(randint(1, 29160), gaussian=0.5)
+                elif s_filt == 'SaltAndPepper':
+                   Rects[i].changeImg(randint(1, 29160), saltpepper=0.2)
+                elif s_filt == 'Poisson':
+                   Rects[i].changeImg(randint(1, 29160), poisson=1)
+                elif s_filt == 'Speckle':
+                   Rects[i].changeImg(randint(1, 29160), speckle=0.1)
+                elif s_filt == 'Blur':
+                   Rects[i].changeImg(randint(1, 29160), blur=0.4)
+                elif s_filt == 'Tearing':
+                   Rects[i].changeImg(randint(1, 29160), tearing=1)
+                   # Removed LowContrast,Bars and Vignette for compatibility issue with NORB DB
                 start_time = time.time()
             else: pass
 
