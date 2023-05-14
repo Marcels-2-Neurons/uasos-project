@@ -58,9 +58,9 @@ class RecObj:
         self.img.draw()
 
     def changeImg(self, n_img, rotate=0, gaussian=0, saltpepper=0, poisson=0, speckle=0, blur=0, tearing=0, mpeg=0):
-        self.img.image = NORBd.imghandler(n_img, gaussian, saltpepper, poisson, speckle, blur, tearing, mpeg)
         if rotate != 0:
             self.img.image = img.rotate(self.img.image, rotate)
+        self.img.image = NORBd.imghandler(n_img, gaussian, saltpepper, poisson, speckle, blur, tearing, mpeg)
         # if self.hobj.opacity != 0.0:
         #    self.hobj.opacity = 0.0
 
@@ -93,5 +93,5 @@ def drw_matrix(n_num=n_num, m_num=m_num):
 
     # Now I should add defined number of rectangles and draw with the Window Class
     for i in range(0, n_num * m_num):
-        Rects[i] = RecObj(xr[i], yr[i],randint(1, 29160),w_rect, h_rect)
+        Rects[i] = RecObj(xr[i], yr[i],randint(0, 911),w_rect, h_rect)
         Rects[i].draw()

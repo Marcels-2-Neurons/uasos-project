@@ -113,21 +113,21 @@ class Window(visual.Window):
                 s_filt = choice(filters)
                 r_case = randint(0, 3) # 0 - Original / 1: 90deg CClock / 2: 180deg CClock / 3: 270deg CClock
                 if s_filt == 'None':
-                   Rects[i].changeImg(randint(0, 29159))
+                   Rects[i].changeImg(randint(0, 911))
                 elif s_filt == 'Gaussian':
-                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, gaussian=0.5)
+                   Rects[i].changeImg(randint(0, 911), rotate=r_case, gaussian=0.5)
                 elif s_filt == 'SaltAndPepper':
-                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, saltpepper=0.2)
+                   Rects[i].changeImg(randint(0, 911), rotate=r_case, saltpepper=0.2)
                 elif s_filt == 'Poisson':
-                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, poisson=1)
+                   Rects[i].changeImg(randint(0, 911), rotate=r_case, poisson=1)
                 elif s_filt == 'Speckle':
-                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, speckle=0.1)
+                   Rects[i].changeImg(randint(0, 911), rotate=r_case, speckle=0.1)
                 elif s_filt == 'Blur':
-                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, blur=0.4)
+                   Rects[i].changeImg(randint(0, 911), rotate=r_case, blur=0.4)
                 elif s_filt == 'Tearing':
-                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, tearing=1)
+                   Rects[i].changeImg(randint(0, 911), rotate=r_case, tearing=1)
                 elif s_filt == 'MPEG':
-                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, mpeg=1)
+                   Rects[i].changeImg(randint(0, 911), rotate=r_case, mpeg=1)
                    # Removed LowContrast,Bars and Vignette for compatibility issue with NORB DB
                 start_time = time.time()
                 changed = True

@@ -15,14 +15,14 @@ class NORB:
     def __init__(self):
         print('Loading Mat Libs...')
         s_time = time.time()
-        self.imgs = mat.loadmat('.\imgs\mat_im_10.mat')
+        self.imgs = io.loadmat('.\imgs\mat_im_10_cut.mat')
         self.keys = list(self.imgs.keys())
-        self.cat = io.loadmat('.\imgs\mat_cat_10.mat')
+        self.cat = io.loadmat('.\imgs\mat_cat_10_cut.mat')
         print('Loading Done in', "%.2f" %(time.time() - s_time),' sec')
 
     def imghandler(self, no_img=1, gaussian=0, saltpepper=0, poisson=0, speckle=0, blur=0, tearing=0, mpeg=0):
         # Retrieve img_handler by passing all the parameters
-        imgHandler = self.imgs[self.keys[0]][no_img].astype(np.uint8)
+        imgHandler = self.imgs[self.keys[3]][0, no_img].astype(np.uint8) # the name of the variable now is in the 4th position (3)
         # Filter Application
         if gaussian != 0: # Default: 0.5
             imgHandler = imt.gaussiannoise(imgHandler, gaussian)
