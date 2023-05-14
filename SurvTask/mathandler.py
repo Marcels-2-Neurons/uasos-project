@@ -20,7 +20,7 @@ class NORB:
         self.cat = io.loadmat('.\imgs\mat_cat_10.mat')
         print('Loading Done in', "%.2f" %(time.time() - s_time),' sec')
 
-    def imghandler(self, no_img=1, gaussian=0, saltpepper=0, poisson=0, speckle=0, blur=0, tearing=0):
+    def imghandler(self, no_img=1, gaussian=0, saltpepper=0, poisson=0, speckle=0, blur=0, tearing=0, mpeg=0):
         # Retrieve img_handler by passing all the parameters
         imgHandler = self.imgs[self.keys[0]][no_img].astype(np.uint8)
         # Filter Application
@@ -36,6 +36,8 @@ class NORB:
             imgHandler = imt.blur(imgHandler, blur)
         elif tearing != 0:  # Default 1 ON/OFF
             imgHandler = imt.tearing(imgHandler)
+        elif mpeg != 0:  # Default 1 ON/OFF
+            imgHandler = imt.mpeg_pixel(imgHandler)
 
         imgHandler = np.flipud((imgHandler / 255)*2 - 1.0)  # Image Matrix Normalization
         return imgHandler

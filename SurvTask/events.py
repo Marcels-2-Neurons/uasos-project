@@ -26,9 +26,12 @@ class Window(visual.Window):
     # Initialization of the class
     def __init__(self):
         if len(s.mon) == 2:
-            super(Window, self).__init__(size=s.wsize[1], screen=1, fullscr=s.Fullscreen, color=(-1, -1, -1), allowGUI=True)
+            super(Window, self).__init__(size=s.wsize[1], screen=1, fullscr=s.Fullscreen, color=(-1, -1, -1),
+                                         allowGUI=True)
         else:
-            super(Window, self).__init__(size=s.wsize[0], screen=0, fullscr=s.Fullscreen, color=(-1, -1, -1), allowGUI=True)
+            super(Window, self).__init__(size=s.wsize, screen=0, fullscr=s.Fullscreen, color=(-1, -1, -1),
+                                         allowGUI=True)
+
         self.alive = 1
 
     # Drawing of the stimuli
@@ -50,15 +53,15 @@ class Window(visual.Window):
 
         stim.drw_matrix()
         # For DEMO PURPOSE ONLY
-        filters = ['Gaussian','SaltAndPepper','Poisson','Speckle','Blur','Tearing','None']
+        filters = ['Gaussian', 'SaltAndPepper', 'Poisson', 'Speckle', 'Blur', 'Tearing', 'MPEG', 'None']
         start_time = time.time()
         elapsed_time = 0  # seconds
         duration = 2  # seconds
-        clock = core.Clock() # for analysis of the image change
+        clock = core.Clock()  # for analysis of the image change
         watchdog = core.Clock()
-        fps = 1/60  # Fixed at 60 Hz
+        fps = 1 / 60  # Fixed at 60 Hz
         while self.alive:
-            #Start Watchdog for reset the frame time
+            # Start Watchdog for reset the frame time
             watchdog.reset()
             # Get key event
             if changed:
@@ -100,7 +103,7 @@ class Window(visual.Window):
                 else:
                     pass
             # Random Change of the image: DEMO Test
-            r_time = fps-watchdog.getTime()
+            r_time = fps - watchdog.getTime()
             if r_time > 0:
                 core.wait(r_time)
             # time.sleep(1/30) # 30 Hz refresh (Putting the actual refresh of the monitor is CRITICAL)
@@ -108,29 +111,32 @@ class Window(visual.Window):
             if elapsed_time >= duration:
                 i = randint(0,8)
                 s_filt = choice(filters)
+                r_case = randint(0, 3) # 0 - Original / 1: 90deg CClock / 2: 180deg CClock / 3: 270deg CClock
                 if s_filt == 'None':
                    Rects[i].changeImg(randint(0, 29159))
                 elif s_filt == 'Gaussian':
-                   Rects[i].changeImg(randint(0, 29159), gaussian=0.5)
+                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, gaussian=0.5)
                 elif s_filt == 'SaltAndPepper':
-                   Rects[i].changeImg(randint(0, 29159), saltpepper=0.2)
+                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, saltpepper=0.2)
                 elif s_filt == 'Poisson':
-                   Rects[i].changeImg(randint(0, 29159), poisson=1)
+                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, poisson=1)
                 elif s_filt == 'Speckle':
-                   Rects[i].changeImg(randint(0, 29159), speckle=0.1)
+                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, speckle=0.1)
                 elif s_filt == 'Blur':
-                   Rects[i].changeImg(randint(0, 29159), blur=0.4)
+                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, blur=0.4)
                 elif s_filt == 'Tearing':
-                   Rects[i].changeImg(randint(0, 29159), tearing=1)
+                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, tearing=1)
+                elif s_filt == 'MPEG':
+                   Rects[i].changeImg(randint(0, 29159), rotate=r_case, mpeg=1)
                    # Removed LowContrast,Bars and Vignette for compatibility issue with NORB DB
+                start_time = time.time()
                 changed = True
-                print('Image changed in ', "%.3f" % (elapsed_time),' sec')
+                print('Image changed in ', "%.3f" % (elapsed_time), ' sec')
                 clock.reset()  # to reset the clock
             else:
                 pass
 
             elapsed_time = clock.getTime()
-
             self.render()
 
 

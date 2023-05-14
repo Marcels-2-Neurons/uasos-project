@@ -9,6 +9,7 @@ from psychopy import visual, core, event
 from mathandler import NORBd
 from settings import n_num, m_num
 from random import *
+import imgtreat as img
 
 class Colors:
     red: Tuple[int, int, int] = [255, 0, 0]
@@ -56,8 +57,10 @@ class RecObj:
         self.hobj.draw()
         self.img.draw()
 
-    def changeImg(self, n_img, gaussian=0, saltpepper=0, poisson=0, speckle=0, blur=0, tearing=0):
-        self.img.image = NORBd.imghandler(n_img, gaussian, saltpepper, poisson, speckle, blur, tearing)
+    def changeImg(self, n_img, rotate=0, gaussian=0, saltpepper=0, poisson=0, speckle=0, blur=0, tearing=0, mpeg=0):
+        self.img.image = NORBd.imghandler(n_img, gaussian, saltpepper, poisson, speckle, blur, tearing, mpeg)
+        if rotate != 0:
+            self.img.image = img.rotate(self.img.image, rotate)
         # if self.hobj.opacity != 0.0:
         #    self.hobj.opacity = 0.0
 

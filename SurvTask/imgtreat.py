@@ -97,6 +97,7 @@ def bars(imghandler, perc=0.0):
     outImg = cv.addWeighted(imghandler, 1-intensity, blur_mat, intensity, 0)
     return outImg
 
+
 def vignette(imghandler, perc=0.0):
     # Vignette adding to the imagehandler
     rows, cols = imghandler.shape[:2]
@@ -107,6 +108,7 @@ def vignette(imghandler, perc=0.0):
     # Applying Mask
     outImg = imghandler*mask
     return outImg
+
 
 def tearing(imghandler):
     # Image Tearing effect
@@ -119,7 +121,7 @@ def tearing(imghandler):
     #iterate through tearing lines
     for i in range(num_lines):
         # calculate the y-coord range for the tearing
-        y_start = i* line_height
+        y_start = i * line_height
         y_end = y_start + line_thick
 
         #swap the tearing line with the corresponding section below
@@ -128,4 +130,28 @@ def tearing(imghandler):
         imghandler[y_end:y_end + line_thick, :] = temp
 
     outImg = imghandler
+    return outImg
+
+
+def mpeg_pixel(imagehandler):
+    # MPEG Pixel Shuffle (STILL TO CALIBRATE!)
+    # Define params for the effect
+    rows, cols = imagehandler.shape
+    block_size = 8
+    switch_probability = 0.15
+    outImg = np.copy(imagehandler)
+
+    # Executing the Shuffle of the random pixel
+    for i in range(0, rows-block_size, block_size):
+        for j in range(0, cols-block_size, block_size):
+            if np.random.uniform() < switch_probability:
+                block = np.copy(imagehandler[i:i+block_size, j:j+block_size])
+                k, p = np.random.randint(0, rows-block_size), np.random.randint(0, cols-block_size)
+                outImg[k:k+block_size, p:p+block_size] = block
+
+    return outImg
+
+def rotate(imagehandler, angle_case):
+    for i in range(0, angle_case):
+        outImg = cv.rotate(imagehandler, cv.ROTATE_90_COUNTERCLOCKWISE)
     return outImg
