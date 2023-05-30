@@ -1,0 +1,32 @@
+{
+  "SEARCH": {
+    "en": "SEARCH",
+    "fr": "CHERCHEZ",
+    "it": "CERCA"
+  },
+  "PEOPLE": {
+    "en": "PEOPLE",
+    "fr": "PERSONNES",
+    "it": "PERSONE"
+  },
+  "VEHICLES": {
+    "en": "VEHICLES",
+    "fr": "VEHICULES",
+    "it": "VEICOLI"
+  },
+  "HEADING": {
+    "en": "HEADING",
+    "fr": "CAP",
+    "it": "ROTTA"
+  },
+  "WAYPOINT": {
+    "en": "WAYPOINT",
+    "fr": "WAYPOINT",
+    "it": "WAYPOINT"
+  },
+  "NONE":{
+    "en": "NONE",
+    "fr": "RIEN",
+    "it": "NIENTE"
+  }
+}

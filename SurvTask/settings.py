@@ -32,7 +32,7 @@ if len(mon) == 2:
     ratio = wsize[1][0]/wsize[1][1]
     Fullscreen = True
 else:
-    wsize = (1600,1400) # (widthPix, heightPix)
+    wsize = (1600,1400)  # (widthPix, heightPix)
     ratio = wsize[0]/wsize[1]
     Fullscreen = False
 # mon = monitors.Monitor(monitorname)

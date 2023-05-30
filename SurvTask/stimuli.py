@@ -5,7 +5,7 @@
 ###################################################################
 
 from typing import Tuple
-from psychopy import visual, core, event
+from psychopy import visual  #, core, event
 from mathandler import NORBd
 from settings import n_num, m_num
 from random import *
@@ -21,7 +21,7 @@ class Colors:
 
 # in PsychoPy, x,y,width and height are defined in % of screen width/height
 class RecObj:
-    def __init__(self, x, y, n_img, width, height):
+    def __init__(self, x, y, n_img, width, height, opaque=1.0):
         from events import win
         self.hobj = visual.Rect(win, pos=(x, y),
                                 size=(width, height),
@@ -29,8 +29,8 @@ class RecObj:
                                 opacity=0.0,
                                 colorSpace='rgb255')
 
-        self.img = visual.ImageStim(win, image=NORBd.imghandler(n_img), #'.\lenna.png',
-                                    pos=(x, y), size=(width*0.95, height*0.95), interpolate=False)
+        self.img = visual.ImageStim(win, image=NORBd.imghandler(n_img),
+                                    pos=(x, y), size=(width*0.95, height*0.95), interpolate=False, opacity=opaque)
 
     def show(self):
         self.hobj.visible = True
@@ -61,8 +61,11 @@ class RecObj:
         if rotate != 0:
             self.img.image = img.rotate(self.img.image, rotate)
         self.img.image = NORBd.imghandler(n_img, gaussian, saltpepper, poisson, speckle, blur, tearing, mpeg)
-        # if self.hobj.opacity != 0.0:
-        #    self.hobj.opacity = 0.0
+        self.img.opacity = 1.0  # due to the opacity 0.0 put in the matrix initialization
+        if self.hobj.opacity != 0.0:
+            self.hobj.color = Colors.white
+            self.hobj.opacity = 0.0
+
 
 
 global Rects
@@ -87,11 +90,11 @@ def drw_matrix(n_num=n_num, m_num=m_num):
         for j in range(0, m_num):
             # xr[k] = (-1 + b_space) + (((3 - j) * w_rect) + ((2 - j) * w_space))
             # yr[k] = 1 - ((h_space * (i + 1)) + (h_rect * (i + 1)))
-            xr[k] = (-1 + b_space + w_rect/2) + j * (w_rect + w_space)
+            xr[k] = (-1 + b_space + w_rect/2) + j * (w_rect + w_space) - (w_rect + w_space)  # Last term is used for giving space to flight Director
             yr[k] = (1 - 3*h_space - h_rect/2) - i * (h_rect + h_space)
             k += 1
 
     # Now I should add defined number of rectangles and draw with the Window Class
     for i in range(0, n_num * m_num):
-        Rects[i] = RecObj(xr[i], yr[i],randint(0, 911),w_rect, h_rect)
+        Rects[i] = RecObj(xr[i], yr[i],randint(0, 911),w_rect, h_rect, opaque = 0.0)
         Rects[i].draw()

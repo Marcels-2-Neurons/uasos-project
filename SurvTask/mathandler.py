@@ -45,7 +45,7 @@ class NORB:
 
     def get_cat(self, no_img):
         # retrieve value from mat_cat
-        return self.cat[self.ckeys[3]][no_img].astype(int)
+        return self.cat[self.ckeys[3]][no_img].astype(str)
 
 
 NORBd = NORB()
