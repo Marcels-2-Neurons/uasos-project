@@ -48,12 +48,12 @@ class flightdir:
                                 fillColor=Colors.dgreen,
                                 opacity=1.0,
                                 colorSpace='rgb255')
-        src_str: str = langue.get_string('SEARCH')
-        item_str: str = langue.get_string('NONE')
+        src_str = langue.get_string('SEARCH')
+        item_str = langue.get_string('VEHICLES')
 
         self.text_src = visual.TextStim(win=win, name='text',
                                         text=src_str,
-                                        font='Open Sans',
+                                        font='Arial Unicode MS',
                                         pos=(x, y), height=0.1, wrapWidth=None, ori=0.0,
                                         color=Colors.white, colorSpace='rgb255', bold=True,
                                         languageStyle='LTR',
@@ -61,7 +61,7 @@ class flightdir:
 
         self.text_item = visual.TextStim(win=win, name='text',
                                         text=item_str,
-                                        font='Open Sans',
+                                        font='Arial Unicode MS',
                                         pos=(x, y), height=0.07, wrapWidth=None, ori=0.0,
                                         color=Colors.white, colorSpace='rgb255', bold=True,
                                         languageStyle='LTR',
@@ -84,7 +84,7 @@ class flightdir:
         self.face.size = (w_rect, h_rect)
         # Set up the border
         self.border.pos = ((1-w_rect/2), (1 - 3*h_space - h_rect/2))
-        self.border.size = (w_rect*(1+r_border), h_rect*(1+r_border))
+        self.border.size = (w_rect*(1+r_border), h_rect*(1+r_border*3.5))
         # Set up the screen
         self.screen.pos = (1-(2*w_rect/3-8*w_space), (1 - 9*h_space))
         self.screen.size = (w_rect, h_rect/3)

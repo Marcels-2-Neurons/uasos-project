@@ -18,13 +18,13 @@ class local:
         self.load_translations()
 
     def load_translations(self):
-        with open(self.file_path,'r') as file:
-            self.translations = json.load(file)
+        with open(self.file_path,'rb') as file:
+            self.translations = json.load(file, encoding='utf-8')
 
     def set_language(self,lang):
         self.lang = lang
 
-    def get_string(self,key):
+    def get_string(self, key):
         if key in self.translations and self.lang in self.translations[key]:
             return self.translations[key][self.lang]
         else:

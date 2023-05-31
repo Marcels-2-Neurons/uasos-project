@@ -13,7 +13,7 @@ global script
 class ScriptGen:
     def __init__(self):
         self.exp_time = 2*60*60*1000  # time in ms
-        self.it_time = 625 # average iteration time in ms
+        self.it_time = 3500 # average iteration time in ms (it was 625 ms)
         self.jitter = 375   # jitter time in ms
         self.TIME = []  # time schedule vector 1xSize_exp
         self.SWITCH = []  # Task switch vector 1xSize_exp:
@@ -59,6 +59,7 @@ class ScriptGen:
             self.gen_time()
             self.task_sorting()
             self.generate_imgs()
+            self.final_cor_chk()
         elif self.mode_sel == 'BATCH':
             pass # I will implement it later when we have the CSV
 
@@ -461,7 +462,7 @@ class ScriptGen:
                 if self.TASK[i-1] in [1, 4] and self.SWITCH[i] == 3:  # Checks the External Switch case
                     change +=1
 
-                next: int = self.NAV_to_SRC[change] if change <= len(self.NAV_to_SRC)-1 else 1 # I send to people, it is not so important
+                next: int = self.NAV_to_SRC[change] if change <= len(self.NAV_to_SRC)-1 else self.NAV_to_SRC[len(self.NAV_to_SRC)-1] # I send to people, it is not so important
 
                 self.Max = randint(1, 3)  # Normal selection of random No of changes
                 purge_p = True if len(self.locp) > 4 else False
@@ -622,8 +623,32 @@ class ScriptGen:
         if len(self.IMGS[iter]) == 9: # always update the location vectors if the length is full
             self.locp = [idx for idx,val in enumerate(self.IMGS[iter]) if self.find('1', NORBd.get_cat(val)) == 1]
             self.locv = [idx for idx, val in enumerate(self.IMGS[iter]) if self.find('4', NORBd.get_cat(val)) == 1]
+
     def find(self, char, str):
         return 1 if str.find(char) != -1 else 0
+
+    def final_cor_chk(self):
+        # It overrides only the CORS vectors to guarantee that the targets are completely found
+        for row in range(len(self.IMGS)):
+            if self.TASK[row] in [1,4]:
+                digit_chk = str(self.TASK[row])
+                for pic in range(len(self.IMGS[row])):
+                    if digit_chk in NORBd.get_cat(self.IMGS[row][pic]):
+                        self.CORS[row][pic] = 1
+                    else: self.CORS[row][pic] = 0
+            else:
+                self.CORS[row] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+            if self.count_occurrences(self.CORS[row]) > 4:
+                print('[WARNING] At step ', row, ' the no. of targets are > 4')
+
+
+    def count_occurrences(self, vector):
+        count = 0
+        for element in vector:
+            if element == 1:
+                count += 1
+        return count
 
 
 script = ScriptGen()
