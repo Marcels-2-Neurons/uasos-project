@@ -11,6 +11,10 @@ from settings import n_num, m_num
 from random import *
 import imgtreat as img
 
+# Still to implement:
+# Navigation GUI, NOT the run cycle here!
+# The run cycle should be implemented inside events.py
+
 class Colors:
     red: Tuple[int, int, int] = [255, 0, 0]
     green: Tuple[int, int, int] = [0, 255, 0]
@@ -20,6 +24,7 @@ class Colors:
 
 
 # in PsychoPy, x,y,width and height are defined in % of screen width/height
+
 class RecObj:
     def __init__(self, x, y, n_img, width, height, opaque=1.0):
         from events import win
@@ -38,8 +43,8 @@ class RecObj:
     def highlight(self):
         if self.hobj.opacity == 0.0:
             self.hobj.opacity = 1.0
-        elif self.hobj.opacity != 0.0:
-            self.hobj.opacity = 0.0
+        #elif self.hobj.opacity != 0.0:
+        #    self.hobj.opacity = 0.0
 
     def correct(self):
         # update hobj color to green
@@ -88,8 +93,6 @@ def drw_matrix(n_num=n_num, m_num=m_num):
     # and rising up. With the same number order of the Keyboard Numpad
     for i in range(0, n_num):
         for j in range(0, m_num):
-            # xr[k] = (-1 + b_space) + (((3 - j) * w_rect) + ((2 - j) * w_space))
-            # yr[k] = 1 - ((h_space * (i + 1)) + (h_rect * (i + 1)))
             xr[k] = (-1 + b_space + w_rect/2) + j * (w_rect + w_space) - (w_rect + w_space)  # Last term is used for giving space to flight Director
             yr[k] = (1 - 3*h_space - h_rect/2) - i * (h_rect + h_space)
             k += 1

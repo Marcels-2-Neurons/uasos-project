@@ -10,10 +10,14 @@ from copy import *
 import numpy as np
 global script
 
+# Still to implement:
+# Randomization of the angles/grid sectors cases Heading and Waypoint
+# Batch mode from csv file
+
 class ScriptGen:
     def __init__(self):
         self.exp_time = 2*60*60*1000  # time in ms
-        self.it_time = 3500 # average iteration time in ms (it was 625 ms)
+        self.it_time = 3500  # average iteration time in ms (it was 625 ms)
         self.jitter = 375   # jitter time in ms
         self.TIME = []  # time schedule vector 1xSize_exp
         self.SWITCH = []  # Task switch vector 1xSize_exp:
@@ -540,7 +544,7 @@ class ScriptGen:
                             while not check:  # Recursive loop until target
                                 last_val = self.IMGS[i][idx]
                                 self.IMGS[i][idx] = randint(0, 911)  # random select
-                                next: int = self.NAV_to_SRC[change] if change <= len(self.NAV_to_SRC)-1 else 1 # I send to people, it is not so important
+
                                 done = self.check_correct(iter=i, idx=idx, num=self.IMGS[i][idx], mode=self.TASK[next])
                                 # Change with implementation of sorting of the available cases
                                 if done in [4, 5, 6] and len(self.IMGS[i]) == len(set(self.IMGS[i])):  # Case Non-Targets

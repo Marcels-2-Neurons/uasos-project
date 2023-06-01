@@ -10,6 +10,9 @@ import imgtreat as imt
 from scipy import io
 import time
 
+# Still to implement:
+# A new NORB dataset with balanced no. of images for each case
+
 # Initialize NORB Dataset
 class NORB:
     def __init__(self):

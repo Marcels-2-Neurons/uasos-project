@@ -6,11 +6,13 @@
 
 from typing import Tuple
 from psychopy import visual  #, core, event
-from mathandler import NORBd
 from settings import n_num, m_num
 
 from random import *
 global FDir
+
+# Still to implement:
+# flight director for Navigation Task (we mirror the actual one and change the strings)
 
 
 class Colors:

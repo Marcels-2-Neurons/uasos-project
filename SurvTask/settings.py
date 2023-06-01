@@ -6,6 +6,9 @@
 from psychopy import visual, core, event, monitors
 import screeninfo
 
+# Still to implement:
+# A bit of order in this mess :')
+
 #Data about monitor
 widthPix = 1920 # screen width in px
 heightPix = 1080 # screen height in px
