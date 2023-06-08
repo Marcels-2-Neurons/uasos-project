@@ -1,0 +1,37 @@
+{
+  "SEARCH": {
+    "en": "SEARCH",
+    "fr": "CHERCHEZ",
+    "it": "CERCA"
+  },
+  "PEOPLE": {
+    "en": "PEOPLE",
+    "fr": "PERSONNES",
+    "it": "PERSONE"
+  },
+  "VEHICLES": {
+    "en": "VEHICLES",
+    "fr": "VÉHICULES",
+    "it": "VEICOLI"
+  },
+  "HEADING": {
+    "en": "HEADING",
+    "fr": "CAP",
+    "it": "ROTTA"
+  },
+  "WAYPOINT": {
+    "en": "WAYPOINT",
+    "fr": "WAYPOINT",
+    "it": "WAYPOINT"
+  },
+  "NONE":{
+    "en": "NONE",
+    "fr": "RIEN",
+    "it": "NIENTE"
+  },
+  "HOLD":{
+    "en": "Press <S> to start the experiment",
+    "fr": "Appuyez sur <S> pour commencer l'expérience",
+    "it": "Premi <S> per cominciare l'esperimento"
+  }
+}
