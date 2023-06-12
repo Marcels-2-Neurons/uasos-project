@@ -9,10 +9,13 @@
 import Pyro4 as pyro
 import serpent
 import base64
+import threading
 import psutil
+from utilscsv import *
 from copy import *
-from packet import Packet
+from packet import *
 from scriptgen import script
+
 
 
 @pyro.expose
@@ -21,6 +24,14 @@ class PyroServer:
         # initialize just the values but not start the server on init for now
         self.server_up = False
         self.scr_dir = script
+        self.MlastPacket = Packet()
+        self.SRClastPacket = Packet()
+        self.NAVlastPacket = Packet()
+        self.clock = cClock()
+        self.SRCPackOUT = False
+        self.NAVPackOUT = True  # Init as both False, for now the NAV Packet is faked as arrived
+        self.csv_prt = utilscsv()
+
         while not self.server_up:
             if len(self.scr_dir.TIME) != 0:
                 self.daemon = pyro.Daemon()
@@ -32,20 +43,43 @@ class PyroServer:
                 self.daemon.requestLoop()
 
     @pyro.expose
-    def close(self):
+    def set_USER_info(self, USER_ID):
+        self.csv_prt.USER_ID = USER_ID
+        self.csv_prt.setup_out()
+        return
+
+    @pyro.expose
+    def close(self, phase):
         # self.daemon.shutdown()
+        if phase == 0:  # Close both result files
+            self.csv_prt.close_file(0)
+            self.csv_prt.close_file(1)
+        elif phase == 1:  # Close the last result file remained
+            self.csv_prt.close_file(1)
+
         for proc in psutil.process_iter():
             if proc.name() == 'pyro4-ns.exe':
                 proc.terminate()
                 print('Pyro4 server terminated')
                 return
 
+    @pyro.expose
+    def start_time(self):
+        self.clock.reset_time()
+        return self.clock.get_time()
     # Remember: I'm seeing these function from the Task point of view
+
+    @pyro.expose
+    def get_time(self):
+        return self.clock.get_time()
+
     @pyro.expose
     def read_data(self, it: int):
         # read line from server
         out_pack = Packet()
+        out_pack.INorOUT = 0  # Inbound for the task
         out_pack.iter = it
+
         out_pack.Tot_iters = len(script.TIME)
         out_pack.Time = script.TIME[it]
         out_pack.Switch = script.SWITCH[it]
@@ -56,16 +90,106 @@ class PyroServer:
         out_pack.Fils = deepcopy(script.FILS[it])
         out_pack.Rots = deepcopy(script.ROTS[it])
         out_pack.Corr = deepcopy(script.CORS[it])
-        # To add: NAV data
+        # TODO: add NAV data
 
         return serpent.dumps(out_pack)
 
     @pyro.expose
+    def thread_send(self, in_pack):
+        threading.Thread(target=self.send_data, args=(in_pack,)).start()  # this will generate a separate thread, avoiding stops
+        return
+
     def send_data(self, inbound_pack):
         # send behavioral pack, remember to add the base64 decoding
         wrk_pack = Packet()
-        # Implement thread to write on csv
-        pass  # For now, it's fake
+        dec_inpack = base64.b64decode(inbound_pack['data'])
+        w_pack = serpent.loads(dec_inpack)
+
+        # restructure the packet in the custom class
+        wrk_pack.INorOUT = w_pack['INorOUT']  # Inbound for the task
+        if wrk_pack.INorOUT == 1:
+            self.SRCPackOUT = True  # Packet arrived from SRCTask
+        elif wrk_pack.INorOUT == 2:
+            self.NAVPackOUT = True  # Packet arrived from NAVTask
+
+        wrk_pack.iter = w_pack['iter']
+        wrk_pack.Tot_iters = w_pack['Tot_iters']
+        wrk_pack.Time = w_pack['Time']
+        wrk_pack.Switch = w_pack['Switch']
+        wrk_pack.Task = w_pack['Task']
+
+        wrk_pack.Imgs = deepcopy(w_pack['Imgs'])
+        wrk_pack.Fils = deepcopy(w_pack['Fils'])
+        wrk_pack.Rots = deepcopy(w_pack['Rots'])
+        wrk_pack.Corr = deepcopy(w_pack['Corr'])
+
+        if wrk_pack.INorOUT == 1:
+            wrk_pack.UserType = deepcopy(w_pack['UserType'])
+            wrk_pack.RT = w_pack['RT']
+            wrk_pack.SRCLatency = w_pack['SRCLatency']
+            wrk_pack.Tnum = w_pack['Tnum']
+            wrk_pack.GoodCh = w_pack['GoodCh']
+            wrk_pack.OvCh = w_pack['OvCh']
+            wrk_pack.OvTrue = w_pack['OvTrue']
+            #wrk_pack.ACC = w_pack['ACC']
+        elif wrk_pack.INorOUT == 2:
+            # Missing other NAV params
+            wrk_pack.Tstick = w_pack['Tstick']
+            wrk_pack.NAVLatency = w_pack['NAVLatency']
+
+        if wrk_pack.INorOUT == 1:
+            del self.SRClastPacket
+            self.SRClastPacket = deepcopy(wrk_pack)  # Packet arrived from SRCTask
+        elif wrk_pack.INorOUT == 2:
+            del self.NAVlastPacket
+            self.NAVlastPacket = deepcopy(wrk_pack)  # Packet arrived from NAVTask
+
+        if self.SRCPackOUT and self.NAVPackOUT:
+            self.merge_packs()  # Executing as separate thread
+
+        return
+
+    def merge_packs(self):
+        # Reinit the packet
+        del self.MlastPacket
+        self.MlastPacket = Packet()
+        # Copy of the data
+        self.MlastPacket.iter = self.SRClastPacket.iter
+        self.MlastPacket.Tot_iters = self.SRClastPacket.Tot_iters
+        self.MlastPacket.Time = self.SRClastPacket.Time
+        self.MlastPacket.Switch = self.SRClastPacket.Switch
+        # SRC Params
+        self.MlastPacket.Task = deepcopy(self.SRClastPacket.Task)
+        self.MlastPacket.Imgs = deepcopy(self.SRClastPacket.Imgs)
+        self.MlastPacket.Fils = deepcopy(self.SRClastPacket.Fils)
+        self.MlastPacket.Rots = deepcopy(self.SRClastPacket.Rots)
+        self.MlastPacket.Corr = deepcopy(self.SRClastPacket.Corr)
+        self.MlastPacket.UserType = deepcopy(self.SRClastPacket.UserType)
+        self.MlastPacket.SRCLatency = self.SRClastPacket.SRCLatency
+        self.MlastPacket.RT = self.SRClastPacket.RT
+        self.MlastPacket.Tnum = self.SRClastPacket.Tnum
+        self.MlastPacket.ACC = self.SRClastPacket.ACC
+        self.MlastPacket.GoodCh = self.SRClastPacket.GoodCh
+        self.MlastPacket.OvCh = self.SRClastPacket.OvCh
+        self.MlastPacket.OvTrue = self.SRClastPacket.OvTrue
+        # NAV Params
+        #self.MlastPacket.Tstick = self.NAVlastPacket.Tstick
+        #self.MlastPacket.NAVLatency = self.NAVlastPacket.NAVLatency
+
+        # Overall computations
+        #if self.MlastPacket.Switch == 3:
+        #    self.MlastPacket.TTS = abs(self.SRClastPacket.Tnum-self.NAVlastPacket.Tstick)  # Time to Switch
+
+        # Add routine to write on csv on separate process
+        self.csv_prt.write_line(self.MlastPacket)
+
+        # Reset Flags
+        self.SRCPackOUT = False
+        #self.NAVPackOUT = False
+
+        return
+
+
 
 
 pyro_svr = PyroServer()

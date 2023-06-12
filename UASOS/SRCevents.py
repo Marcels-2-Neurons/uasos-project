@@ -17,13 +17,6 @@ import stimuli as stim
 from settings import set
 
 global SRCwin
-# Rewrite the keyLog!
-global keyLog
-global saveLog
-
-keyLog: list = [0 for _ in range(9)]
-saveLog: list = [0 for _ in range(9)]
-
 
 # Still to implement:
 # Navigation update/render/run cycle (similar to the one from Search task)
@@ -42,10 +35,22 @@ class SRCWindow(visual.Window):
                                             allowGUI=True)
 
         self.case = 0  # Case 0 - Start of the Experiment, in Hold / Case 1 - Experiment Routine
+        self.USER_ID = None
         self.duration = 0
+        self.phase = 0  # 0 - Training Phase / 1 - Current Experiment
         self.alive = 1
         self.spack = None
         self.pack = Packet()
+
+        # Persisting Parameters
+        self.keyLog = [0 for _ in range(9)]
+        self.RT = 0
+        self.ACC = 0
+        self.Tnum = [0,0]
+        self.SRCLatency = 0
+        self.good_choice = 0  # User good choices
+        self.Ov_choice = 0  # All the user choices
+        self.Ov_true = 0  # All the true values
 
         # Pyro Client Init
         pyro4_path = "C:\\Users\\vi.vitale\\AppData\\Local\\Programs\\PsychoPy\\Scripts\\pyro4-ns.exe"
@@ -102,7 +107,7 @@ class SRCWindow(visual.Window):
                 FDir.led_off()
         else:
             for a in range(0, set.n_num * set.m_num):
-                if keyLog[a] == 1 and Rects[a].hobj.opacity == 0.0:  # Case Selected, for DEBUG purposes
+                if self.keyLog[a] == 1 and Rects[a].hobj.opacity == 0.0:  # Case Selected, for DEBUG purposes
                     Rects[a].highlight()
 
     # Drawing of the stimuli
@@ -125,24 +130,48 @@ class SRCWindow(visual.Window):
         changed = False
         self.request_pkg(0)
         stim.drw_matrix()
-
+        usr = self.USER_ID
+        self.pkproxy.set_USER_info(usr)
         exp_step = 0
         elapsed_time = -1  # msec
         self.duration = 0  # msec
-        clock = core.Clock()  # for analysis of the image change
+        react_clock = core.Clock()
         # filetxt = open('latency_test.txt', 'w', newline='') # DEBUG PURPOSE: Latency Test
         while self.alive:
-            global keyLog
-            # Start Watchdog for reset the frame time
 
             if elapsed_time >= self.duration:
+                self.send_pkg() # I send the packet here!
+                react_clock.reset()  # Reset the Reaction Time clock!
                 self.update_stim(exp_step, change=True)
                 self.render()
-                elapsed_time = clock.getTime() * 1000
+                self.SRCLatency = (self.pkproxy.get_time() * 1000) - self.duration
+                self.keyLog = [0 for _ in range(9)]
                 changed = True
-                keyLog = [0 for _ in range(9)]
-                # print('Image changed in ', "{:.3f}".format(elapsed_time), ' msec,', "{:.3f}".format(elapsed_time-script.TIME[exp_step]), ' msec late.')
-                # filetxt.write("{:.3f}".format(elapsed_time-script.TIME[exp_step])+'\n') # DEBUG PURPOSE: Latency Test
+                # print('Image changed in ', "{:.3f}".format(elapsed_time), ' msec,', "{:.3f}".format(elapsed_time-self.duration), ' msec late.')
+                # filetxt.write("{:.3f}".format(elapsed_time-self.duration)+'\n') # DEBUG PURPOSE: Latency Test
+            else:
+                pass
+
+            # Keypress event should be within the refresh cycle
+            key = input.get_num_keys()
+            if key is not None and key not in ['s', 'escape']:
+                self.keyLog[int(key)] = 1
+                if self.count_ones(self.keyLog) == 1:  # I take the first and last keypresses
+                    self.Tnum[0] = self.pkproxy.get_time() * 1000
+                    self.RT = react_clock.getTime() * 1000  # Catch the Reaction Time
+                else:
+                    self.Tnum[1] = self.pkproxy.get_time() * 1000
+            elif key == 'escape':
+                self.pkproxy.close(self.phase)  # Server Closing
+                self.close()
+                atexit.register(os.system("taskkill /f /im python.exe"))  # Guarantee the clean exit of the experiment
+                core.quit()
+            elif key == 's' and self.case == 0:  # routine for starting the experiment
+                self.case = 1
+                self.phase = 0  # TODO: early stage, Traning still not defined!
+                self.duration = self.pack.Time
+                elapsed_time = self.pkproxy.start_time() * 1000
+                changed = False
             else:
                 pass
 
@@ -153,29 +182,12 @@ class SRCWindow(visual.Window):
                 changed = False
 
             self.update_stim(exp_step, change=False)
+
             if self.duration != 0:  # we don't want to have updates where we are in waiting
                 self.render()
-                elapsed_time = clock.getTime() * 1000
+                elapsed_time = self.pkproxy.get_time() * 1000
             else:
                 self.render()
-                clock.reset()  # maintain the clock at zero
-
-            key = input.get_num_keys()
-            if key is not None and key not in ['s', 'escape']:
-                keyLog[int(key)] = 1
-            elif key == 'escape':
-                self.pkproxy.close()  # Server Closing
-                self.close()
-                atexit.register(os.system("taskkill /f /im python.exe"))  # Guarantee the clean exit of the experiment
-                core.quit()
-            elif key == 's' and self.case == 0:  # routine for starting the experiment
-                self.case = 1
-                self.duration = self.pack.Time
-                clock.reset()
-                elapsed_time = clock.getTime() * 1000
-                changed = False
-            else:
-                pass
 
     def request_pkg(self, it):
         # Function to retrieve the packet
@@ -197,5 +209,43 @@ class SRCWindow(visual.Window):
         self.pack.Rots = deepcopy(dicts['Rots'])
         self.pack.Corr = deepcopy(dicts['Corr'])
 
+    def send_pkg(self):
+        # Function for sending the packet to the server to print
+        self.pack.USER_ID = self.USER_ID
+        self.pack.INorOUT = 1  # It defines the package from SRCTask
+        self.pack.UserType = deepcopy(self.keyLog)
+        self.pack.RT = self.RT
+        self.pack.SRCLatency = self.SRCLatency
+
+        if self.pack.Switch == 3 and self.pack.Task in [1,4]:
+            self.pack.Tnum = self.Tnum[0] # I take the one from the first keypress
+        elif self.pack.Switch == 3 and self.pack.Task in [5,6]:
+            self.pack.Tnum = self.Tnum[1]  # I take the one from the last keypress
+        else:
+            self.pack.Tnum = 0
+
+        self.good_choice += self.count_match()
+        self.pack.GoodCh = self.good_choice
+        self.Ov_choice += self.count_ones(self.keyLog)
+        self.pack.OvCh = self.Ov_choice
+        self.Ov_true += self.count_ones(self.pack.Corr)
+        self.pack.OvTrue = self.Ov_true
+        # Send the packet
+        out_pkg = serpent.dumps(self.pack)
+        self.pkproxy.thread_send(out_pkg)
+
+    def count_ones(self, vec):
+        count=0
+        for element in vec:
+            if element == 1:
+                count += 1
+        return count
+
+    def count_match(self):
+        count = 0
+        for e_C, e_User in zip(self.pack.Corr, self.pack.UserType):
+            if e_C == 1 and e_User == 1:
+                count += 1
+        return count
 
 SRCwin = SRCWindow()

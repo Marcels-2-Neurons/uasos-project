@@ -9,4 +9,5 @@ from SRCevents import SRCwin
 
 if __name__ == "__main__":
     # Call of the instance SRCTask
+    SRCwin.USER_ID = 100  # TODO: debug, it changes with questionnaire
     SRCwin.run()

@@ -3,7 +3,9 @@
 # Imported in settings as library
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
+import csv
 from random import *
+import os
 import time
 from mathandler import NORBd
 from copy import *
@@ -44,7 +46,7 @@ class ScriptGen:
         self.CORSt = [0, 0, 0, 0, 0, 0, 0, 0, 0]  # last correct iteration in case of NAV
         self.threshold = 0.03
         self.dev_per = 0
-        self.mode_sel = 'DEBUG'  # 'BATCH'
+        self.mode_sel = 'BATCH'  # 'BATCH'
         # Probability Table for the Task Cases - Condition Balancing
         # ______________________________________________________________________________________
         # |                |   SRC - 1 25% |   SRC - 4 25% |   FLY - HDG 25% |   FLY - WPT 25% |
@@ -68,7 +70,30 @@ class ScriptGen:
             self.generate_imgs()
             self.final_cor_chk()
         elif self.mode_sel == 'BATCH':
-            pass  # I will implement it later when we have the CSV
+            scriptsDb = "./scripts/scripts_dset.csv"
+            with open(scriptsDb,"r",newline="") as scriptsDb:
+                reader = csv.reader(scriptsDb, delimiter='\t')
+                n_rows = len(list(reader))
+                scriptsDb.seek(0)  # Return the reader index at start
+                dim = round(n_rows/3)
+                sel_script = randint(0, dim-1)
+                for i, row in enumerate(reader):
+                    if i == 3*sel_script:
+                        self.TIME = [float(value) for value in row]
+                    elif i == (3*sel_script+1):
+                        self.SWITCH = [int(value) for value in row]
+                    elif i == (3*sel_script+2):
+                        self.TASK = [int(value) for value in row]
+                        break
+                    else: pass
+
+            # Fill out the vector of return to SEARCH position
+            for i in range(0, len(self.SWITCH)):
+                if self.SWITCH[i] == 3 and self.TASK[i] in [1, 4]:
+                    self.NAV_to_SRC.append(i)
+
+            self.generate_imgs()
+            self.final_cor_chk()
 
     def generate_batch(self, n_thread):
         self.gen_time()
@@ -188,7 +213,7 @@ class ScriptGen:
         # Fill out the vector of return to SEARCH position
         for i in range(0, len(self.SWITCH)):
             if self.SWITCH[i] == 3 and self.TASK[i] in [1, 4]:
-                self.NAV_to_SRC.append(i + 1)
+                self.NAV_to_SRC.append(i)
 
         # Apply the first case
         self.SWITCH.insert(0, 0)
