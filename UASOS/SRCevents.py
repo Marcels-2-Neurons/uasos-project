@@ -3,6 +3,8 @@
 # Imported in Main as library
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
+import pyglet.image
+
 import input
 import os
 import atexit
@@ -161,7 +163,7 @@ class SRCWindow(visual.Window):
                     self.RT = react_clock.getTime() * 1000  # Catch the Reaction Time
                 else:
                     self.Tnum[1] = self.pkproxy.get_time() * 1000
-            elif key == 'escape':
+            elif key == 'escape' or set.close is True:
                 self.pkproxy.close(self.phase)  # Server Closing
                 self.close()
                 atexit.register(os.system("taskkill /f /im python.exe"))  # Guarantee the clean exit of the experiment

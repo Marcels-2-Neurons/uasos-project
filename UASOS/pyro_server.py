@@ -17,11 +17,13 @@ from packet import *
 from scriptgen import script
 
 
-
 @pyro.expose
 class PyroServer:
     def __init__(self):
         # initialize just the values but not start the server on init for now
+        # Solve TIMEOUT issue:
+        self.timeout_value = 86400  # 1yr in seconds
+
         self.server_up = False
         self.scr_dir = script
         self.MlastPacket = Packet()

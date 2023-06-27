@@ -3,7 +3,10 @@
 # Imported in Main as library
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
+import ctypes
+
 import screeninfo
+import sys
 
 # Still to implement:
 
@@ -38,6 +41,8 @@ class settings:
 
         self.n_num: int = 3
         self.m_num: int = 3
+
+        self.close = False
 
 
 set = settings()

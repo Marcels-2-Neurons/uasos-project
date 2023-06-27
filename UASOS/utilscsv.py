@@ -86,3 +86,20 @@ class utilscsv:
         self.file_path = os.path.join(self.path, self.folder_name, self.filename)
         print("Result file will be saved in: ", f_path)
         self.start_writers()
+
+
+def writeform(ans=None):
+    if ans is not None:
+        path = os.getcwd()
+        folder_name = 'results'
+        file_name = f'data_ID{ans.ID}.csv'
+        filename = os.path.join(path, folder_name, file_name)
+        with open(filename, 'w', newline='') as datafile:
+            dwriter = csv.writer(datafile, delimiter='\t')
+            dwriter.writerow(ans.header)
+            dwriter.writerow([ans.ID] + [ans.lang] + [ans.age] + [ans.gender] + [ans.degree] + [ans.work] +
+                              [ans.total] + [ans.scorewriting] + [ans.scorethrowing] + [ans.scoretoothbrush] +
+                              [ans.scorespoon] + [ans.KSS_data] + [ans.SPS_data] + [ans.RSME_data] +
+                              [ans.VAS_cognitive] + [ans.VAS_drowsiness])
+            datafile.close()
+        print(f'Subject ID {ans.ID} data saved in: {filename}')
