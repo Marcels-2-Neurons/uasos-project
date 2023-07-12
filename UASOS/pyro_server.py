@@ -14,7 +14,7 @@ import psutil
 from utilscsv import *
 from copy import *
 from packet import *
-from scriptgen import script
+from scriptgen import script, script_s, script_n, script_ov
 
 
 @pyro.expose
@@ -25,7 +25,8 @@ class PyroServer:
         self.timeout_value = 86400  # 1yr in seconds
 
         self.server_up = False
-        self.scr_dir = script
+        self.scr_dir = [script, script_s, script_n, script_ov]
+        self.case = None
         self.MlastPacket = Packet()
         self.SRClastPacket = Packet()
         self.NAVlastPacket = Packet()
@@ -35,7 +36,7 @@ class PyroServer:
         self.csv_prt = utilscsv()
 
         while not self.server_up:
-            if len(self.scr_dir.TIME) != 0:
+            if len(self.scr_dir) != 0:  # It somehow waits the generation of the objects
                 self.daemon = pyro.Daemon()
                 self.uri = self.daemon.register(self)
                 self.name_src = pyro.locateNS()
@@ -66,6 +67,10 @@ class PyroServer:
                 return
 
     @pyro.expose
+    def check_status(self):
+        return True
+
+    @pyro.expose
     def start_time(self):
         self.clock.reset_time()
         return self.clock.get_time()
@@ -75,24 +80,50 @@ class PyroServer:
     def get_time(self):
         return self.clock.get_time()
 
+    def pause_time(self):
+        self.clock.pause_time()
+        return
+
     @pyro.expose
-    def read_data(self, it: int):
+    def read_data(self, case, it: int):  # Here I should implement the difference in the lines to read
+        # TODO Add here a stop of the sending and reset of the clock for the next phase
+        if self.case is None:  # At init
+            self.case = case
         # read line from server
         out_pack = Packet()
         out_pack.INorOUT = 0  # Inbound for the task
         out_pack.iter = it
-
-        out_pack.Tot_iters = len(script.TIME)
-        out_pack.Time = script.TIME[it]
-        out_pack.Switch = script.SWITCH[it]
-        out_pack.Task = script.TASK[it]
-        if it != 0:
-            out_pack.pImgs = deepcopy(script.IMGS[it-1])
-        out_pack.Imgs = deepcopy(script.IMGS[it])
-        out_pack.Fils = deepcopy(script.FILS[it])
-        out_pack.Rots = deepcopy(script.ROTS[it])
-        out_pack.Corr = deepcopy(script.CORS[it])
+        # writing of the pack selection in base on the phase
+        if self.case == 1:  # MAIN PHASE
+            ph = 0
+        elif self.case == 2:  # SEARCH PHASE
+            ph = 1
+        elif self.case == 3:  # NAVI PHASE
+            ph = 2
+        elif self.case == 4:  # OVERALL PHASE
+            ph = 3
+        else:
+            ph = 1  # Initial case
+        out_pack.Tot_iters = len(self.scr_dir[ph].TIME)
+        out_pack.Time = self.scr_dir[ph].TIME[it]
+        out_pack.Switch = self.scr_dir[ph].SWITCH[it]
+        out_pack.Task = self.scr_dir[ph].TASK[it]
+        out_pack.case = None
+        out_pack.Imgs = deepcopy(self.scr_dir[ph].IMGS[it])
+        out_pack.Fils = deepcopy(self.scr_dir[ph].FILS[it])
+        out_pack.Rots = deepcopy(self.scr_dir[ph].ROTS[it])
+        out_pack.Corr = deepcopy(self.scr_dir[ph].CORS[it])
         # TODO: add NAV data
+
+        if it != 0 and (it < out_pack.Tot_iters and self.case != 6):  # Exclude ending and pause cases
+            out_pack.pImgs = deepcopy(self.scr_dir[ph].IMGS[it-1])
+
+        elif it == out_pack.Tot_iters:
+            out_pack.case = 8  # I REQUEST THE CALL FOR END
+            # TODO CALL THE DAMN RESEEEEET OF THE CLOOOOOCK!
+        elif self.case == 6:
+            out_pack.case = 6  # Pause is then commanded!
+            pass  # TODO Figure it out how I should pause the events!
 
         return serpent.dumps(out_pack)
 
@@ -116,6 +147,9 @@ class PyroServer:
 
         wrk_pack.iter = w_pack['iter']
         wrk_pack.Tot_iters = w_pack['Tot_iters']
+        wrk_pack.phase = w_pack['phase']
+        wrk_pack.case = w_pack['case']
+        self.case = w_pack['case']
         wrk_pack.Time = w_pack['Time']
         wrk_pack.Switch = w_pack['Switch']
         wrk_pack.Task = w_pack['Task']
@@ -158,6 +192,8 @@ class PyroServer:
         # Copy of the data
         self.MlastPacket.iter = self.SRClastPacket.iter
         self.MlastPacket.Tot_iters = self.SRClastPacket.Tot_iters
+        self.MlastPacket.phase = self.SRClastPacket.phase
+        self.MlastPacket.case = self.SRClastPacket.case
         self.MlastPacket.Time = self.SRClastPacket.Time
         self.MlastPacket.Switch = self.SRClastPacket.Switch
         # SRC Params
@@ -174,11 +210,11 @@ class PyroServer:
         self.MlastPacket.GoodCh = self.SRClastPacket.GoodCh
         self.MlastPacket.OvCh = self.SRClastPacket.OvCh
         self.MlastPacket.OvTrue = self.SRClastPacket.OvTrue
-        # NAV Params
+        # TODO NAV Params
         #self.MlastPacket.Tstick = self.NAVlastPacket.Tstick
         #self.MlastPacket.NAVLatency = self.NAVlastPacket.NAVLatency
 
-        # Overall computations
+        # TODO Overall computations
         #if self.MlastPacket.Switch == 3:
         #    self.MlastPacket.TTS = abs(self.SRClastPacket.Tnum-self.NAVlastPacket.Tstick)  # Time to Switch
 
@@ -187,11 +223,9 @@ class PyroServer:
 
         # Reset Flags
         self.SRCPackOUT = False
-        #self.NAVPackOUT = False
+        #self.NAVPackOUT = False # TODO
 
         return
-
-
 
 
 pyro_svr = PyroServer()

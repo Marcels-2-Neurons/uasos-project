@@ -22,9 +22,9 @@ class local:
             self.translations = json.load(file, encoding='utf-8')
 
     def set_language(self, lang):
-        langs = {'fr':'Change la langue en Français',
-                 'en':'Changing Language to English',
-                 'it':'Cambio la lingua in Italiano'}
+        langs = {'fr': 'Change la langue en Français',
+                 'en': 'Changing Language to English',
+                 'it': 'Cambio la lingua in Italiano'}
         self.lang = lang
         print(langs[lang])
         self.load_translations()

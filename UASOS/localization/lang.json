@@ -1,8 +1,53 @@
 {
+  "FORM": {
+    "en": "Please, fill the forms",
+    "fr": "Veuillez remplir les formulaires,\ns’ils vous plaît",
+    "it": "Prego, compili i forms"
+  },
+  "PAUSE": {
+    "en": "PAUSE\npress <S> to continue",
+    "fr": "PAUSE\nappuyez sur <S> pour continuer",
+    "it": "PAUSA\npremi <S> per continuare"
+  },
+  "END_OF_PHASE": {
+    "en": "END OF PHASE\npress <S> to continue",
+    "fr": "PHASE TERMINÉ\nappuyez sur <S> pour continuer",
+    "it": "FASE TERMINATA\npremi <S> per continuare"
+  },
+  "THANK_YOU": {
+    "en": "Experiment ended\nThank you for your time",
+    "fr": "Expérience terminé\nMerci de votre temps",
+    "it": "Esperimento concluso\nGrazie del vostro tempo"
+  },
+  "S_TO_PAUSE": {
+    "en": "Doubts?\nPress <S>\nto pause",
+    "fr": "Des doutes?\nAppuyez sur <S>\npour une pause",
+    "it": "Dubbi?\nPremi <S>\nper una pausa"
+  },
+  "DETECTED": {
+    "en": "DETECTED",
+    "fr": "DÉTECTÉS",
+    "it": "RILEVATI"
+  },
+  "MISSED": {
+    "en": "MISSED",
+    "fr": "MANQUÉE",
+    "it": "MANCATI"
+  },
+  "TARGETS": {
+    "en": "TARGETS",
+    "fr": "CIBLES",
+    "it": "TARGETS"
+  },
   "SEARCH": {
     "en": "SEARCH",
     "fr": "CHERCHEZ",
     "it": "CERCA"
+  },
+  "NAVIGATION": {
+    "en": "NAVIGATION PER",
+    "fr": "NAVIGATION PAR",
+    "it": "NAVIGAZIONE PER"
   },
   "PEOPLE": {
     "en": "PEOPLE",

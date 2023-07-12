@@ -10,6 +10,8 @@ from PyQt5.QtWidgets import QWidget, QSlider, QRadioButton, QLabel, QLineEdit, Q
     QPushButton, QStyleOptionSlider, QStyle, QButtonGroup, QApplication
 from PyQt5.QtGui import QPainter, QPixmap, QIcon, QIntValidator, QFontMetrics, QFont
 from PyQt5.QtCore import Qt, QPoint, QRect
+
+
 from local import langue
 from utilscsv import *
 from settings import set
@@ -45,8 +47,10 @@ class answers():
         # VAS data
         self.VAS_cognitive = None
         self.VAS_drowsiness = None
-        self.header = ['ID','lang','age','gender','degree','work','EHI_tot','scorewriting','scorethrowing',
-                  'scoretoothbrush','scorespoon','KSS_data','SPS_data','RSME_data','VAS_cognitive','VAS_drowsiness']
+        self.header = ['ID', 'lang', 'age', 'gender', 'degree', 'work', 'EHI_tot', 'scorewriting', 'scorethrowing',
+                       'scoretoothbrush', 'scorespoon', 'KSS_data', 'SPS_data', 'RSME_data', 'VAS_cognitive',
+                       'VAS_drowsiness']
+
 
 class QVRadioButton(QRadioButton):
     def __init__(self, label, value):
@@ -150,7 +154,6 @@ class QLSlider(QWidget):
         available = style.pixelMetric(QStyle.PM_SliderSpaceAvailable, st_slider, self.sl)
 
         # Set font Style
-        font = QFont()
         if self.style is not None:
             font = QFont()
             f_family = re.search(r'font-family: ([^;]+)', self.style).group(1)
@@ -300,6 +303,7 @@ class QLang(QWidget):
         self.setLayout(layout)
 
     def on_fr_FR_click(self, event):
+        from SRCevents import SRCwin
         if not self.ID_box.text():
             pass
         else:
@@ -307,10 +311,14 @@ class QLang(QWidget):
             ans.ID = int(self.ID_box.text())
             langue.set_language(ans.lang)
             ans.f_done = 1
+
+            SRCwin.flip()
+            SRCwin.FDir.draw(case=-5)
+            SRCwin.flip()
             self.hide()
 
-
     def on_en_US_click(self, event):
+        from SRCevents import SRCwin
         if not self.ID_box.text():
             pass
         else:
@@ -318,17 +326,25 @@ class QLang(QWidget):
             ans.ID = int(self.ID_box.text())
             langue.set_language(ans.lang)
             ans.f_done = 1
+
+            SRCwin.flip()
+            SRCwin.FDir.draw(case=-5)
+            SRCwin.flip()
             self.hide()
 
-
     def on_it_IT_click(self, event):
+        from SRCevents import SRCwin
         if not self.ID_box.text():
             pass
         else:
             ans.lang = 'it'
             ans.ID = int(self.ID_box.text())
             langue.set_language(ans.lang)
-            ans.done = 1
+            ans.f_done = 1
+
+            SRCwin.flip()
+            SRCwin.FDir.draw(case=-5)
+            SRCwin.flip()
             self.hide()
 
     def closeEvent(self, e):
@@ -539,9 +555,9 @@ class QEHI(QWidget):
                     self.ylabsBox[cidx + 1].addSpacing(20)
                 else:
                     opt = QVRadioButton("", 5 - cidx)
-                    opt.setProperty("Value", 5-cidx)
+                    opt.setProperty("Value", 5 - cidx)
                     opt.toggled.connect(self.checkInput)
-                    self.qracks[pos-1].addButton(opt)
+                    self.qracks[pos - 1].addButton(opt)
                     self.ylabsBox[cidx + 1].addWidget(opt, alignment=Qt.AlignCenter)
                     self.ylabsBox[cidx + 1].addSpacing(10)
         # Put in the Widget Containers
@@ -578,7 +594,7 @@ class QEHI(QWidget):
         ans.scoretoothbrush = self.qracks[2].checkedButton().property("Value")
         ans.scorespoon = self.qracks[3].checkedButton().property("Value")
 
-        ans.total = ans.scorewriting+ans.scorethrowing+ans.scoretoothbrush+ans.scorespoon
+        ans.total = ans.scorewriting + ans.scorethrowing + ans.scoretoothbrush + ans.scorespoon
         ans.f_done = 3
         self.hide()
 
@@ -628,10 +644,10 @@ class QKSS(QWidget):
         self.wbigbox = QWidget()
 
         for idx in range(9):
-            lbl = QLabel(f"{idx+1}")
+            lbl = QLabel(f"{idx + 1}")
             lbl.setStyleSheet(self.textconfig)
             self.nqst.addWidget(lbl)
-            opt = QVRadioButton(langue.get_string(f"KSS_{idx+1}"),idx+1)
+            opt = QVRadioButton(langue.get_string(f"KSS_{idx + 1}"), idx + 1)
             opt.setStyleSheet(self.textconfig)
             opt.toggled.connect(self.checkInput)
             self.opts.append(opt)
@@ -718,10 +734,10 @@ class QSPS(QWidget):
         self.wbigbox = QWidget()
 
         for idx in range(7):
-            lbl = QLabel(f"{idx+1}")
+            lbl = QLabel(f"{idx + 1}")
             lbl.setStyleSheet(self.textconfig)
             self.nqst.addWidget(lbl)
-            opt = QVRadioButton(langue.get_string(f"SPS_{idx+1}"), idx+1)
+            opt = QVRadioButton(langue.get_string(f"SPS_{idx + 1}"), idx + 1)
             opt.setStyleSheet(self.textconfig)
             opt.toggled.connect(self.checkInput)
             self.opts.append(opt)
@@ -770,6 +786,7 @@ class QSPS(QWidget):
         ans.err = 0
         e.accept()
 
+
 class QRSME(QWidget):
     def __init__(self):
         super().__init__()
@@ -805,13 +822,14 @@ class QRSME(QWidget):
 
         # Define slider
         pos_labels = [2, 13, 25, 37, 57, 71, 85, 102, 112]
-        labels = ["- "+langue.get_string(f"RSME_l{k + 1}") for k in range(9)]
-        self.slider = QLSlider(0, 150, 1, labels=labels, positions=pos_labels, orientation=Qt.Vertical, tickinterval=10, style=self.textconfig)
+        labels = ["- " + langue.get_string(f"RSME_l{k + 1}") for k in range(9)]
+        self.slider = QLSlider(0, 150, 1, labels=labels, positions=pos_labels, orientation=Qt.Vertical, tickinterval=10,
+                               style=self.textconfig)
         self.slider.sl.valueChanged.connect(self.checkInput)
         self.slbox = QHBoxLayout()
         self.slbox.addWidget(self.slider)
         self.wslbox = QWidget()
-        self.wslbox.setFixedSize(self.slider.width()-350, self.slider.height())
+        self.wslbox.setFixedSize(self.slider.width() - 350, self.slider.height())
         self.wslbox.setLayout(self.slbox)
         self.layout.addWidget(self.wslbox)
 
@@ -845,7 +863,7 @@ class QRSME(QWidget):
 class QVAS(QWidget):
     def __init__(self):
         super().__init__()
-        self.checks = [False, False] # Check Purpose
+        self.checks = [False, False]  # Check Purpose
 
         self.setWindowTitle("VAS Form")
         self.setWindowIcon(QIcon("./props/isae_logo.png"))
@@ -942,24 +960,31 @@ def subject_fullform():
     while ans.f_done != 8 and ans.err is None:
         if ans.f_done == 0 and ans.forms[0] is None:
             ans.forms[0] = QLang()
+            ans.forms[0].setWindowFlags(ans.forms[0].windowFlags() | Qt.WindowStaysOnTopHint)
             ans.forms[0].show()
         elif ans.f_done == 1 and ans.forms[1] is None:
             ans.forms[1] = QDemo()
+            ans.forms[1].setWindowFlags(ans.forms[1].windowFlags() | Qt.WindowStaysOnTopHint)
             ans.forms[1].show()
         elif ans.f_done == 2 and ans.forms[2] is None:
             ans.forms[2] = QEHI()
+            ans.forms[2].setWindowFlags(ans.forms[2].windowFlags() | Qt.WindowStaysOnTopHint)
             ans.forms[2].show()
         elif ans.f_done == 3 and ans.forms[3] is None:
             ans.forms[3] = QKSS()
+            ans.forms[3].setWindowFlags(ans.forms[3].windowFlags() | Qt.WindowStaysOnTopHint)
             ans.forms[3].show()
         elif ans.f_done == 4 and ans.forms[4] is None:
             ans.forms[4] = QSPS()
+            ans.forms[4].setWindowFlags(ans.forms[4].windowFlags() | Qt.WindowStaysOnTopHint)
             ans.forms[4].show()
         elif ans.f_done == 5 and ans.forms[5] is None:
             ans.forms[5] = QRSME()
+            ans.forms[5].setWindowFlags(ans.forms[5].windowFlags() | Qt.WindowStaysOnTopHint)
             ans.forms[5].show()
         elif ans.f_done == 6 and ans.forms[6] is None:
             ans.forms[6] = QVAS()
+            ans.forms[6].setWindowFlags(ans.forms[6].windowFlags() | Qt.WindowStaysOnTopHint)
             ans.forms[6].show()
         elif ans.f_done == 7:
             writeform(ans)
@@ -970,7 +995,6 @@ def subject_fullform():
     if ans.err is not None:
         # I close everything
         set.close = True
-
 
 
 ans = answers()

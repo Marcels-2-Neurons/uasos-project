@@ -14,4 +14,5 @@ if __name__ == "__main__":
     subject_fullform()
     # Call of the instance SRCTask
     SRCwin.USER_ID = questions.ans.ID  # Now it changes time by time
+    SRCwin.setup_complete = True
     SRCwin.run()

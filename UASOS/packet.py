@@ -7,12 +7,14 @@
 
 from psychopy import core
 
+
 class Packet(object):
     def __init__(self):
         self.USER_ID = 0
         self.INorOUT = -1  # O - Inbound for the task / 1 - Outbound from the SRCTask / 2 - Outbound from the NAVTask
-        self.phase = 0  # 0 - Training Phase / 1 - Experiment Phase
+        self.phase = 0  # See flightdir.py for the complete list of the phases
         # 3 - Ready to write to csv
+        self.case = 0
         # Parameters to send
         self.iter = 0
         self.Tot_iters = 0  # Total No of iterations
@@ -54,12 +56,35 @@ class Packet(object):
 class cClock(object):  # Common Clock object for syncronizing the tasks
     def __init__(self):
         self.time = core.Clock()
+        self.delta = 0
+        self.pause = False
         self.reset = False
+        self.resetc = 0
 
     def reset_time(self):
-        if not self.reset:
+        # TODO figure the restart of the clock object when passing to another experiment phase
+        if self.reset is False and self.resetc == 0:  # Clock Init case
+            self.delta = 0
             self.time.reset()
+            self.resetc += 1  # Reset counter
+            self.reset = True
+        elif self.resetc != 0:  # Pause situation
+            self.delta += self.time.getTime()
+            self.time.reset()
+            self.resetc += 1  # Reset counter
             self.reset = True
 
-    def get_time(self):
-        return self.time.getTime()
+    def get_time(self, pause=False):
+        if pause is True and self.pause is False:
+            self.pause = True
+            self.reset_time()
+        elif pause is False and self.pause is True:
+            self.time.reset()
+            self.pause = False
+        if self.reset is True:
+            self.reset = False
+        return self.delta + self.time.getTime()
+
+    def pause_time(self):
+        self.delta = self.get_time(pause=True)
+        self.pause = True  # This will trigger the reset at the reprise

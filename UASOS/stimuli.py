@@ -44,8 +44,10 @@ class RecObj:
     def highlight(self):
         if self.hobj.opacity == 0.0:
             self.hobj.opacity = 1.0
-        # elif self.hobj.opacity != 0.0:
-        #    self.hobj.opacity = 0.0
+
+    def no_hlight(self):
+        if self.hobj.opacity != 0.0:
+            self.hobj.opacity = 0.0
 
     def correct(self):
         # update hobj color to green

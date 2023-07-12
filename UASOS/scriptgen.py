@@ -12,18 +12,19 @@ from copy import *
 import numpy as np
 
 global script
-
+global script_s
+global script_n
+global script_ov
 
 # Still to implement:
 # Randomization of the angles/grid sectors cases Heading and Waypoint
-# Batch mode from csv file
 
 
 class ScriptGen:
-    def __init__(self):
-        self.exp_time = 2 * 60 * 60 * 1000  # time in ms
-        self.it_time = 3500  # average iteration time in ms (it was 625 ms)
-        self.jitter = 375  # jitter time in ms
+    def __init__(self, phase='MAIN', exclude = -1):
+        # Parameters definition
+        self.phase = phase
+        self.exclude = exclude
         self.TIME = []  # time schedule vector 1xSize_exp
         self.SWITCH = []  # Task switch vector 1xSize_exp:
         # 0-Just at start / 1-Repeat Task / 2-Switch Task Mode / 3-Switch Tasks
@@ -54,46 +55,96 @@ class ScriptGen:
         # | INTERNAL-2 33% |    8.25%      |     8.25%     |     8.25%       |      8.25%      |
         # | EXTERNAL-3 33% |    8.25%      |     8.25%     |     8.25%       |      8.25%      |
         # ______________________________________________________________________________________
-
-        self.T = [0.34, 0.33, 0.33]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
-        self.ST = [0.25, 0.25, 0.25, 0.25]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
+        # Profile settings
+        if phase == 'MAIN':  # The experiment
+            self.exp_time = 2 * 60 * 60 * 1000  # time in ms
+            self.mode_sel = 'BATCH'
+            self.it_time = 3500  # average iteration time in ms (it was 625 ms)
+            self.jitter = 375  # jitter time in ms
+            self.T = [0.34, 0.33, 0.33]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
+            self.ST = [0.25, 0.25, 0.25, 0.25]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
+        elif phase == 'SRC_TRAIN':  # The Time Training Phase
+            self.exp_time = 3 * 60 * 1000  # 3 mins time in ms
+            self.mode_sel = 'BATCH'
+            self.it_time = 3500  # average iteration time in ms (it was 625 ms)
+            self.jitter = 375  # jitter time in ms
+            self.T = [0.5, 0.5, 0.0]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
+            self.ST = [0.5, 0.5, 0.0, 0.0]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
+        elif phase == 'NAVI_TRAIN':  # The Navigation Training Phase
+            self.exp_time = 3 * 60 * 1000  # 3 mins time in ms
+            self.mode_sel = 'BATCH'
+            self.it_time = 3500  # average iteration time in ms (it was 625 ms)
+            self.jitter = 375  # jitter time in ms
+            self.T = [0.5, 0.5, 0.0]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
+            self.ST = [0.0, 0.0, 0.5, 0.5]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
+        elif phase == 'OV_TRAIN':  # The complete training phase
+            self.exp_time = 20 * 60 * 1000  # 20 mins time in ms
+            self.mode_sel = 'BATCH'
+            self.threshold = 0.03
+            self.it_time = 3500  # average iteration time in ms (it was 625 ms)
+            self.jitter = 375  # jitter time in ms
+            self.T = [0.34, 0.33, 0.33]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
+            self.ST = [0.25, 0.25, 0.25, 0.25]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
 
         self.generate()  # I call in __init__ the generation, so at startup the routine will be launched
 
     def generate(self):
         # adaptation for using debug and batch modes
+        global val_m  # recall of the global value inside
         if self.mode_sel == 'DEBUG':
-            self.threshold = 0.05
+            # self.threshold = 0.05
 
             self.gen_time()
             self.task_sorting()
-            self.generate_imgs()
-            self.final_cor_chk()
-        elif self.mode_sel == 'BATCH':
-            scriptsDb = "./scripts/scripts_dset.csv"
-            with open(scriptsDb,"r",newline="") as scriptsDb:
+            # these steps will not be made for NAVI_TRAIN
+            if self.phase != 'NAVI_TRAIN':
+                self.generate_imgs()
+                self.final_cor_chk()
+            else:
+                pass  # TODO I will add here the HDG and WPY generation
+        elif self.mode_sel == 'BATCH':  # TODO ADD THE NEW SCRIPTS DSETS
+            if self.phase == 'MAIN' or self.phase == 'OV_TRAIN':
+                scriptsDb = "./scripts/scripts_dset.csv"
+            elif self.phase == 'SRC_TRAIN':
+                scriptsDb = "./scripts/scripts_SRC_train.csv"
+            elif self.phase == 'NAVI_TRAIN':
+                scriptsDb = "./scripts/scripts_NAVI_train.csv"
+
+            with open(scriptsDb, "r", newline="") as scriptsDb:
                 reader = csv.reader(scriptsDb, delimiter='\t')
                 n_rows = len(list(reader))
                 scriptsDb.seek(0)  # Return the reader index at start
-                dim = round(n_rows/3)
-                sel_script = randint(0, dim-1)
+                dim = round(n_rows / 3)
+                if self.exclude != -1:
+                    sel_script = self.exclude
+                    while sel_script == self.exclude:
+                        sel_script = randint(0, dim - 1)
+                else:
+                    sel_script = randint(0, dim - 1)
+                    self.exclude = sel_script
                 for i, row in enumerate(reader):
-                    if i == 3*sel_script:
+                    if i == 3 * sel_script:
                         self.TIME = [float(value) for value in row]
-                    elif i == (3*sel_script+1):
+                    elif i == (3 * sel_script + 1):
                         self.SWITCH = [int(value) for value in row]
-                    elif i == (3*sel_script+2):
+                    elif i == (3 * sel_script + 2):
                         self.TASK = [int(value) for value in row]
                         break
-                    else: pass
+                    else:
+                        pass
 
             # Fill out the vector of return to SEARCH position
             for i in range(0, len(self.SWITCH)):
                 if self.SWITCH[i] == 3 and self.TASK[i] in [1, 4]:
                     self.NAV_to_SRC.append(i)
 
-            self.generate_imgs()
-            self.final_cor_chk()
+            if self.phase != 'NAVI_TRAIN':
+                self.generate_imgs()
+                self.final_cor_chk()
+            elif self.phase != 'SRC_TRAIN':
+                # TODO This is to generate the NAVI Requests
+                pass
+
 
     def generate_batch(self, n_thread):
         self.gen_time()
@@ -201,6 +252,9 @@ class ScriptGen:
                 min_d = self.dev_per
             if self.dev_per <= self.threshold:
                 CONVERGE = True
+            elif self.phase == 'SRC_TRAIN' or self.phase == 'OV_TRAIN':
+                CONVERGE = True
+
             if k == 3000:
                 if n_thr == -1:
                     print('Convergence Failed, Repeat.')
@@ -209,11 +263,6 @@ class ScriptGen:
                 broken = True
                 break
             k += 1
-
-        # Fill out the vector of return to SEARCH position
-        for i in range(0, len(self.SWITCH)):
-            if self.SWITCH[i] == 3 and self.TASK[i] in [1, 4]:
-                self.NAV_to_SRC.append(i)
 
         # Apply the first case
         self.SWITCH.insert(0, 0)
@@ -233,6 +282,11 @@ class ScriptGen:
                 self.TASK.insert(0, choices(STval[2:4], self.ST[2:4])[0])
             else:
                 self.TASK.insert(0, choices(STval[0:2], self.ST[0:2])[0])
+
+        # Fill out the vector of return to SEARCH position
+        for i in range(0, len(self.SWITCH)):
+            if self.SWITCH[i] == 3 and self.TASK[i] in [1, 4]:
+                self.NAV_to_SRC.append(i)
 
         if broken:
             print("Min Deviation obtained: ", "{:.3f}".format(min_d * 100), " %")
@@ -693,4 +747,8 @@ class ScriptGen:
         return count
 
 
-script = ScriptGen()
+script = ScriptGen(phase='MAIN')
+script_s = ScriptGen(phase='SRC_TRAIN')
+script_n = ScriptGen(phase='NAVI_TRAIN')
+script_ov = ScriptGen(phase='OV_TRAIN', exclude=script.exclude)  # So we are sure that script and script_ov will not share the same script
+
