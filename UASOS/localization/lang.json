@@ -26,12 +26,12 @@
   },
   "DETECTED": {
     "en": "DETECTED",
-    "fr": "DÉTECTÉS",
+    "fr": "DÉTECTÉES",
     "it": "RILEVATI"
   },
   "MISSED": {
     "en": "MISSED",
-    "fr": "MANQUÉE",
+    "fr": "MANQUÉES",
     "it": "MANCATI"
   },
   "TARGETS": {
