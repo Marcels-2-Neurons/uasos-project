@@ -1,7 +1,0 @@
-pylsl
-pyxdf
-numpy
-matplotlib
-lxml
-jupyter
-pandas

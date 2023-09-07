@@ -1,4 +1,0 @@
-I cannot publish the NORB Db since it's too big for GitHub.
-Please download the Cat and Im mat files and rename as:
-- Cat: mat_cat_10.mat
-- Im: mat_im_10.mat

@@ -1,0 +1,472 @@
+{
+  "FORM": {
+    "en": "Please, fill the forms",
+    "fr": "Veuillez remplir les formulaires,\ns’ils vous plaît",
+    "it": "Prego, compili i forms"
+  },
+  "PAUSE": {
+    "en": "PAUSE\npress <S> to continue",
+    "fr": "PAUSE\nappuyez sur <S> pour continuer",
+    "it": "PAUSA\npremi <S> per continuare"
+  },
+  "VAS_REQUEST": {
+    "en": "VAS\nCompile the form\npress <S> to continue",
+    "fr": "VAS\nVeuillez remplir le formulaire\nappuyez sur <S> pour continuer",
+    "it": "VAS\nCompili il form\npremi <S> per continuare"
+  },
+  "END_OF_PHASE": {
+    "en": "END OF PHASE\npress <S> to continue",
+    "fr": "PHASE TERMINÉE\nappuyez sur <S> pour continuer",
+    "it": "FASE TERMINATA\npremi <S> per continuare"
+  },
+  "THANK_YOU": {
+    "en": "Experiment ended\nThank you for your time",
+    "fr": "Expérience terminé\nMerci de votre temps",
+    "it": "Esperimento concluso\nGrazie del vostro tempo"
+  },
+  "S_TO_PAUSE": {
+    "en": "Doubts?\nPress <S>\nto pause",
+    "fr": "Des doutes?\nAppuyez sur <S>\npour une pause",
+    "it": "Dubbi?\nPremi <S>\nper una pausa"
+  },
+  "DETECTED": {
+    "en": "DETECTED",
+    "fr": "DÉTECTÉES",
+    "it": "RILEVATI"
+  },
+  "CORRECT": {
+    "en": "CORRECT DIR",
+    "fr": "DIR CORRECT",
+    "it": "DIR CORRETTA"
+  },
+  "WRONG": {
+    "en": "WRONG DIR",
+    "fr": "DIR ERRONÉE",
+    "it": "DIR ERRATA"
+  },
+  "N/A": {
+    "en": "N/A",
+    "fr": "N/A",
+    "it": "N/A"
+  },
+  "HDG_DEV": {
+    "en": "HDG DEV:",
+    "fr": "CAP DEV:",
+    "it": "HDG DEV:"
+  },
+  "NOT_ACTIVE": {
+    "en": "SCREEN NOT ACTIVE\nIN THIS PHASE",
+    "fr": "ÉCRAN INACTIF\nÀ CETTE PHASE",
+    "it": "SCHERMO NON ATTIVO\nIN QUESTA FASE"
+  },
+  "TOTAL": {
+    "en": "TOTAL",
+    "fr": "TOTALE",
+    "it": "TOTALE"
+  },
+  "TARGETS": {
+    "en": "TARGETS",
+    "fr": "CIBLES",
+    "it": "TARGETS"
+  },
+  "SEARCH": {
+    "en": "SEARCH",
+    "fr": "CHERCHEZ",
+    "it": "CERCA"
+  },
+  "NAVIGATE": {
+    "en": "NAVIGATE PER",
+    "fr": "NAVIGUEZ PAR",
+    "it": "NAVIGA PER"
+  },
+  "PEOPLE": {
+    "en": "PEOPLE",
+    "fr": "PERSONNES",
+    "it": "PERSONE"
+  },
+  "VEHICLES": {
+    "en": "VEHICLES",
+    "fr": "VÉHICULES",
+    "it": "VEICOLI"
+  },
+  "HEADING": {
+    "en": "HEADING",
+    "fr": "CAP",
+    "it": "ROTTA"
+  },
+  "WAYPOINT": {
+    "en": "WAYPOINT",
+    "fr": "WAYPOINT",
+    "it": "WAYPOINT"
+  },
+  "NONE":{
+    "en": "NONE",
+    "fr": "RIEN",
+    "it": "NIENTE"
+  },
+  "HOLD":{
+    "en": "Press <S> to start the experiment",
+    "fr": "Appuyez sur <S> pour commencer l'expérience",
+    "it": "Prema <S> per cominciare l'esperimento"
+  },
+  "ID_request": {
+    "en": "Test Subject ID:",
+    "fr": "ID Sujet de Test:",
+    "it": "ID Soggetto di Test:"
+  },
+  "demo_Title": {
+    "en": "Demographics",
+    "fr": "Démographie",
+    "it": "Demografica"
+  },
+  "demo_AGE": {
+    "en": "Please, enter your age:",
+    "fr": "Veuillez entrer votre âge:",
+    "it": "Prego, immetta la sua età:"
+  },
+  "demo_gender": {
+    "en": "Please, indicate your gender:",
+    "fr": "Veuillez indiquer votre genre:",
+    "it": "Prego, selezioni il suo genere:"
+  },
+  "Male": {
+    "en": "Male",
+    "fr": "Homme",
+    "it": "Uomo"
+  },
+  "Female": {
+    "en": "Female",
+    "fr": "Femme",
+    "it": "Donna"
+  },
+  "Undefined": {
+    "en": "Undefined",
+    "fr": "Indéfinie",
+    "it": "Indefinito"
+  },
+  "demo_degree": {
+    "en": "Please, indicate the highest level\nof education you have achieved:",
+    "fr": "Veuillez indiquer le niveau d'etudes\nplus élevé que vous avez atteint:",
+    "it": "Prego, indichi il suo più alto\ntitolo di studio ottenuto:"
+  },
+  "HighSchool": {
+    "en": "High School",
+    "fr": "Lycée",
+    "it": "Diploma"
+  },
+  "Apprenticeship": {
+    "en": "Apprenticeship",
+    "fr": "Apprentissage",
+    "it": "Apprendistato"
+  },
+  "Bachelors": {
+    "en": "Undergraduate Degree (Bachelors)",
+    "fr": "Diplôme de Premier cycle (Licence)",
+    "it": "Laurea Triennale (LT)"
+  },
+  "Masters": {
+    "en": "Graduate Degree (Masters)",
+    "fr": "Diplôme d'études supérieures (Masters)",
+    "it": "Laurea Magistrale (LM)"
+  },
+  "PhD": {
+    "en": "PhD",
+    "fr": "Doctorant",
+    "it": "Dottorato"
+  },
+  "OK": {
+    "en": "OK",
+    "fr": "OK",
+    "it": "OK"
+  },
+  "CLOSE": {
+    "en": "CLOSE",
+    "fr": "FERME",
+    "it": "CHIUDI"
+  },
+  "demo_work": {
+    "en": "Please, indicate what best describes\nyour current situation:",
+    "fr": "Veuillez indiquer ce qui décrit\nau mieux la votre situation actuelle:",
+    "it": "Prego, indichi la scelta che descrive\nmeglio la sua situazione attuale:"
+  },
+  "Student": {
+    "en": "Student",
+    "fr": "Étudiant",
+    "it": "Studente"
+  },
+  "Employed": {
+    "en": "Employed",
+    "fr": "Employé",
+    "it": "Lavoratore"
+  },
+  "Unemployed": {
+    "en": "Unemployed",
+    "fr": "Chômeur",
+    "it": "Disoccupato"
+  },
+  "Other": {
+    "en": "other",
+    "fr": "autre",
+    "it": "altro"
+  },
+  "KSS_Title":{
+    "en": "Vigilance",
+    "fr": "Vigilance",
+    "it": "Vigilanza"
+  },
+  "KSS_question": {
+    "en": "Please, indicate how you are feeling right now:",
+    "fr": "Veuillez indiquer comment vous vous-sentez en ce moment:",
+    "it": "Prego, indichi come si sente adesso:"
+  },
+  "KSS_1": {
+    "en": "Extremely Alert",
+    "fr": "Extrêmement éveillé",
+    "it": "Estremamente vigile"
+  },
+  "KSS_2": {
+    "en": "Very Alert",
+    "fr": "Très éveillé",
+    "it": "Molto vigile"
+  },
+  "KSS_3": {
+    "en": "Alert",
+    "fr": "Éveillé",
+    "it": "Vigile"
+  },
+  "KSS_4": {
+    "en": "Fairly Alert",
+    "fr": "Plutôt éveillé",
+    "it": "Piuttosto vigile"
+  },
+  "KSS_5": {
+    "en": "Neither alert nor sleepy",
+    "fr": "Ni éveillé ni endormie",
+    "it": "Né vigile né sveglio"
+  },
+  "KSS_6": {
+    "en": "Some signs of sleepiness",
+    "fr": "Quelques signes de somnolence",
+    "it": "Qualche sintomo di sonnolenza"
+  },
+  "KSS_7": {
+    "en": "Sleepy but no effort to keep alert",
+    "fr": "Sommeil mais aucun effort pour rester éveillé",
+    "it": "Sonnolente ma senza sforzi per restare sveglio"
+  },
+  "KSS_8": {
+    "en": "Sleepy with some effort to keep alert",
+    "fr": "Sonneil avec des efforts pour rester éveillé",
+    "it": "Sonnolente con sforzi per restare sveglio"
+  },
+  "KSS_9": {
+    "en": "Very sleepy with great effort to keep alert, fighting against sleep",
+    "fr": "Très somnolent avec des grand efforts pour rester éveillé, en lutte contre le sommeil",
+    "it": "Molto sonnolente, si mantiene sveglio con fatica, lotta per restare sveglio"
+  },
+  "SPS_Title":{
+    "en": "Fatigue",
+    "fr": "Fatigue",
+    "it": "Stanchezza"
+  },
+  "SPS_question": {
+    "en": "Please, indicate the statement that best corresponds to your feeling of fatigue:",
+    "fr": "Sélectionnez la déclaration qui décrit votre sentiment de fatigue:",
+    "it": "Prego, scelga l'affermazione più affine al vostro livello di stanchezza:"
+  },
+  "SPS_1": {
+    "en": "Fully alert, wide awake",
+    "fr": "Pleinement vigilant, tout à fait réveillé",
+    "it": "Pienamente vigile, totalmente sveglio"
+  },
+  "SPS_2": {
+    "en": "Very lively, responsive, but not at peak",
+    "fr": "Plein d'entrain, réceptif, mais pas à son meilleur",
+    "it": "Molto attivo e responsivo, ma non al massimo"
+  },
+  "SPS_3": {
+    "en": "Ok, somewhat fresh",
+    "fr": "Bon, assez reposé",
+    "it": "Ok, diciamo fresco"
+  },
+  "SPS_4": {
+    "en": "A little tired, less than fresh",
+    "fr": "Un peu fatigué",
+    "it": "Un po' stanco"
+  },
+  "SPS_5": {
+    "en": "Moderately tired, let down",
+    "fr": "Moyennement fatigué, abattu",
+    "it": "Moderatamente stanco, spossato"
+  },
+  "SPS_6": {
+    "en": "Extremely tired, very difficult to concentrate",
+    "fr": "Extrêmement fatigué, très difficile de se concentrer",
+    "it": "Estremamente stanco, con molta difficoltà a concentrarsi"
+  },
+  "SPS_7": {
+    "en": "Completely exhausted, unable to concentrate effectively",
+    "fr": "Complètement épuisé, incapable de bien concentrer",
+    "it": "Totalmente esausto, incapace a concentrarsi"
+  },
+  "EHI_Title": {
+    "en": "Edinburgh Handedness Inventory (EHI)",
+    "fr": "Edinburgh Handedness Inventory (EHI)",
+    "it": "Edinburgh Handedness Inventory (EHI)"
+  },
+  "EHI_question": {
+    "en": "Please, indicate your preferences in the use of hands in the following activities or objects:",
+    "fr": "Veuillez indiquer vos préférences concernant l'utilisation des mains dans les activités ou des objects suivant:",
+    "it": "Prego, indichi la sua preferenza nell'uso delle mani nelle attività od oggetti proposti:"
+  },
+  "EHI_c5": {
+    "en": "Always Left",
+    "fr": "Toujours Gauche",
+    "it": "Sempre la Sinistra"
+  },
+  "EHI_c4": {
+    "en": "Usually Left",
+    "fr": "Habituellement Gauche",
+    "it": "Spesso la Sinistra"
+  },
+  "EHI_c3": {
+    "en": "Both equally",
+    "fr": "Les deux à égalité",
+    "it": "Tutte due ugualmente"
+  },
+  "EHI_c2": {
+    "en": "Usually Right",
+    "fr": "Habituellement Droit",
+    "it": "Spesso la Destra"
+  },
+  "EHI_c1": {
+    "en": "Always Right",
+    "fr": "Toujours Droit",
+    "it": "Sempre la Destra"
+  },
+  "EHI_r1": {
+    "en": "Writing",
+    "fr": "Écrire",
+    "it": "Scrivere"
+  },
+  "EHI_r2": {
+    "en": "Throwing",
+    "fr": "Lancer un object",
+    "it": "Lanciare un oggetto"
+  },
+  "EHI_r3": {
+    "en": "Toothbrush",
+    "fr": "Brosse à dents",
+    "it": "Spazzolino da denti"
+  },
+  "EHI_r4": {
+    "en": "Spoon",
+    "fr": "Cuillère",
+    "it": "Cucchiaio"
+  },
+  "RSME_Title": {
+    "en": "Mental Effort",
+    "fr": "Effort Mentale",
+    "it": "Sforzo Mentale"
+  },
+  "RSME_question": {
+    "en": "Please, indicate by marking the vertical axis below,\nhow high your degree of effort is right now",
+    "fr": "Veuillez indiquer, en cochand la case l'axe vertical ci-dessous,\nquel est votre degré d'effort actuel",
+    "it": "Prego, indichi il suo livello di sforzo attuale\nmuovendo lo slider sulla definizione coerente al suo stato\ndi sforzo mentale"
+  },
+  "RSME_l1": {
+    "en": "Absolutely no effort",
+    "fr": "Absolument aucun effort",
+    "it": "Assolutamente nessuno sforzo"
+  },
+  "RSME_l2": {
+    "en": "Almost no effort",
+    "fr": "Presque aucun effort",
+    "it": "Quasi nessuno sforzo"
+  },
+  "RSME_l3": {
+    "en": "A little effort",
+    "fr": "Un petit effort",
+    "it": "Un piccolo sforzo"
+  },
+  "RSME_l4": {
+    "en": "Some effort",
+    "fr": "Quelques effort",
+    "it": "Qualche sforzo"
+  },
+  "RSME_l5": {
+    "en": "Rather much effort",
+    "fr": "Plutôt beaucoup d'efforts",
+    "it": "Decisamente qualche sforzo"
+  },
+  "RSME_l6": {
+    "en": "Considerable effort",
+    "fr": "Un effort considérable",
+    "it": "Uno sforzo considerevole"
+  },
+  "RSME_l7": {
+    "en": "Great effort",
+    "fr": "Grand effort",
+    "it": "Un grande sforzo"
+  },
+  "RSME_l8": {
+    "en": "Very great effort",
+    "fr": "Un très grand effort",
+    "it": "Decisamente un grande sforzo"
+  },
+  "RSME_l9": {
+    "en": "Extreme effort",
+    "fr": "Un effort extrême",
+    "it": "Uno sforzo estremo"
+  },
+  "VAS_Title":{
+    "en": "Fatigue",
+    "fr": "Fatigue",
+    "it": "Stanchezza"
+  },
+  "VAS_question": {
+    "en": "Please, indicate with the horizontal sliders on the lines,\nyour actual degree of fatigue",
+    "fr": "Veuillez placer un marqueur sur chaque ligne horizontale qui décrirait\nau mieux votre état de fatigue actuel",
+    "it": "Prego, indichi con lo slider di ogni linea orizontale,\nil suo livello di stanchezza attuale"
+  },
+  "VAS_hint1": {
+    "en": "Cognitive Fatigue refers to the need to stop a cognitive/mental effort\nin execution, since it has become highly demanding in the current situation.",
+    "fr": "La fatigue cognitive fait référence à la nécessité d'arrêter un effort cognitif/mental\nen cours, qui serait devenu trop exigeant dans une situation.",
+    "it": "La stanchezza cognitiva fa riferimento alla necessità di fermare uno sforzo cognitivo/mentale\nin essere, poiché divenuto troppo esigente nella situazione attuale."
+  },
+  "VAS_hint2": {
+    "en": "Fatigue linked to drowsiness consists in a certain drowsiness pressure\nthat conducts to a need to close your eyes and sleep.",
+    "fr": "La fatigue liée à la somnolence correspond à une pression de sommeil importante\nconduisant au besoin de fermer les yeux et de s'endormir.",
+    "it": "La stanchezza legata alla sonnolenza corrisponde ad una pressione di sonnolenza\ntale da condurla a chiudere gli occhi e dormire."
+  },
+  "VAS_hl1": {
+    "en": "Cognitive Fatigue",
+    "fr": "Fatigue cognitive",
+    "it": "Stanchezza cognitiva"
+  },
+  "VAS_hl2": {
+    "en": "Drowsiness",
+    "fr": "Somnolence",
+    "it": "Sonnolenza"
+  },
+  "VAS_low": {
+    "en": "No fatigue",
+    "fr": "Aucune fatigue",
+    "it": "Nessuna Fatica"
+  },
+  "VAS_high": {
+    "en": "Completely exhausted",
+    "fr": "Epuisement complet",
+    "it": "Completamente esausto"
+  },
+  "VAS_tab": {
+    "en": "Press <b>Tab</b> to switch between sliders",
+    "fr": "Appuyez sur <b>Tab</b> pour changer le slider actif",
+    "it": "Premi <b>Tab</b> per cambiare lo slider attivo"
+  },
+  "VAS_enter": {
+    "en": "Press <b>Enter</b> to convalidate your choices",
+    "fr": "Appuyez sur <b>Entrée</b> pour valider votre reponses",
+    "it": "Premi <b>Invio</b> per convalidare le sue scelte"
+  }
+}
