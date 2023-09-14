@@ -20,6 +20,7 @@ global script
 
 class ScriptGen:
     def __init__(self, phase='MAIN', exclude=-1):
+        from settings import set
         self.exp_time = 2 * 60 * 60 * 1000  # time in ms
         self.it_time = 3500  # average iteration time in ms (it was 625 ms)
         self.jitter = 375  # jitter time in ms
@@ -68,33 +69,33 @@ class ScriptGen:
         # ______________________________________________________________________________________
         # Profile settings
         if phase == 'MAIN':  # The experiment
-            self.exp_time = 2 * 60 * 60 * 1000  # time in ms
+            self.exp_time = set.exp_time_main  # time in ms
             self.mode_sel = 'BATCH'
-            self.it_time = 7000  # average iteration time in ms (it was 625 ms)
-            self.jitter = 1000  # jitter time in ms
+            self.it_time = set.it_time  # average iteration time in ms (it was 625 ms)
+            self.jitter = set.jitter  # jitter time in ms
             self.T = [0.34, 0.33, 0.33]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
             self.ST = [0.25, 0.25, 0.25, 0.25]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
         elif phase == 'SRC_TRAIN':  # The Time Training Phase
-            self.exp_time = 3 * 60 * 1000  # 3 mins time in ms
+            self.exp_time = set.exp_time_srct  # 3 mins time in ms
             self.mode_sel = 'BATCH'
-            self.it_time = 7000  # average iteration time in ms (it was 625 ms)
-            self.jitter = 1000  # jitter time in ms
+            self.it_time = set.it_time  # average iteration time in ms (it was 625 ms)
+            self.jitter = set.jitter  # jitter time in ms
             self.T = [0.5, 0.5, 0.0]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
             self.ST = [0.5, 0.5, 0.0, 0.0]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
         elif phase == 'NAVI_TRAIN':  # The Navigation Training Phase
-            self.exp_time = 3 * 60 * 1000  # 3 mins time in ms
+            self.exp_time = set.exp_time_navt  # 3 mins time in ms
             self.mode_sel = 'BATCH'
-            self.it_time = 7000  # average iteration time in ms (it was 625 ms)
-            self.jitter = 1000  # jitter time in ms
+            self.it_time = set.it_time  # average iteration time in ms (it was 625 ms)
+            self.jitter = set.jitter  # jitter time in ms
             self.T = [0.5, 0.5, 0.0]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
             self.ST = [0.0, 0.0, 0.5, 0.5]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
         elif phase == 'OV_TRAIN':  # The complete training phase
-            self.exp_time = 20 * 60 * 1000  # 20 mins time in ms
+            self.exp_time = set.exp_time_ovt  # 10 mins time in ms
             self.mode_sel = 'BATCH'
             self.threshold = 0.03
-            self.train_maxtime = 10*60*1000  # 20 mins in ms, it can be changed
-            self.it_time = 7000  # average iteration time in ms (it was 625 ms)
-            self.jitter = 1000  # jitter time in ms
+            self.train_maxtime = set.exp_time_ovt  # 20 mins in ms, it can be changed
+            self.it_time = set.it_time  # average iteration time in ms (it was 625 ms)
+            self.jitter = set.jitter  # jitter time in ms
             self.T = [0.34, 0.33, 0.33]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
             self.ST = [0.25, 0.25, 0.25, 0.25]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
 

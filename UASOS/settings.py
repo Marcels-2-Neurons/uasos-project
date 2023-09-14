@@ -5,7 +5,6 @@
 ###################################################################
 import screeninfo
 
-# TO-DO: BETTER MULTIDISPLAY INFO ACQUISITION FOR AUTOMATIC SETUP
 global n_num
 global m_num
 n_num: int = 3
@@ -18,6 +17,16 @@ class settings:
         self.SRCwin = 1  # It should be your LEFT SCREEN
         self.NAVwin = 0  # It should be your RIGHT SCREEN
         self.processes = []
+
+        # Experiment Settings:
+        min2ms = 60*1000
+        self.exp_time_main = 2 * 60 * min2ms  # Change 2*60 = 120 min as your max scriptgen dset time
+        self.exp_time_ovt = 10 * min2ms  # 10 mins - change it
+        self.exp_time_srct = 3 * min2ms  # 3 mins  - change it
+        self.exp_time_navt = 3 * min2ms  # 3 mins  - change it
+        self.it_time = 7000  # [ms] 7 sec of it time - change it
+        self.jitter = 1000   # [ms] +/-1 sec of jitter - change it
+
         if len(self.mon) == 2:
             self.n_mon = 2
             self.wsize = [(0, 0), (0, 0)]
