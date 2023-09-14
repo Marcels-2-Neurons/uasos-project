@@ -23,7 +23,7 @@ while True:
         maxInt = int(maxInt/10)
 
 global num_threads
-num_threads = mp.cpu_count()-1  # Number of CPU Cores, put mp.cpu_count()-1 if you are running it on a standard PC
+num_threads = mp.cpu_count()  # Number of CPU Cores, put mp.cpu_count()-1 if you are running it on a standard PC
 
 global phase_gen, exp_time_main, exp_time_train, it_time, jitter, treshold, treshold_train
 global max_size_dset,max_perthread, max_time
