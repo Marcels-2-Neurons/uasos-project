@@ -7,10 +7,6 @@ import os
 from typing import Tuple
 from psychopy import visual
 from settings import *
-from PIL import Image
-
-# Still to implement:
-# flight director for Navigation Task (we mirror the actual one and change the strings)
 
 
 class Colors:

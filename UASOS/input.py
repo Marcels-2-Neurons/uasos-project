@@ -5,12 +5,8 @@
 ###################################################################
 import pygame.joystick
 from psychopy.hardware import keyboard
-from psychopy import event
 import pysticks
 import numpy as np
-# Still to implement:
-# Flight Stick input code, considering also increasing speed of translation/rotation with respect of angle of flight stick
-# Translation on 2 axis for Waypoint Navigation, Rotation by inclining the stick at left or right for Heading Navigation
 
 
 class keyBoard():

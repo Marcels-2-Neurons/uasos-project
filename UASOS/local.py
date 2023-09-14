@@ -3,7 +3,6 @@
 # Imported in flight director as library
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
-
 import json
 
 global langue

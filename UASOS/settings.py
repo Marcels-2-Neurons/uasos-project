@@ -3,17 +3,7 @@
 # Imported in Main as library
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
-import ctypes
-
 import screeninfo
-import sys
-
-# Still to implement:
-
-
-# Data about monitor
-widthPix = 1920  # screen width in px
-heightPix = 1080  # screen height in px
 
 # TO-DO: BETTER MULTIDISPLAY INFO ACQUISITION FOR AUTOMATIC SETUP
 global n_num
@@ -25,9 +15,9 @@ m_num: int = 3
 class settings:
     def __init__(self):
         self.mon = screeninfo.get_monitors()
-        self.SRCwin = 1
-        self.NAVwin = 0
-        self.pyro4_path = "C:\\Users\\vi.vitale\\AppData\\Local\\Programs\\PsychoPy\\Scripts\\pyro4-ns.exe"
+        self.SRCwin = 1  # It should be your LEFT SCREEN
+        self.NAVwin = 0  # It should be your RIGHT SCREEN
+        self.processes = []
         if len(self.mon) == 2:
             self.n_mon = 2
             self.wsize = [(0, 0), (0, 0)]

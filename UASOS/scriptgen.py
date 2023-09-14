@@ -4,9 +4,7 @@
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
 import csv
-import string
 from random import *
-import os
 import time
 from mathandler import NORBd
 from copy import *

@@ -4,7 +4,6 @@
 # will hold in listening until the connection is established
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
-
 from psychopy import core
 
 

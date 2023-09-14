@@ -3,23 +3,14 @@
 # Imported in events as library
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
-import string
-from copy import deepcopy
 from typing import Tuple
 
-import numpy as np
-from psychopy import visual  # , core, event
+from psychopy import visual
 from mathandler import NORBd
 from settings import n_num, m_num
 from random import *
-import cv2 as cv
 import imgtreat as img
-from PIL import Image
 
-
-# Still to implement:
-# Navigation GUI, NOT the run cycle here!
-# The run cycle should be implemented inside SRCevents.pyss
 
 class Colors:
     red: Tuple[int, int, int] = [255, 0, 0]

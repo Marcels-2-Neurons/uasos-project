@@ -3,9 +3,7 @@
 # Imported in stimuli as library
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
-
 import numpy as np
-# import mat73 as mat
 import imgtreat as imt
 from scipy import io
 import time

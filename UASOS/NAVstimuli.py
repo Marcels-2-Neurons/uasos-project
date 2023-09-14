@@ -9,13 +9,9 @@ from copy import deepcopy
 from typing import Tuple
 
 import numpy as np
-from psychopy import visual  # , core, event
-from mathandler import NORBd
-from settings import n_num, m_num
-from random import *
-import cv2 as cv
-import imgtreat as img
+from psychopy import visual
 from PIL import Image
+
 
 class Colors:
     red: Tuple[int, int, int] = [255, 0, 0]

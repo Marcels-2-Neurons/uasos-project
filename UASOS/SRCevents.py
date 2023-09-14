@@ -3,18 +3,14 @@
 # Imported in Main as library
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
+import signal
 import sys
-import threading
-
 import pyglet
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication
 
 from pytictoc import TicToc
 import questions
 from input import keyBoard
-import os
-import atexit
+import whichcraft
 import Pyro4 as pyro
 pyro.config.COMPRESSION = True
 pyro.config.DETAILED_TRACEBACK = True
@@ -33,10 +29,18 @@ from flightdir import flightdir
 from mathandler import NORBd
 from threading import Thread
 from utilscsv import vas_utils
-from questions import QVAS_ingame
+from questions import *
 
 global SRCwin
 
+def start_subp(command):
+    process = subprocess.Popen(command)
+    set.processes.append(process)
+    return
+
+def close_all():
+    for process in set.processes:
+        process.kill()
 
 class SRCWindow(visual.Window):
     # Initialization of the class
@@ -111,11 +115,17 @@ class SRCWindow(visual.Window):
         self.last_pos = None  # Last index of the ex_order called, for pause purpose
         self.last_TASK = None
         self.last_IMGS = None
+
         # Pyro Client Init
-        pyro4_path = set.pyro4_path
-                        #"C:\\Users\\Vincenzo Maria\\AppData\\Local\\Programs\\PsychoPy\\Scripts\\pyro4-ns.exe"
-        subprocess.Popen([pyro4_path])
-        subprocess.Popen(["python", "pyro_server.py"])
+        pyro4_path = whichcraft.which('pyro4-ns.exe')
+        if pyro4_path:
+            start_subp([pyro4_path])
+            start_subp(["python", "pyro_server.py"])
+            #subprocess.Popen([pyro4_path])
+            #subprocess.Popen(["python", "pyro_server.py"])
+        else:
+            print('Please, install pyro4==4.82 through pip')
+            sys.exit(1)
         # Wait for the server start up, cycle until the uri is obtained
         uri = None
         while uri is None:
@@ -311,8 +321,8 @@ class SRCWindow(visual.Window):
                     self.LSLHldr.send_mrk(typ='CLS')  # Correct execution
                 else:
                     self.LSLHldr.send_mrk(typ='BRK', it=exp_step)  # Force closing
+                close_all()
                 self.close()
-                atexit.register(os.system("taskkill /f /im python.exe"))  # Guarantee the clean exit of the experiment
                 core.quit()
             elif key[0] == 's' or self.nexts == -1:  # routine for starting the experiment
 
@@ -435,6 +445,8 @@ class SRCWindow(visual.Window):
                         self.case = 8
                     elif self.case == 1:
                         self.case = 5  # Thank you
+                        self.render()
+                        questions.subject_endform()  # Last set of questions
                     exp_step = 0
 
             if self.case == 8 and not p_once:

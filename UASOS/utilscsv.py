@@ -11,7 +11,6 @@ import fnmatch
 import os
 import sys
 
-import packet
 from packet import *
 
 class vas_utils():
@@ -153,7 +152,7 @@ class utilscsv:
         self.start_writers()
 
 
-def writeform(ans=None):
+def writeform(ans=None, end=False):
     if ans is not None:
         path = os.getcwd()
         folder_name = 'results'
@@ -163,17 +162,25 @@ def writeform(ans=None):
         if not os.path.exists(filepath):
             os.makedirs(filepath)
 
-        file_name = f'data_ID{ans.ID}.csv'
+        file_name = f'data_ID{ans.ID}.csv' if end is False else f'data_ID{ans.ID}_end.csv'
         filename = os.path.join(filepath, file_name)
         with open(filename, 'w', newline='') as datafile:
             dwriter = csv.writer(datafile, delimiter='\t')
-            dwriter.writerow(ans.header)
-            dwriter.writerow([ans.ID] + [ans.lang] + [ans.age] + [ans.gender] + [ans.degree] + [ans.work] +
-                              [ans.total] + [ans.scorewriting] + [ans.scorethrowing] + [ans.scoretoothbrush] +
-                              [ans.scorespoon] + [ans.KSS_data] + [ans.SPS_data] + [ans.RSME_data] +
-                              [ans.VAS_cognitive] + [ans.VAS_drowsiness])
-            datafile.close()
-        print(f'Subject ID {ans.ID} data saved in: {filename}')
+            if end is False:
+                dwriter.writerow(ans.header)
+                dwriter.writerow([ans.ID] + [ans.lang] + [ans.age] + [ans.gender] + [ans.degree] + [ans.work] +
+                                  [ans.total] + [ans.scorewriting] + [ans.scorethrowing] + [ans.scoretoothbrush] +
+                                  [ans.scorespoon] + [ans.KSS_data] + [ans.SPS_data] + [ans.RSME_data] +
+                                  [ans.VAS_cognitive] + [ans.VAS_drowsiness])
+                datafile.close()
+                print(f'Subject ID {ans.ID} data saved in: {filename}')
+            else:
+                dwriter.writerow(ans.header_end)
+                dwriter.writerow([ans.KSS_data] + [ans.SPS_data] + [ans.RSME_data] +
+                                 [ans.VAS_cognitive] + [ans.VAS_drowsiness])
+                datafile.close()
+                print(f'Subject ID {ans.ID} END data saved in: {filename}')
+
 
 
 def write_metadata(ans=None):

@@ -4,21 +4,23 @@
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
 import atexit
-import os
 import re
-import sys
+import signal
 
 from PyQt5.QtWidgets import QWidget, QSlider, QRadioButton, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, \
     QPushButton, QStyleOptionSlider, QStyle, QButtonGroup, QApplication, QCheckBox
 from PyQt5.QtGui import QPainter, QPixmap, QIcon, QIntValidator, QFontMetrics, QFont, QKeyEvent
 from PyQt5.QtCore import Qt, QPoint, QRect
 
-
 from local import langue
 from utilscsv import *
 from settings import set
 
 global ans
+
+def close_all():
+    for process in set.processes:
+        process.kill()
 
 
 class answers():
@@ -64,6 +66,7 @@ class answers():
         self.header = ['ID', 'lang', 'age', 'gender', 'degree', 'work', 'EHI_tot', 'scorewriting', 'scorethrowing',
                        'scoretoothbrush', 'scorespoon', 'KSS_data', 'SPS_data', 'RSME_data', 'VAS_cognitive',
                        'VAS_drowsiness']
+        self.header_end = ['KSS_data', 'SPS_data', 'RSME_data', 'VAS_cognitive', 'VAS_drowsiness']
 
 class QVRadioButton(QRadioButton):
     def __init__(self, label, value):
@@ -448,8 +451,8 @@ class QLang(QWidget):
 
     def closeEvent(self, e):
         ans.err = 0
+        close_all()  # Guarantee the clean exit of the experiment os.system("taskkill /f /im python.exe")
         self.pkproxy.close(0)  # Server Closing
-        atexit.register(os.system("taskkill /f /im python.exe"))  # Guarantee the clean exit of the experiment
         e.accept()
 
 
@@ -595,6 +598,7 @@ class QDemo(QWidget):
 
     def closeEvent(self, e):
         ans.err = 0
+        close_all()
         e.accept()
 
 
@@ -701,6 +705,8 @@ class QEHI(QWidget):
 
     def closeEvent(self, e):
         ans.err = 0
+        close_all()
+        self.pkproxy.close(0)  # Server Closing
         e.accept()
 
 
@@ -792,6 +798,12 @@ class QKSS(QWidget):
                 break
         ans.f_done = 4
         self.hide()
+
+    def closeEvent(self, e):
+        ans.err = 0
+        close_all()
+        self.pkproxy.close(0)  # Server Closing
+        e.accept()
 
 
 class QSPS(QWidget):
@@ -885,6 +897,8 @@ class QSPS(QWidget):
 
     def closeEvent(self, e):
         ans.err = 0
+        close_all()
+        self.pkproxy.close(0)  # Server Closing
         e.accept()
 
 
@@ -958,6 +972,8 @@ class QRSME(QWidget):
 
     def closeEvent(self, e):
         ans.err = 0
+        close_all()
+        self.pkproxy.close(0)  # Server Closing
         e.accept()
 
 
@@ -1053,6 +1069,8 @@ class QVAS(QWidget):
 
     def closeEvent(self, e):
         ans.err = 0
+        close_all()
+        self.pkproxy.close(0)  # Server Closing
         e.accept()
 
 
@@ -1146,6 +1164,8 @@ class QVAS_ingame(QWidget):
             #self.closeEvent()
 
     def closeEvent(self, e):
+        close_all()
+        self.pkproxy.close(0)  # Server Closing
         e.ignore()
 
 
@@ -1209,6 +1229,41 @@ def subject_fullform():
     if ans.err is not None:
         # I close everything
         set.close = True
+        close_all()
+        SRCwin.pkproxy.close(0)  # Server Closing
+
+
+def subject_endform():
+    app = QApplication(sys.argv)
+    ans.f_done = 3
+    ans.forms = [None, None, None, None, None, None, None]
+    while ans.f_done not in [8, 9] and ans.err is None:
+        if ans.f_done == 3 and ans.forms[0] is None:
+            ans.forms[0] = QKSS()
+            ans.forms[0].setWindowFlags(ans.forms[0].windowFlags() | Qt.WindowStaysOnTopHint)
+            ans.forms[0].show()
+        elif ans.f_done == 4 and ans.forms[1] is None:
+            ans.forms[1] = QSPS()
+            ans.forms[1].setWindowFlags(ans.forms[1].windowFlags() | Qt.WindowStaysOnTopHint)
+            ans.forms[1].show()
+        elif ans.f_done == 5 and ans.forms[2] is None:
+            ans.forms[2] = QRSME()
+            ans.forms[2].setWindowFlags(ans.forms[2].windowFlags() | Qt.WindowStaysOnTopHint)
+            ans.forms[2].show()
+        elif ans.f_done == 6 and ans.forms[3] is None:
+            ans.forms[3] = QVAS()
+            ans.forms[3].setWindowFlags(ans.forms[3].windowFlags() | Qt.WindowStaysOnTopHint)
+            ans.forms[3].show()
+        elif ans.f_done == 7:
+            writeform(ans, end=True)
+            ans.f_done = 8
+            app.quit()
+        app.processEvents()
+
+    if ans.err is not None:
+        # I close everything
+        set.close = True
+
 
 
 ans = answers()

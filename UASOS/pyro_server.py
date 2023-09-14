@@ -5,17 +5,16 @@
 # will hold in listening until the connection is established
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
 ###################################################################
-import os
-os.environ["PYRO_STORAGE "] = "./logs/"
-os.environ["PYRO_LOGFILE"] = "PyroLog.log"
-os.environ["PYRO_LOGLEVEL"] = "DEBUG"
+# import os
+# os.environ["PYRO_STORAGE "] = "./logs/"
+# os.environ["PYRO_LOGFILE"] = "PyroLog.log"
+# os.environ["PYRO_LOGLEVEL"] = "DEBUG"
 
 import Pyro4 as pyro
 pyro.config.SERVERTYPE = 'multiplex'
 pyro.config.COMPRESSION = True
 pyro.config.DETAILED_TRACEBACK = True
 pyro.config.SOCK_REUSE = True
-#pyro.config.AUTOPROXY = False
 
 import serpent
 import base64
