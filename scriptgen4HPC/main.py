@@ -1,7 +1,8 @@
-# This is a sample Python script.
-
-# Press Maiusc+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# main.py>
+# Main of scriptgen4HPC - utility for customizing the UASOS experiment
+# Set your parameters where requested hereafter
+# Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
+###################################################################
 
 from scriptgen import *
 from datetime import datetime

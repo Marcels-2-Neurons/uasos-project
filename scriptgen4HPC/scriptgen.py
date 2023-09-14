@@ -1,4 +1,4 @@
-# scriptgen_old2.py>
+# scriptgen.py>
 # Library used as Script Generator for the experiment
 # Imported in settings as library
 # Author: Vincenzo Maria VITALE - DCAS - MS TAS AERO - FTE
