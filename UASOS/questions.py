@@ -1233,7 +1233,9 @@ def subject_fullform():
         SRCwin.pkproxy.close(0)  # Server Closing
 
 
-def subject_endform():
+def subject_endform(id=None):
+    if id is not None:
+        ans.ID = id
     app = QApplication(sys.argv)
     ans.f_done = 3
     ans.forms = [None, None, None, None, None, None, None]
