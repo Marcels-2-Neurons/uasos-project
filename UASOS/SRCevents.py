@@ -196,7 +196,7 @@ class SRCWindow(visual.Window):
         self.render()
 
     # Rendering of the stimuli
-    def render(self, do=False):
+    def render(self, update_step=None, do=False):
         # stimuli drawing
         from SRCstimuli import Rects
         diff = self.count_diff_imgs(self.pack.Imgs, self.pack.pImgs)
@@ -208,7 +208,7 @@ class SRCWindow(visual.Window):
             for i in range(0, set.n_num * set.m_num):
                 Rects[i].draw(case=self.case)
                 if self.pack.Imgs[i] != self.pack.pImgs[i] and self.charged is False and do is True:
-                    self.LSLHldr.send_mrk(typ='IMG', wht=i+1, A=int(NORBd.get_cat(self.pack.Imgs[i])), B=self.pack.Corr[i], it=self.pack.iter, end=False)  # Charging the batch of markers
+                    self.LSLHldr.send_mrk(typ='IMG', wht=i+1, A=int(NORBd.get_cat(self.pack.Imgs[i])), B=self.pack.Corr[i], it=update_step, end=False)  # Charging the batch of markers
                     self.charged = True if len(self.LSLHldr.bsample) == diff else False
                     self.newpics = True
             self.FDir.draw(case=self.case, nexts=self.nexts)
@@ -292,7 +292,10 @@ class SRCWindow(visual.Window):
                 self.RTt.tic()  # Reset the Reaction Time clock!
                 # react_clock.reset()  # Reset the Reaction Time clock!
                 self.update_stim(exp_step, change=True)
-                self.render(do=True)
+                if exp_step != 0:
+                    self.render(update_step=exp_step-1, do=True)
+                else:
+                    self.render(do=True)
                 if self.newpics:
                     thread = Thread(target=self.exec_send)
                     thread.start()
@@ -437,12 +440,13 @@ class SRCWindow(visual.Window):
                     self.pack.Time = self.duration
                     changed = False
                 else:
-                    if not once:
-                        self.LSLHldr.send_mrk(typ='STP', wht=self.ex_order[self.last_pos])
-                        #self.LSLHldr.send_mrk(typ='SND')
-                        once = True
+                    # if not once:
+                    #
+                    #     #self.LSLHldr.send_mrk(typ='SND')
+                    #     once = True
                     if self.case in [2, 3, 4]:
                         self.case = 8
+                        questions.subject_endform()  # Last set of questions
                     elif self.case == 1:
                         self.case = 5  # Thank you
                         self.render()
@@ -451,6 +455,7 @@ class SRCWindow(visual.Window):
 
             if self.case == 8 and not p_once:
                 #self.start_case = False
+                self.LSLHldr.send_mrk(typ='STP', wht=self.ex_order[self.last_pos])
                 elapsed_time = 0
                 self.pkproxy.send_tstamp(elapsed_time)
                 self.pkproxy.reset_actual_delta()
@@ -459,6 +464,7 @@ class SRCWindow(visual.Window):
                 p_idx += 1
                 #self.request_pkg(0, case=pack[p_idx])
                 p_once = True
+                once = False
                 #exp_step = 1
             self.update_stim(exp_step, change=False)
 

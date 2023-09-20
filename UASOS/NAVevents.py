@@ -147,9 +147,9 @@ class NAVWindow(visual.Window):
                 if self.pack.Task == 5:
                     stim.map.get_labels(x=self.map_x % 5824, y=self.map_y % 5824)
 
-                    self.LSLHldr.send_mrk(typ='HDG', wht=self.pack.HDG, B=1)
+                    self.LSLHldr.send_mrk(typ='HDG', wht=self.pack.HDG, B=1, it=exp_it)
                     self.fake_wpy = self.get_rand_WPY(self.map_x, self.map_y)
-                    self.LSLHldr.send_mrk(typ='WPY', wht=self.fake_wpy, B=0)
+                    self.LSLHldr.send_mrk(typ='WPY', wht=self.fake_wpy, B=0, it=exp_it)
                     stim.map.HDG_Ttxt.text = f'{self.pack.HDG}'
                     stim.map.WPY_Ftxt.text = self.fake_wpy
                 if self.pack.Task == 6:
@@ -162,8 +162,8 @@ class NAVWindow(visual.Window):
                         OK = self.check_WPY(x_lbls=stim.map.x_lbls, y_lbls=stim.map.y_lbls, WPY=self.WPY[0], WPY_tuple=self.WPY[1])
                     stim.map.HDG_Ftxt.text = f'{hdg}'
                     stim.map.WPY_Ttxt.text = self.WPY[0]
-                    self.LSLHldr.send_mrk(typ='HDG', wht=hdg, B=0)
-                    self.LSLHldr.send_mrk(typ='WPY', wht=self.WPY[0], B=1)
+                    self.LSLHldr.send_mrk(typ='HDG', wht=hdg, B=0, it=exp_it)
+                    self.LSLHldr.send_mrk(typ='WPY', wht=self.WPY[0], B=1, it=exp_it)
                     self.ov_WPY += 1
             else:
                 stim.map.get_labels(x=self.map_x % 5824, y=self.map_y % 5824)
@@ -305,8 +305,7 @@ class NAVWindow(visual.Window):
                     self.y_wpy = self.map_y
                     stim.map.get_labels(x=self.x_wpy % 5824, y=self.y_wpy % 5824)  # Update the frozen labels for the wpy selection
                     once = True
-                self.update_stim(change=True, exp_it=self.exp_step)
-                self.render()  # do=True is for LSL markers sending
+                #self.render()  # do=True is for LSL markers sending
                 # Reset timers
                 #self.t.tic()
                 self.RTt.tic()
@@ -320,6 +319,12 @@ class NAVWindow(visual.Window):
             # Controls of the experiment
             if self.case in [1, 3, 4]:
                 #self.duration = self.pack.Time
+                if self.exp_step != 0 and changed is True:
+                    self.update_stim(change=True, exp_it=self.exp_step-1)
+                    self.render()
+                elif self.exp_step == 0 and changed is True:
+                    self.update_stim(change=True, exp_it=self.exp_step)
+                    self.render()
                 self.pos_updated = False
                 # Add Trackball
                 if self.mouse.mouseMoved():
@@ -346,7 +351,10 @@ class NAVWindow(visual.Window):
                                 pos = stim.map.tiles[i].rect.pos
                                 self.te_mouse = self.pkproxy.check_tstamp()
                                 self.sel_WPY(x_lbls=stim.map.x_lbls, y_lbls=stim.map.y_lbls, WPY_tuple=stim.map.tiles[i].value, WPY=self.WPY)
-                                self.LSLHldr.send_mrk(typ='UPY', wht=self.usr_WPY[0], B=self.WPYcorr, it=self.pack.iter - 1)
+                                if self.exp_step != 0:
+                                    self.LSLHldr.send_mrk(typ='UPY', wht=self.usr_WPY[0], B=self.WPYcorr, it=self.exp_step - 1)
+                                else:
+                                    self.LSLHldr.send_mrk(typ='UPY', wht=self.usr_WPY[0], B=self.WPYcorr, it=self.exp_step)
                                 self.selected = True
                                 stim.map.mrk.set_pos(x=pos[0], y=pos[1])
                                 self.nHDG = round(self.HDG + self.WPY_dHDG[i]) % 360
@@ -359,7 +367,7 @@ class NAVWindow(visual.Window):
                         # Send here lsl marker with its -2s timestamp
                         if self.devices[0] is True:
                             self.devices[0] = False
-                            self.LSLHldr.send_mrk(typ='MOV', wht=self.devices[0], it=self.pack.iter - 1, cut_seconds=2)
+                            self.LSLHldr.send_mrk(typ='MOV', wht=self.devices[0], it=self.pack.iter - 1, cut_seconds=0.6)
                         # self.mouse.setVisible(visible=False)
                         # self.mouse.setPos(newPos=stim.map.mouse_pos)
 
@@ -375,7 +383,7 @@ class NAVWindow(visual.Window):
                     if self.devices[1] is False:
                         self.ts_fstick = self.pkproxy.check_tstamp()
                         self.devices[1] = True
-                        self.LSLHldr.send_mrk(typ='FLT', wht=self.devices[1], it=self.pack.iter - 1, cut_seconds=2)
+                        self.LSLHldr.send_mrk(typ='FLT', wht=self.devices[1], it=self.pack.iter - 1)
                     # Fstick is working
                     self.needleHDG = round(self.needleHDG + self.fs.deg)
                     self.nHDG = round(self.HDG + self.needleHDG) % 360
@@ -394,6 +402,7 @@ class NAVWindow(visual.Window):
                             self.dev = (self.pack.HDG - self.usr_nHDG) # % 180
                         self.devices[1] = False
                         self.LSLHldr.send_mrk(typ='FLT', wht=self.devices[1], it=self.pack.iter - 1)
+                        self.LSLHldr.send_mrk(typ='UDG', wht=self.usr_nHDG, it=self.pack.iter - 1)
                     if abs(self.nHDG-self.HDG) < self.toll and self.devices[1] is False:
                         # Reset Condition
                         self.dir = 0
@@ -444,7 +453,7 @@ class NAVWindow(visual.Window):
                 p_idx += 1
                 self.request_pkg(self.exp_step, pack[p_idx])
                 self.duration = self.pack.Time
-                self.update_stim(change=True, exp_it=self.exp_step)
+                self.update_stim(change=False, exp_it=self.exp_step)
                 self.exp_step = 1
                 self.RTt.tic()
                 p_once = True
