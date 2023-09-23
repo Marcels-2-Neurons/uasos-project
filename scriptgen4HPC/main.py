@@ -39,7 +39,7 @@ max_time = 167  # Max time allowable to run, useful to cut before HPC cuts the a
 # Related to the script_dset.csv gen
 phase_gen = 'MAIN'  # choose between 'MAIN', 'SRC_TRAIN', 'NAVI_TRAIN'
 exp_time_main = 2*60*min2ms
-exp_time_train = 3*60*min2ms
+exp_time_train = 3*min2ms
 it_time = 7000
 jitter = 1000
 treshold = 0.03  # Default <3% for convergence in 2hrs 7 (+/-1) sec
