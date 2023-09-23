@@ -12,7 +12,6 @@ UASOS Project - UAS Operator Simulator
 
 ---
 ## TOC
-- [UASOS Project - UAS Operator Simulator](#uasos-project---uas-operator-simulator)
   * [Scope of the project](#scope-of-the-project)
   * [Minimum and Recommended Requirements](#minimum-and-recommended-requirements)
       - [Recommended Flight Stick](#recommended-flight-stick)
