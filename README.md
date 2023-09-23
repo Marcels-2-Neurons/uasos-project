@@ -78,7 +78,7 @@ If you want to add a new controller, you can use the *joyreporter.py* given with
 1. Run on python console `joyreporter.py` available in `./UASOS/utilities/joyreporter`
 2. Identify
    * The Name of the device (ex. `Controller (Xbox One For Windows)`)
-   * the Axis that you want to use as Roll Axis (the only one that UASOS will use)
+   * the Axis that you want to use as Roll Axis (you can identify it by checking the console: it changes between [-1,+1], it will be the only one that UASOS will use)
 4. Update at `line 148` with a new line your controller as:
   `'<CONTROLLER_NAME>': _Xbox360((-1, <AXIS_ID_ROLL>, -3, 0), 0)`
 
