@@ -14,6 +14,8 @@ UASOS Project - UAS Operator Simulator
 ## TOC
   * [Scope of the project](#scope-of-the-project)
   * [Minimum and Recommended Requirements](#minimum-and-recommended-requirements)
+      - [Recommended Requirements](#recommended-requirements)
+      - [Minimum Requirements](#minimum-requirements)
       - [Recommended Flight Stick](#recommended-flight-stick)
   * [Python Modules used](#python-modules-used)
   * [Setup](#setup)
@@ -37,7 +39,8 @@ The Repository includes:
 
 ---
 ## Minimum and Recommended Requirements
-**Recommended Requirements**
+#### Recommended Requirements
+
 We guarantee the full functionality of UASOS under the following requirements:
 
 * CPU: Intel Core i7-8700 @3.20GHz
@@ -48,7 +51,7 @@ We guarantee the full functionality of UASOS under the following requirements:
 * A keyboard, Trackball for best experience
 * Flight Stick: Logitech Extreme 3D Pro
 
-**Minimum Requirements**
+#### Minimum Requirements
 
 * CPU: at least a Quad-Core CPU
 * GPU: at least 1GB GDDR4 - >OpenGL 2.0 for PsychoPy compatibility 
