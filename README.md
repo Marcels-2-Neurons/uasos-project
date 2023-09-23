@@ -10,8 +10,6 @@ The Repository includes the Experiment UASOS and its utility for generating new 
 The project aims to reproduce functionally some of the tasks available on a UAS Ground Station and study the Test Subject mental fatigue subjected to this experiment.
 
 ---
-
----
 ## Minimum and Recommended Requirements
 
 #### Recommended Flight Stick
