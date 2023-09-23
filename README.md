@@ -85,7 +85,6 @@ At the startup, **UASOS** will check the presence of the following modules:
 * scipy 1.7.2
 * screeninfo 0.8.1
 * serpent 1.41
-* whichcraft 0.6.1
 
 Meanwhile **scriptgen4HPC** requires only:
 
