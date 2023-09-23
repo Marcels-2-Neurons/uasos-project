@@ -16,7 +16,7 @@ UASOS Project - UAS Operator Simulator
   * [Minimum and Recommended Requirements](#minimum-and-recommended-requirements)
       - [Recommended Requirements](#recommended-requirements)
       - [Minimum Requirements](#minimum-requirements)
-      - [Recommended Flight Stick](#recommended-flight-stick)
+      - [You have another Flight Stick?](#you-have-another-flight-stick)
   * [Python Modules used](#python-modules-used)
   * [Setup](#setup)
   * [Usage](#usage)
@@ -60,7 +60,7 @@ We guarantee the full functionality of UASOS under the following requirements:
 * 2 Monitors - Resolution: 1920x1080 px
 * A keyboard, a pointing device and Flight Stick (See Recommended Flight Stick section)
 
-#### Recommended Flight Stick
+#### You have another Flight Stick?
 UASOS uses for listening the Flight Stick the library [PySticks](https://github.com/simondlevy/PySticks) from [Pr. Simon D. LEVY](https://simondlevy.academic.wlu.edu/) of Computer Science Department, Washington and Lee University (*Thank you Simon*, Devs. Note).
 
 Following PySticks Release Notes, the compatible controllers are:
