@@ -58,7 +58,7 @@ We guarantee the full functionality of UASOS under the following requirements:
 * RAM: at least 6 GB
 * Storage: At least 512 MB
 * 2 Monitors - Resolution: 1920x1080 px
-* A keyboard, a pointing device and Flight Stick (See Recommended Flight Stick section)
+* A keyboard, a pointing device and Flight Stick (See You have another Flight Stick? section)
 
 #### You have another Flight Stick?
 UASOS uses for listening the Flight Stick the library [PySticks](https://github.com/simondlevy/PySticks) from [Pr. Simon D. LEVY](https://simondlevy.academic.wlu.edu/) of Computer Science Department, Washington and Lee University (*Thank you Simon*, Devs. Note).
