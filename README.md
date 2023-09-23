@@ -18,7 +18,7 @@ UASOS Project - UAS Operator Simulator
   * [Setup](#setup)
   * [Usage](#usage)
     + [UASOS](#uasos)
-    + [Need personalized scripts? Use scriptgen4HPC](#need-personalized-scripts--use-scriptgen4hpc)
+    + [Need personalized scripts? Use scriptgen4HPC](#need-personalized-scripts-use-scriptgen4hpc)
   * [FAQ](#faq)
   * [License](#license)
 
@@ -27,7 +27,9 @@ UASOS Project - UAS Operator Simulator
 
 The project aims to reproduce functionally some of the tasks available on a UAS Ground Station and study the Test Subject mental fatigue subjected to this experiment.
 
-The Repository includes the Experiment *UASOS* and its utility for generating new experimental scripts called *scriptgen4HPC*.
+The Repository includes:
+* *UASOS*: the Experiment
+* *scriptgen4HPC*: utility for generating new experimental scripts
 
 ---
 ## Minimum and Recommended Requirements
