@@ -30,7 +30,7 @@ class keyBoard():
             'escape': 'escape'
         }
 
-        keys = self.kbHandler.getKeys(keyList=key_map.keys())
+        keys = self.kbHandler.getKeys(keyList=key_map.keys(), clear=True)
         out_pkg = [None, None]
         for key in keys:
             if key.name in key_map and key.name.isnumeric():

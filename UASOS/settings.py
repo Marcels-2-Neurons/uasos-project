@@ -31,8 +31,8 @@ class settings:
             self.n_mon = 2
             self.wsize = [(0, 0), (0, 0)]
             self.ratio = [0, 0]
-            self.wsize[0] = (self.mon[0].width, self.mon[0].height)
-            self.wsize[1] = (self.mon[1].width, self.mon[1].height)
+            self.wsize[0] = (1920, 1080) #(self.mon[0].width, self.mon[0].height)
+            self.wsize[1] = (1920, 1080) #(self.mon[1].width, self.mon[1].height)
             self.ratio[0] = self.wsize[0][0] / self.wsize[0][1]
             self.ratio[1] = self.wsize[1][0] / self.wsize[1][1]
             self.Fullscreen = False

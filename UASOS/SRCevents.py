@@ -10,7 +10,7 @@ import pyglet
 from pytictoc import TicToc
 import questions
 from input import keyBoard
-import whichcraft
+from shutil import which
 import Pyro4 as pyro
 pyro.config.COMPRESSION = True
 pyro.config.DETAILED_TRACEBACK = True
@@ -117,12 +117,10 @@ class SRCWindow(visual.Window):
         self.last_IMGS = None
 
         # Pyro Client Init
-        pyro4_path = whichcraft.which('pyro4-ns.exe')
+        pyro4_path = which('pyro4-ns.exe',path='./utilities/pyro4/')
         if pyro4_path:
             start_subp([pyro4_path])
             start_subp(["python", "pyro_server.py"])
-            #subprocess.Popen([pyro4_path])
-            #subprocess.Popen(["python", "pyro_server.py"])
         else:
             print('Please, install pyro4==4.82 through pip')
             sys.exit(1)
@@ -327,7 +325,7 @@ class SRCWindow(visual.Window):
                 close_all()
                 self.close()
                 core.quit()
-            elif key[0] == 's' or self.nexts == -1:  # routine for starting the experiment
+            elif (key[0] == 's' or self.nexts == -1) and self.case != -5:  # routine for starting the experiment
 
                 if self.nexts == -1 or self.case in [0, 8]:  # slide or end of phase
                     pos += 1

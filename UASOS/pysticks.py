@@ -145,7 +145,7 @@ controllers = {
     'SPEKTRUM RECEIVER': _RcTransmitter((1, 2, 5, 0), 4),
     'Horizon Hobby SPEKTRUM RECEIVER': _RcTransmitter((1, 2, 3, 0), 4),
     'Extreme 3D pro': _GameController((-2, 0, -1, 3), 0),
-    'Controller (Xbox One For Windows)': _Xbox360((-1, 4, -3, 0), 2)  # DEBUG CONTROLLER, JUST A DUMMY
+    'Controller (Xbox One For Windows)': _Xbox360((-1, 2, -3, 0), 2)  # DEBUG CONTROLLER, JUST A DUMMY
 }
 
 
