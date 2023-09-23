@@ -1,13 +1,19 @@
+
+*A project on behalf of Fédération de recherche ONERA - ISAE SUPAERO - ENAC ([FONISEN](https://hal.science/FONISEN))*
+
 UASOS Project - UAS Operator Simulator
 =============
-A project on behalf of Fédération de recherche ONERA - ISAE SUPAERO - ENAC (FONISEN).
 
-The Repository includes the Experiment UASOS and its utility for generating new experimental scripts called scriptgen4HPC. 
+**Authors**: *[Pr. Raphaëlle N. ROY](https://pagespro.isae-supaero.fr/raphaelle-n-roy-211/) (ISAE CNE), [Pr. Anke BROCK](https://people.bordeaux.inria.fr/abrock/) (ENAC LII),* 
+
+*[Marcel Francis HINSS](https://www.linkedin.com/in/marcel-francis-hinss-9097a5140/) (ISAE CNE), [PHAN Nhat Tien](https://www.linkedin.com/in/phanhatien/) (ENAC LII), [Vincenzo Maria VITALE](https://www.linkedin.com/in/enzomvitale/) (ISAE CNE)*
 
 ---
 ## Scope of the project
 
 The project aims to reproduce functionally some of the tasks available on a UAS Ground Station and study the Test Subject mental fatigue subjected to this experiment.
+
+The Repository includes the Experiment *UASOS* and its utility for generating new experimental scripts called *scriptgen4HPC*.
 
 ---
 ## Minimum and Recommended Requirements
@@ -30,7 +36,7 @@ We guarantee the full functionality of UASOS under the following requirements:
 * A keyboard, a pointing device and Flight Stick (See Recommended Flight Stick section)
 
 #### Recommended Flight Stick
-UASOS uses for listening the Flight Stick the library [PySticks](https://github.com/simondlevy/PySticks) from [Pr. Simon D. Levy](https://simondlevy.academic.wlu.edu/) of Computer Science Department, Washington and Lee University (*Thank you Simon*, Devs. Note).
+UASOS uses for listening the Flight Stick the library [PySticks](https://github.com/simondlevy/PySticks) from [Pr. Simon D. LEVY](https://simondlevy.academic.wlu.edu/) of Computer Science Department, Washington and Lee University (*Thank you Simon*, Devs. Note).
 
 Following PySticks Release Notes, the compatible controllers are:
 
