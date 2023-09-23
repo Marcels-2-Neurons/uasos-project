@@ -38,6 +38,7 @@ We guarantee the full functionality of UASOS under the following requirements:
 * GPU: NVidia Quadro P620 - 2GB GDDR5 - OpenGL 4.5
 * RAM: 8 GB
 * Storage: At least 2 GB
+* 2 Identical Monitors - Resolution: 1920x1080 px
 * A keyboard, Trackball for best experience
 * Flight Stick: Logitech Extreme 3D Pro
 
@@ -47,6 +48,7 @@ We guarantee the full functionality of UASOS under the following requirements:
 * GPU: at least 1GB GDDR4 - >OpenGL 2.0 for PsychoPy compatibility 
 * RAM: at least 6 GB
 * Storage: At least 512 MB
+* 2 Monitors - Resolution: 1920x1080 px
 * A keyboard, a pointing device and Flight Stick (See Recommended Flight Stick section)
 
 #### Recommended Flight Stick
