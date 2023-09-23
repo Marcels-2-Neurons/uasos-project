@@ -9,6 +9,20 @@ UASOS Project - UAS Operator Simulator
 *[Marcel Francis HINSS](https://www.linkedin.com/in/marcel-francis-hinss-9097a5140/) (ISAE CNE), [PHAN Nhat Tien](https://www.linkedin.com/in/phanhatien/) (ENAC LII), [Vincenzo Maria VITALE](https://www.linkedin.com/in/enzomvitale/) (ISAE CNE)*
 
 ---
+## TOC
+- [UASOS Project - UAS Operator Simulator](#uasos-project---uas-operator-simulator)
+  * [Scope of the project](#scope-of-the-project)
+  * [Minimum and Recommended Requirements](#minimum-and-recommended-requirements)
+      - [Recommended Flight Stick](#recommended-flight-stick)
+  * [Python Modules used](#python-modules-used)
+  * [Setup](#setup)
+  * [Usage](#usage)
+    + [UASOS](#uasos)
+    + [Need personalized scripts? Use scriptgen4HPC](#need-personalized-scripts--use-scriptgen4hpc)
+  * [FAQ](#faq)
+  * [License](#license)
+
+---
 ## Scope of the project
 
 The project aims to reproduce functionally some of the tasks available on a UAS Ground Station and study the Test Subject mental fatigue subjected to this experiment.
