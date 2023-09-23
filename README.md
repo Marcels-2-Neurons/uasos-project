@@ -1,4 +1,4 @@
-![uasos logo](https://raw.githubusercontent.com/Descent098/ezcv/master/.github/logo.png)
+![uasos logo](https://media.githubusercontent.com/media/Marcels-2-Neurons/Reaper/main/UASOS/imgs/UASOS%20Banner.png)
 
 
 *A project on behalf of Fédération de recherche ONERA - ISAE SUPAERO - ENAC ([FONISEN](https://hal.science/FONISEN))*
@@ -21,7 +21,10 @@ UASOS Project - UAS Operator Simulator
   * [Usage](#usage)
     + [UASOS](#uasos)
     + [Need personalized scripts? Use scriptgen4HPC](#need-personalized-scripts-use-scriptgen4hpc)
-  * [FAQ](#faq)
+      - [Prerequirements](#prerequirements)
+      - [If you use an Home PC](#if-you-use-an-home-pc)
+      - [If you use an HPC Node](#if-you-use-an-hpc-node)
+      - [Parameters to change and run](#parameters-to-change-and-run)
   * [License](#license)
 
 ---
@@ -124,10 +127,41 @@ For a Demo, you can simply start UASOS experiment directly and follow the experi
 Have fun! 😉
 
 ### Need personalized scripts? Use scriptgen4HPC
-**scriptgen4HPC** 
+**scriptgen4HPC** can work both on a house PC and on HPC Node.
+#### Prerequirements
 
+#### If you use an Home PC
 ---
-## FAQ
+In order to avoid stutters when using your PC, maintain one logical core available for essential processes:
+
+Modify in `main.py` at `line 26`: `num_threads = mp.cpu_count() - 1`
+
+#### If you use an HPC Node
+---
+No modifications necessary, just go to the next to [Parameters to change](#parameters-to-change)
+
+Remember to build your own Slurm file to organize your simulation.
+
+#### Parameters to change and run
+---
+From `line 37` to `line 46`
+```python
+max_size_dset = 1000  # indicative, pc needs to do a round number of scripts
+max_time = 167  # Max time allowable to run, useful to cut before HPC cuts the allocation time
+# Related to the script_dset.csv gen
+phase_gen = 'MAIN'  # choose between 'MAIN', 'SRC_TRAIN', 'NAVI_TRAIN'
+exp_time_main = 2*60*min2ms # Modify just the first integer if you want to modify the hours
+exp_time_train = 3*min2ms # Modify just the first integer if you want to modify the minutes
+it_time = 7000 # Mean iteration time in ms
+jitter = 1000 # Jitter range in ms [-jitter,+jitter]
+treshold = 0.03  # Default <3% for convergence in 2hrs 7 (+/-1) sec [DO NOT GO < 2%]
+treshold_train = 0.5  # Stay large, it's just training [DO NOT GO < 15%]
+```
+And then you are ready to run.
+
+You will obtain your new scripts on `./scriptgen4HPC/final`.
+
+Overwrite them on `./UASOS/scripts` and remember to update with the parameters you have chosen in `settings.py` from `line 23` to `line 28`.
 
 ---
 ## License
