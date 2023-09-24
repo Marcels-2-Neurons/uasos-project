@@ -8,7 +8,7 @@ import re
 import signal
 
 from PyQt5.QtWidgets import QWidget, QSlider, QRadioButton, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, \
-    QPushButton, QStyleOptionSlider, QStyle, QButtonGroup, QApplication, QCheckBox
+    QPushButton, QStyleOptionSlider, QStyle, QButtonGroup, QApplication, QCheckBox, QDesktopWidget
 from PyQt5.QtGui import QPainter, QPixmap, QIcon, QIntValidator, QFontMetrics, QFont, QKeyEvent
 from PyQt5.QtCore import Qt, QPoint, QRect
 
@@ -89,6 +89,10 @@ class QLSlider(QWidget):
         else:
             self.levels = list(zip(levels, map(str, levels)))
 
+        self.screen_size = QDesktopWidget().screenGeometry()
+        self.screen_X = self.screen_size.width()/1920
+        self.screen_Y = self.screen_size.height()/1080
+
         if orientation == Qt.Horizontal:
             self.layout = QVBoxLayout(self)
             self.layout.setAlignment(Qt.AlignTop)
@@ -127,7 +131,7 @@ class QLSlider(QWidget):
         self.sl = QSlider(orientation, self)
         if style is not None:
             self.style = style
-            self.sl.setStyleSheet(self.style)
+            self.sl.setFont(style)
         else:
             self.style = None
 
@@ -171,11 +175,7 @@ class QLSlider(QWidget):
 
         # Set font Style
         if self.style is not None:
-            font = QFont()
-            f_family = re.search(r'font-family: ([^;]+)', self.style).group(1)
-            f_size = int(re.search(r'font-size: (\d+)', self.style).group(1))
-            font.setFamily(f_family)
-            font.setPixelSize(f_size)
+            font = self.style
             painter.setFont(font)
         else:
             font = QFont("Arial", 12)
@@ -193,7 +193,7 @@ class QLSlider(QWidget):
 
                 # left bound of the text = center - half of text width + L_margin
                 left = x_loc - rect.width() // 2 + self.left_margin
-                bottom = - st_slider.rulxy[1] + self.offset
+                bottom = - st_slider.rulxy[1] + self.offset + 20*(self.screen_Y-1)
 
                 # enlarge margins if clipping
                 if v == self.sl.minimum():
@@ -255,12 +255,15 @@ class QLang(QWidget):
     def __init__(self):
         super().__init__()
 
-        font = "Calibri"
-        Ttype = "bold"
-        Tsize: int = 18
-        tsize: int = 14
-        self.titleconfig = f"font-family: {font}; font-weight: {Ttype}; font-size: {Tsize}px"
-        self.textconfig = f"font-family: {font}; font-size: {tsize}px"
+        screen_size = QDesktopWidget().screenGeometry()
+        screen_X = round(screen_size.width()/1920)
+        screen_Y = round(screen_size.height()/1080)
+        Tsize: int = 18 * screen_Y/2
+        Tfont = QFont("Calibri", Tsize)
+        Tfont.setBold(True)
+        tsize: int = 14 * screen_Y/2
+        tfont = QFont("Calibri", tsize)
+
 
         if 'ans' in locals() or 'ans' in globals():
             pass
@@ -270,17 +273,17 @@ class QLang(QWidget):
         self.setWindowTitle("Select Language")
         self.setWindowIcon(QIcon("./imgs/isae_logo.png"))
         self.title = QLabel("ISAE CNE - Bienvenue")
-        self.title.setStyleSheet(self.titleconfig)
+        self.title.setFont(Tfont)
         self.title.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.setFixedSize(335, 335)
+        self.setFixedSize(335*screen_X, 335*screen_Y)
         # Country Flags for the languages
         self.ID_label = QLabel(langue.get_string("ID_request"))
-        self.ID_label.setStyleSheet(self.textconfig)
+        self.ID_label.setFont(tfont)
         self.ID_box = QLineEdit()
         self.IDval = QIntValidator()
         self.ID_box.setValidator(self.IDval)
-        self.ID_box.setFixedSize(100, 25)
-        self.ID_box.setStyleSheet(self.textconfig)
+        self.ID_box.setFixedSize(100*screen_X, 25*screen_Y)
+        self.ID_box.setFont(tfont)
         self.box = QHBoxLayout()
         self.box.addWidget(self.ID_label)
         self.box.addWidget(self.ID_box)
@@ -292,15 +295,15 @@ class QLang(QWidget):
         self.it_IT = QIcon(QPixmap("./imgs/it_IT.png"))
         # Create the labels with icons
         self.lbl_fr = QLabel()
-        self.lbl_fr.setPixmap(self.fr_FR.pixmap(100, 100))
+        self.lbl_fr.setPixmap(self.fr_FR.pixmap(100*screen_X, 100*screen_Y))
         self.lbl_fr.mousePressEvent = self.on_fr_FR_click
 
         self.lbl_en = QLabel()
-        self.lbl_en.setPixmap(self.en_US.pixmap(100, 100))
+        self.lbl_en.setPixmap(self.en_US.pixmap(100*screen_X, 100*screen_Y))
         self.lbl_en.mousePressEvent = self.on_en_US_click
 
         self.lbl_it = QLabel()
-        self.lbl_it.setPixmap(self.it_IT.pixmap(100, 100))
+        self.lbl_it.setPixmap(self.it_IT.pixmap(100*screen_X, 100*screen_Y))
         self.lbl_it.mousePressEvent = self.on_it_IT_click
 
         # Create a vertical layout
@@ -312,6 +315,7 @@ class QLang(QWidget):
         wflay.setLayout(flay)
 
         self.restart = QCheckBox("Restart from ID folder")
+        self.restart.setFont(tfont)
         ResLayout = QHBoxLayout()
         ResW = QWidget()
         ResLayout.addWidget(self.restart)
@@ -319,13 +323,14 @@ class QLang(QWidget):
         VASOrganized = QHBoxLayout()
         WVAS = QWidget()
         self.VAS = QCheckBox("Request VAS every [min]")
+        self.VAS.setFont(tfont)
         self.VAS.setChecked(True)
         self.VAS_box = QLineEdit()
+        self.VAS_box.setFont(tfont)
         self.VAS_box.setText("19")
         self.VASval = QIntValidator()
         self.VAS_box.setValidator(self.VASval)
-        self.VAS_box.setFixedSize(100, 25)
-        self.VAS_box.setStyleSheet(self.textconfig)
+        self.VAS_box.setFixedSize(100*screen_X, 25*screen_Y)
         VASOrganized.addWidget(self.VAS)
         VASOrganized.addWidget(self.VAS_box)
         WVAS.setLayout(VASOrganized)
@@ -457,25 +462,26 @@ class QLang(QWidget):
 
 
 class QDemo(QWidget):
-    # TODO: Add Icon
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Demographics Form")
         self.setWindowIcon(QIcon("./imgs/isae_logo.png"))
-        if ans.lang == 'en' or ans.lang == 'fr':
-            self.setFixedSize(600, 600)
-            self.space = 180
-        elif ans.lang == 'it':
-            self.setFixedSize(500, 600)
-            self.space = 130
+        screen_size = QDesktopWidget().screenGeometry()
+        screen_X = round(screen_size.width() / 1920)
+        screen_Y = round(screen_size.height() / 1080)
+        Tsize: int = 18 * screen_Y / 2
+        Tfont = QFont("Calibri", Tsize)
+        Tfont.setBold(True)
+        tsize: int = 14 * screen_Y / 2
+        tfont = QFont("Calibri", tsize)
 
-        font = "Calibri"
-        Ttype = "bold"
-        Tsize: int = 18
-        tsize: int = 14
-        self.titleconfig = f"font-family: {font}; font-weight: {Ttype}; font-size: {Tsize}px"
-        self.textconfig = f"font-family: {font}; font-size: {tsize}px"
+        if ans.lang == 'en' or ans.lang == 'fr':
+            self.setFixedSize(600*screen_X, 600*screen_Y)
+            self.space = 180*screen_Y
+        elif ans.lang == 'it':
+            self.setFixedSize(500*screen_X, 600*screen_Y)
+            self.space = 130*screen_Y
 
         self.gencheck = []
         self.degcheck = []
@@ -484,7 +490,7 @@ class QDemo(QWidget):
 
         self.title = QLabel(langue.get_string("demo_Title"))
         self.title.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.title.setStyleSheet(self.titleconfig)
+        self.title.setFont(Tfont)
         self.layout.addWidget(self.title)
 
         qDemos = [langue.get_string("demo_AGE"), langue.get_string("demo_gender"),
@@ -508,8 +514,7 @@ class QDemo(QWidget):
 
         for idx, ltext in enumerate(qDemos):
             label = QLabel(ltext)
-            label.setStyleSheet(self.textconfig)
-            # label.resize(label.sizeHint())
+            label.setFont(tfont)
             label.setAlignment(Qt.AlignLeft)
             box[idx].addWidget(label)
 
@@ -518,28 +523,28 @@ class QDemo(QWidget):
                 self.age_field = QLineEdit()
                 self.aval = QIntValidator()
                 self.age_field.setValidator(self.aval)
-                self.age_field.setFixedSize(100, 20)
+                self.age_field.setFixedSize(100*screen_X, 20*screen_Y)
                 self.age_field.textChanged.connect(self.checkInput)
-                self.age_field.setStyleSheet(self.textconfig)
+                self.age_field.setFont(tfont)
                 box[idx].addWidget(self.age_field)
             elif idx == 1:
                 for lgen in q_gender:
                     optg = QVRadioButton(lgen, lgen)
-                    optg.setStyleSheet(self.textconfig)
+                    optg.setFont(tfont)
                     optg.toggled.connect(self.checkInput)
                     self.gencheck.append(optg)
                     list[idx - 1].addWidget(optg)
             elif idx == 2:
                 for ldegree in q_degree:
                     optd = QVRadioButton(ldegree, ldegree)
-                    optd.setStyleSheet(self.textconfig)
+                    optd.setFont(tfont)
                     optd.toggled.connect(self.checkInput)
                     self.degcheck.append(optd)
                     list[idx - 1].addWidget(optd)
             elif idx == 3:
                 for lwork in q_work:
                     optw = QVRadioButton(lwork, lwork)
-                    optw.setStyleSheet(self.textconfig)
+                    optw.setFont(tfont)
                     optw.toggled.connect(self.checkInput)
                     self.workcheck.append(optw)
                     list[idx - 1].addWidget(optw)
@@ -554,9 +559,9 @@ class QDemo(QWidget):
         self.qOK.mousePressEvent = self.on_OK_click
         self.butlay = QHBoxLayout()
         self.wbutlay = QWidget()
-        self.qOK.setFixedSize(100, 25)
-        self.qOK.setStyleSheet(self.textconfig)
-        self.butlay.addStretch(300)
+        self.qOK.setFixedSize(100*screen_X, 25*screen_Y)
+        self.qOK.setFont(tfont)
+        self.butlay.addStretch(300*screen_X)
         self.butlay.addWidget(self.qOK)
         self.wbutlay.setLayout(self.butlay)
         self.layout.addWidget(self.wbutlay)
@@ -608,29 +613,30 @@ class QEHI(QWidget):
 
         self.setWindowTitle("EHI Form")
         self.setWindowIcon(QIcon("./imgs/isae_logo.png"))
+        screen_size = QDesktopWidget().screenGeometry()
+        screen_X = round(screen_size.width() / 1920)
+        screen_Y = round(screen_size.height() / 1080)
+        Tsize: int = 18 * screen_Y / 2
+        Tfont = QFont("Calibri", Tsize)
+        Tfont.setBold(True)
+        tsize: int = 14 * screen_Y / 2
+        tfont = QFont("Calibri", tsize)
         if ans.lang == 'it' or ans.lang == 'fr':
-            self.setFixedSize(800, 320)
+            self.setFixedSize(800*screen_X, 320*screen_X)
         elif ans.lang == 'en':
-            self.setFixedSize(750, 320)
+            self.setFixedSize(750*screen_X, 320*screen_X)
 
-        # Font Selection
-        font = "Calibri"
-        Ttype = "bold"
-        Tsize: int = 18
-        tsize: int = 14
-        self.titleconfig = f"font-family: {font}; font-weight: {Ttype}; font-size: {Tsize}px"
-        self.textconfig = f"font-family: {font}; font-size: {tsize}px"
         # Layout
         self.layout = QVBoxLayout()
         # Set Title
         self.title = QLabel(langue.get_string("EHI_Title"))
         self.title.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.title.setStyleSheet(self.titleconfig)
+        self.title.setFont(Tfont)
         self.layout.addWidget(self.title)
         # Set question
         self.quest = QLabel(langue.get_string("EHI_question"))
         self.quest.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.quest.setStyleSheet(self.textconfig)
+        self.quest.setFont(tfont)
         self.layout.addWidget(self.quest)
         # Set Column labels
         self.bigbox = QHBoxLayout()
@@ -644,27 +650,26 @@ class QEHI(QWidget):
         # Column Labels on 0 - Hands
         for idx in range(5):
             if idx == 0:
-                self.ylabsBox[0].addSpacing(30)
+                self.ylabsBox[0].addSpacing(30*screen_X)
             else:
                 label = QLabel(rlabels[idx - 1])
-                label.setStyleSheet(self.textconfig)
+                label.setFont(tfont)
                 self.ylabsBox[0].addWidget(label)
-                # self.ylabsBox[0].addSpacing(10)
         # Each question now
         for cidx in range(5):
             for pos in range(5):
                 if pos == 0:
                     label = QLabel(clabels[cidx])
-                    label.setStyleSheet(self.textconfig)
+                    label.setFont(tfont)
                     self.ylabsBox[cidx + 1].addWidget(label, alignment=Qt.AlignCenter)
-                    self.ylabsBox[cidx + 1].addSpacing(20)
+                    self.ylabsBox[cidx + 1].addSpacing(20*screen_Y)
                 else:
                     opt = QVRadioButton("", 5 - cidx)
                     opt.setProperty("Value", 5 - cidx)
                     opt.toggled.connect(self.checkInput)
                     self.qracks[pos - 1].addButton(opt)
                     self.ylabsBox[cidx + 1].addWidget(opt, alignment=Qt.AlignCenter)
-                    self.ylabsBox[cidx + 1].addSpacing(10)
+                    self.ylabsBox[cidx + 1].addSpacing(10*screen_Y)
         # Put in the Widget Containers
         for i in range(6):
             self.wylabsBox[i].setLayout(self.ylabsBox[i])
@@ -677,9 +682,9 @@ class QEHI(QWidget):
         self.qOK.mousePressEvent = self.on_OK_click
         self.butlay = QHBoxLayout()
         self.wbutlay = QWidget()
-        self.qOK.setFixedSize(100, 25)
-        self.qOK.setStyleSheet(self.textconfig)
-        self.butlay.addStretch(300)
+        self.qOK.setFixedSize(100*screen_X, 25*screen_Y)
+        self.qOK.setFont(tfont)
+        self.butlay.addStretch(300*screen_X)
         self.butlay.addWidget(self.qOK)
         self.wbutlay.setLayout(self.butlay)
         self.layout.addWidget(self.wbutlay)
@@ -716,30 +721,31 @@ class QKSS(QWidget):
 
         self.setWindowTitle("KSS Form")
         self.setWindowIcon(QIcon("./imgs/isae_logo.png"))
+        screen_size = QDesktopWidget().screenGeometry()
+        screen_X = round(screen_size.width() / 1920)
+        screen_Y = round(screen_size.height() / 1080)
+        Tsize: int = 18 * screen_Y / 2
+        Tfont = QFont("Calibri", Tsize)
+        Tfont.setBold(True)
+        tsize: int = 14 * screen_Y / 2
+        tfont = QFont("Calibri", tsize)
         if ans.lang == 'fr':
-            self.setFixedSize(580, 400)
+            self.setFixedSize(580*screen_X, 400*screen_Y)
         if ans.lang == 'it':
-            self.setFixedSize(530, 400)
+            self.setFixedSize(530*screen_X, 400*screen_Y)
         elif ans.lang == 'en':
-            self.setFixedSize(480, 400)
-
-        font = "Calibri"
-        Ttype = "bold"
-        Tsize: int = 18
-        tsize: int = 14
-        self.titleconfig = f"font-family: {font}; font-weight: {Ttype}; font-size: {Tsize}px"
-        self.textconfig = f"font-family: {font}; font-size: {tsize}px"
+            self.setFixedSize(480*screen_X, 400*screen_Y)
 
         self.layout = QVBoxLayout()
         # Set Title
         self.title = QLabel(langue.get_string("KSS_Title"))
         self.title.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.title.setStyleSheet(self.titleconfig)
+        self.title.setFont(Tfont)
         self.layout.addWidget(self.title)
         # Set question
         self.quest = QLabel(langue.get_string("KSS_question"))
         self.quest.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.quest.setStyleSheet(self.textconfig)
+        self.quest.setFont(tfont)
         self.layout.addWidget(self.quest)
 
         self.nqst = QVBoxLayout()
@@ -752,10 +758,10 @@ class QKSS(QWidget):
 
         for idx in range(9):
             lbl = QLabel(f"{idx + 1}")
-            lbl.setStyleSheet(self.textconfig)
+            lbl.setFont(tfont)
             self.nqst.addWidget(lbl)
             opt = QVRadioButton(langue.get_string(f"KSS_{idx + 1}"), idx + 1)
-            opt.setStyleSheet(self.textconfig)
+            opt.setFont(tfont)
             opt.toggled.connect(self.checkInput)
             self.opts.append(opt)
             self.qst.addWidget(opt, alignment=Qt.AlignLeft)
@@ -774,9 +780,9 @@ class QKSS(QWidget):
         self.qOK.mousePressEvent = self.on_OK_click
         self.butlay = QHBoxLayout()
         self.wbutlay = QWidget()
-        self.qOK.setFixedSize(100, 25)
-        self.qOK.setStyleSheet(self.textconfig)
-        self.butlay.addStretch(300)
+        self.qOK.setFixedSize(100*screen_X, 25*screen_Y)
+        self.qOK.setFont(tfont)
+        self.butlay.addStretch(300*screen_X)
         self.butlay.addWidget(self.qOK)
         self.wbutlay.setLayout(self.butlay)
         self.layout.addWidget(self.wbutlay)
@@ -812,30 +818,32 @@ class QSPS(QWidget):
 
         self.setWindowTitle("SPS Form")
         self.setWindowIcon(QIcon("./imgs/isae_logo.png"))
+        screen_dpi = QApplication.primaryScreen().logicalDotsPerInch()
+        screen_size = QDesktopWidget().screenGeometry()
+        screen_X = round(screen_size.width() / 1920)
+        screen_Y = round(screen_size.height() / 1080)
+        Tsize: int = 18 * screen_Y / 2
+        Tfont = QFont("Calibri", Tsize)
+        Tfont.setBold(True)
+        tsize: int = 14 * screen_Y / 2
+        tfont = QFont("Calibri", tsize)
         if ans.lang == 'fr':
-            self.setFixedSize(410, 300)
+            self.setFixedSize(410*screen_X, 300*screen_Y)
         if ans.lang == 'it':
-            self.setFixedSize(430, 300)
+            self.setFixedSize(430*screen_X, 300*screen_Y)
         elif ans.lang == 'en':
-            self.setFixedSize(470, 300)
-
-        font = "Calibri"
-        Ttype = "bold"
-        Tsize: int = 18
-        tsize: int = 14
-        self.titleconfig = f"font-family: {font}; font-weight: {Ttype}; font-size: {Tsize}px"
-        self.textconfig = f"font-family: {font}; font-size: {tsize}px"
+            self.setFixedSize(470*screen_X, 300*screen_Y)
 
         self.layout = QVBoxLayout()
         # Set Title
         self.title = QLabel(langue.get_string("SPS_Title"))
         self.title.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.title.setStyleSheet(self.titleconfig)
+        self.title.setFont(Tfont)
         self.layout.addWidget(self.title)
         # Set question
         self.quest = QLabel(langue.get_string("SPS_question"))
         self.quest.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.quest.setStyleSheet(self.textconfig)
+        self.quest.setFont(tfont)
         self.layout.addWidget(self.quest)
 
         self.nqst = QVBoxLayout()
@@ -848,10 +856,10 @@ class QSPS(QWidget):
 
         for idx in range(7):
             lbl = QLabel(f"{idx + 1}")
-            lbl.setStyleSheet(self.textconfig)
+            lbl.setFont(tfont)
             self.nqst.addWidget(lbl)
             opt = QVRadioButton(langue.get_string(f"SPS_{idx + 1}"), idx + 1)
-            opt.setStyleSheet(self.textconfig)
+            opt.setFont(tfont)
             opt.toggled.connect(self.checkInput)
             self.opts.append(opt)
             self.qst.addWidget(opt, alignment=Qt.AlignLeft)
@@ -870,9 +878,9 @@ class QSPS(QWidget):
         self.qOK.mousePressEvent = self.on_OK_click
         self.butlay = QHBoxLayout()
         self.wbutlay = QWidget()
-        self.qOK.setFixedSize(100, 25)
-        self.qOK.setStyleSheet(self.textconfig)
-        self.butlay.addStretch(300)
+        self.qOK.setFixedSize(100*screen_X, 25*screen_Y)
+        self.qOK.setFont(tfont)
+        self.butlay.addStretch(300*screen_X)
         self.butlay.addWidget(self.qOK)
         self.wbutlay.setLayout(self.butlay)
         self.layout.addWidget(self.wbutlay)
@@ -908,29 +916,24 @@ class QRSME(QWidget):
 
         self.setWindowTitle("RSME Form")
         self.setWindowIcon(QIcon("./imgs/isae_logo.png"))
-        # if ans.lang == 'fr':
-        #     self.setFixedSize(410, 600)
-        # if ans.lang == 'it':
-        #     self.setFixedSize(430, 600)
-        # elif ans.lang == 'en':
-        #     self.setFixedSize(430, 600)
-
-        font = "Calibri"
-        Ttype = "bold"
-        Tsize: int = 18
-        tsize: int = 14
-        self.titleconfig = f"font-family: {font}; font-weight: {Ttype}; font-size: {Tsize}px"
-        self.textconfig = f"font-family: {font}; font-size: {tsize}px"
+        screen_size = QDesktopWidget().screenGeometry()
+        screen_X = round(screen_size.width() / 1920)
+        screen_Y = round(screen_size.height() / 1080)
+        Tsize: int = 18 * screen_Y / 2
+        Tfont = QFont("Calibri", Tsize)
+        Tfont.setBold(True)
+        tsize: int = 14 * screen_Y / 2
+        tfont = QFont("Calibri", tsize)
 
         self.layout = QHBoxLayout()
         # Set Title
         self.title = QLabel(langue.get_string("RSME_Title"))
         self.title.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.title.setStyleSheet(self.titleconfig)
+        self.title.setFont(Tfont)
         # Set question
         self.quest = QLabel(langue.get_string("RSME_question"))
         self.quest.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.quest.setStyleSheet(self.textconfig)
+        self.quest.setFont(tfont)
 
         self.Rbox = QVBoxLayout()
         self.wbox = QWidget()
@@ -939,12 +942,12 @@ class QRSME(QWidget):
         pos_labels = [2, 13, 25, 37, 57, 71, 85, 102, 112]
         labels = ["- " + langue.get_string(f"RSME_l{k + 1}") for k in range(9)]
         self.slider = QLSlider(0, 150, 1, labels=labels, positions=pos_labels, orientation=Qt.Vertical, tickinterval=10,
-                               style=self.textconfig)
+                               style=tfont)
         self.slider.sl.valueChanged.connect(self.checkInput)
         self.slbox = QHBoxLayout()
         self.slbox.addWidget(self.slider)
         self.wslbox = QWidget()
-        self.wslbox.setFixedSize(self.slider.width() - 350, self.slider.height())
+        self.wslbox.setFixedSize((self.slider.width() - 350)*screen_X, (self.slider.height())*screen_Y)
         self.wslbox.setLayout(self.slbox)
         self.layout.addWidget(self.wslbox)
 
@@ -955,8 +958,8 @@ class QRSME(QWidget):
         self.qOK = QPushButton(qbut)
         self.qOK.setEnabled(False)
         self.qOK.mousePressEvent = self.on_OK_click
-        self.qOK.setFixedSize(100, 25)
-        self.qOK.setStyleSheet(self.textconfig)
+        self.qOK.setFixedSize(100*screen_X, 25*screen_Y)
+        self.qOK.setFont(tfont)
         self.Rbox.addWidget(self.qOK)
         self.wbox.setLayout(self.Rbox)
         self.layout.addWidget(self.wbox)
@@ -984,55 +987,52 @@ class QVAS(QWidget):
 
         self.setWindowTitle("VAS Form")
         self.setWindowIcon(QIcon("./imgs/isae_logo.png"))
-        # if ans.lang == 'fr':
-        #     self.setFixedSize(410, 600)
-        # if ans.lang == 'it':
-        #     self.setFixedSize(430, 600)
-        # elif ans.lang == 'en':
-        #     self.setFixedSize(430, 600)
-
-        font = "Calibri"
-        Ttype = "bold"
-        htype = "italic"
-        Tsize: int = 18
-        tsize: int = 14
-        self.titleconfig = f"font-family: {font}; font-weight: {Ttype}; font-size: {Tsize}px"
-        self.qconfig = f"font-family: {font}; font-weight: {Ttype}; font-size: {tsize}px"
-        self.hintsconfig = f"font-family: {font}; font-style: {htype}; font-size: {tsize}px"
-        self.textconfig = f"font-family: {font}; font-size: {tsize}px"
+        screen_dpi = QApplication.primaryScreen().logicalDotsPerInch()
+        screen_size = QDesktopWidget().screenGeometry()
+        screen_X = round(screen_size.width() / 1920)
+        screen_Y = round(screen_size.height() / 1080)
+        Tsize: int = 18 * screen_Y / 2
+        Tfont = QFont("Calibri", Tsize)
+        Tfont.setBold(True)
+        tsize: int = 14 * screen_Y / 2
+        tfont = QFont("Calibri", tsize)
+        itfont = QFont("Calibri", tsize)
+        itfont.setItalic(True)
+        qfont = QFont("Calibri", tsize)
+        qfont.setBold(True)
 
         self.layout = QVBoxLayout()
         # Set Title
         self.title = QLabel(langue.get_string("VAS_Title"))
         self.title.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.title.setStyleSheet(self.titleconfig)
+        self.title.setFont(Tfont)
         # Set question
         self.quest = QLabel(langue.get_string("VAS_question"))
         self.quest.setAlignment(Qt.AlignTop)
-        self.quest.setStyleSheet(self.qconfig)
+        self.quest.setFont(qfont)
         # Set hints
         self.hint1 = QLabel(langue.get_string("VAS_hint1"))
         self.hint2 = QLabel(langue.get_string("VAS_hint2"))
         self.hint1.setAlignment(Qt.AlignTop)
         self.hint2.setAlignment(Qt.AlignTop)
-        self.hint1.setStyleSheet(self.hintsconfig)
-        self.hint2.setStyleSheet(self.hintsconfig)
+        self.hint1.setFont(itfont)
+        self.hint2.setFont(itfont)
 
         # Set slider titles
         self.sltitle1 = QLabel(langue.get_string("VAS_hl1"))
         self.sltitle2 = QLabel(langue.get_string("VAS_hl2"))
         self.sltitle1.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
         self.sltitle2.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.sltitle1.setStyleSheet(self.textconfig)
-        self.sltitle2.setStyleSheet(self.textconfig)
+        self.sltitle1.setFont(tfont)
+        self.sltitle2.setFont(tfont)
 
         # Set Sliders
         labels = [langue.get_string("VAS_low"), langue.get_string("VAS_high")]
         pos_labels = [0, 100]
         self.slid1 = QLSlider(0, 100, 1, labels=labels, positions=pos_labels, orientation=Qt.Horizontal,
-                              tickinterval=100, style=self.textconfig)
+                              tickinterval=100, style=tfont)
         self.slid2 = QLSlider(0, 100, 1, labels=labels, positions=pos_labels, orientation=Qt.Horizontal,
-                              tickinterval=100, style=self.textconfig)
+                              tickinterval=100, style=tfont)
         self.slid1.sl.valueChanged.connect(lambda: self.checkInput(0))
         self.slid2.sl.valueChanged.connect(lambda: self.checkInput(1))
 
@@ -1041,8 +1041,8 @@ class QVAS(QWidget):
         self.qOK = QPushButton(qbut)
         self.qOK.setEnabled(False)
         self.qOK.clicked.connect(self.on_OK_click)
-        self.qOK.setFixedSize(100, 25)
-        self.qOK.setStyleSheet(self.textconfig)
+        self.qOK.setFixedSize(100*screen_X, 25*screen_Y)
+        self.qOK.setFont(tfont)
 
         # Add everything
         self.layout.addWidget(self.title)
@@ -1086,7 +1086,20 @@ class QVAS_ingame(QWidget):
 
         self.setWindowTitle("VAS In-game Form")
         self.setWindowIcon(QIcon("./imgs/isae_logo.png"))
-        self.setFixedSize(1280, 768)
+        screen_size = QDesktopWidget().screenGeometry()
+        screen_X = round(screen_size.width() / 1920)
+        screen_Y = round(screen_size.height() / 1080)
+        Tsize: int = 36 * screen_Y / 2
+        Tfont = QFont("Calibri", Tsize)
+        Tfont.setBold(True)
+        tsize: int = 28 * screen_Y / 2
+        tfont = QFont("Calibri", tsize)
+        itfont = QFont("Calibri", tsize)
+        itfont.setItalic(True)
+        qfont = QFont("Calibri", tsize)
+        qfont.setBold(True)
+
+        self.setFixedSize(1280*screen_X, 768*screen_Y)
         self.setWindowFlags(Qt.CustomizeWindowHint | Qt.WindowTitleHint)
         self.setWindowFlags(
             self.windowFlags() & ~Qt.WindowCloseButtonHint & ~Qt.WindowMaximizeButtonHint & ~Qt.WindowMinimizeButtonHint)
@@ -1105,42 +1118,42 @@ class QVAS_ingame(QWidget):
         # Set Title
         self.title = QLabel(langue.get_string("VAS_Title"))
         self.title.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.title.setStyleSheet(self.titleconfig)
+        self.title.setFont(Tfont)
         # Set question
         self.quest = QLabel(langue.get_string("VAS_question"))
         self.quest.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
-        self.quest.setStyleSheet(self.qconfig)
+        self.quest.setFont(qfont)
         # Set hints
         self.hint1 = QLabel(langue.get_string("VAS_hint1"))
         self.hint2 = QLabel(langue.get_string("VAS_hint2"))
         self.hint1.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
         self.hint2.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
-        self.hint1.setStyleSheet(self.hintsconfig)
-        self.hint2.setStyleSheet(self.hintsconfig)
+        self.hint1.setFont(itfont)
+        self.hint2.setFont(itfont)
 
         # Set slider titles
         self.sltitle1 = QLabel(langue.get_string("VAS_hl1"))
         self.sltitle2 = QLabel(langue.get_string("VAS_hl2"))
         self.sltitle1.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
         self.sltitle2.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
-        self.sltitle1.setStyleSheet(self.textconfig)
-        self.sltitle2.setStyleSheet(self.textconfig)
+        self.sltitle1.setFont(tfont)
+        self.sltitle2.setFont(tfont)
 
         # Command hint
         self.hintcom1 = QLabel(langue.get_string("VAS_tab"))
         self.hintcom1.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
-        self.hintcom1.setStyleSheet(self.hintsconfig)
+        self.hintcom1.setFont(itfont)
         self.hintcom2 = QLabel(langue.get_string("VAS_enter"))
         self.hintcom2.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
-        self.hintcom2.setStyleSheet(self.hintsconfig)
+        self.hintcom2.setFont(itfont)
 
         # Set Sliders
         labels = [langue.get_string("VAS_low"), langue.get_string("VAS_high")]
         pos_labels = [0, 100]
         self.slid1 = QLSlider(0, 100, 1, labels=labels, positions=pos_labels, orientation=Qt.Horizontal,
-                              tickinterval=100, style=self.textconfig)
+                              tickinterval=100, style=tfont)
         self.slid2 = QLSlider(0, 100, 1, labels=labels, positions=pos_labels, orientation=Qt.Horizontal,
-                              tickinterval=100, style=self.textconfig)
+                              tickinterval=100, style=tfont)
 
         # Add everything
         self.layout.addWidget(self.title)
@@ -1161,7 +1174,6 @@ class QVAS_ingame(QWidget):
             self.VAS_drowsiness = self.slid2.sl.value()
             self.csv.write_VAS(answers=[self.iter, self.VAS_cognitive, self.VAS_drowsiness], usr=self.USER_ID)
             self.close = True
-            #self.closeEvent()
 
     def closeEvent(self, e):
         close_all()
@@ -1182,8 +1194,6 @@ def vas_ingame(usr, hdlr, iter):
         window.show()
         app.processEvents()
     app.quit()
-    #self.hide()
-    #window.show()
 
 def subject_fullform():
     from SRCevents import SRCwin
@@ -1233,9 +1243,12 @@ def subject_fullform():
         SRCwin.pkproxy.close(0)  # Server Closing
 
 
-def subject_endform(id=None):
+def subject_endform(id=None, lang=None):
     if id is not None:
         ans.ID = id
+    if lang is not None:
+        ans.lang = lang
+        langue.set_language(lang)
     app = QApplication(sys.argv)
     ans.f_done = 3
     ans.forms = [None, None, None, None, None, None, None]

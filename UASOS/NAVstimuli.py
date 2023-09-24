@@ -30,7 +30,7 @@ class tile():
     def draw(self):
         self.rect.draw()
 
-class marker(): # TODO DEBUG
+class marker():
     def __init__(self, win, x, y, width, height):
         self.marker = visual.ImageStim(win, image="./imgs/wpy_label.png", colorSpace="rgb1",
                                         pos=(x, y), size=(width, height), interpolate=False, opacity=0.0)
@@ -68,11 +68,13 @@ class marker(): # TODO DEBUG
         self.marker.pos = pos
         if abs(pos[0]-self.center[0]) < 0.01 and abs(pos[1]-self.center[1]) < 0.01:
             self.disable_marker()  # Disables the marker on the map
+
+
 class Map():
     def __init__(self, x=0, y=0, width=0, height=0, opaque=1.0):
         from NAVevents import NAVwin
         self.map_pth = './imgs/testext.png'
-        self.map_load = Image.open(self.map_pth)  # cv.imread(self.map_pth, cv.IMREAD_UNCHANGED)
+        self.map_load = Image.open(self.map_pth)
         self.map = np.array(self.map_load, order="C")
         self.map = (self.map.astype(float) / 255.0)  # convert to float in 0--1 range, assuming image is 8-bit uint.
         self.map = np.flip(self.map, axis=0)
@@ -124,7 +126,6 @@ class Map():
         # Tiles are always hidden, while the wpy is hidden until the respective tile is selected
         self.wpy = None
         # these will have the tiles in which the waypoint will appear
-        # TODO think about if the cursor of the mouse should be integrated here
         self.compass = visual.ImageStim(NAVwin, image='./imgs/compass_extn.png', colorSpace="rgb1",
                                         pos=(0, 0), size=(width, height), interpolate=False, opacity=opaque)
         self.needle = visual.ImageStim(NAVwin, image='./imgs/compass_point.png', colorSpace="rgb1",
@@ -150,25 +151,19 @@ class Map():
             if round(x_pos + self.w_img/2) < (self.w_img / 4 - self.w_size / 2) and round(y_pos + self.h_img/2) < (self.h_img / 4 - self.h_size / 2):
                 x_pos += 5824  # round(self.w_img / 2)
                 y_pos += 5824  # round(self.h_img / 2)
-                #print('changed +x and +y')
             elif round(x_pos + self.w_img/2) < (self.w_img / 4 - self.w_size / 2):
                 x_pos += 5824  # round(self.w_img / 2)
-                #print('changed +x')
             elif round(y_pos + self.h_img/2) < (self.h_img / 4 - self.h_size / 2):
                 y_pos += 5824  # round(self.h_img / 2)
-                #print('changed +y')
 
         if round(x_pos + self.w_img/2) > (3*self.w_img / 4 + self.w_size / 2) or round(y_pos + self.h_img/2) > (3*self.h_img / 4 + self.h_size / 2):
             if round(x_pos + self.w_img/2) > (3*self.w_img / 4 + self.w_size / 2) and round(y_pos + self.h_img/2) > (3*self.h_img / 4 + self.h_size / 2):
-                x_pos -= 5824  # round(self.w_img / 2)
-                y_pos -= 5824  # round(self.h_img / 2)
-                #print('changed -x and -y')
+                x_pos -= 5824
+                y_pos -= 5824
             elif round(x_pos + self.w_img/2) > (3*self.w_img / 4 + self.w_size / 2):
-                x_pos -= 5824  # round(self.w_img / 2)
-                #print('changed -x')
+                x_pos -= 5824
             elif round(y_pos + self.h_img/2) > (3*self.h_img / 4 + self.h_size / 2):
-                y_pos -= 5824  # round(self.h_img / 2)
-                #print('changed -y')
+                y_pos -= 5824
 
         self.ROI = deepcopy(
             self.map[round(self.w_img / 2 + x_pos - self.w_size / 2):round(self.w_img / 2 + x_pos + self.w_size / 2),
@@ -302,30 +297,24 @@ def draw_map(n=4, m=4):
         map.tiles[i].rect.size = (w_rect, h_rect)
         map.tiles[i].rect.pos = (xr[i], yr[i])
         map.tiles[i].value = ((i % 4)+1, s2)
-        #map.tiles[i].draw()
         if (i % 4) + 1 == 4:
             s2 += 1
 
 
 def update_map(x, y, HDG: int, x_wpy=None, y_wpy=None, freeze=False):
-    # TODO Update the ROI of the map!
     # Since Tien returns me x and y as px coordinates, I should convert the central pos as in a cyclical position
     x_cyc = x % (5824)
     y_cyc = y % (5824)
     map_HDG = n2mHDG(HDG)
 
-    # if freeze is True:
-    #     pass
-    #     # x_wpy = x_wpy % (5824)
-    #     # y_wpy = y_wpy % (5824)
-    #     #map.get_labels(x_wpy, y_wpy)
-    # if freeze is False:
-    #     map.get_labels(x_cyc, y_cyc)
     map.cut_map(x_pos=x_cyc, y_pos=y_cyc)
     map.map_sqr.ori = map_HDG
     map.compass.ori = map_HDG
 
+
 def update_needle(HDG: int):
     map.needle.ori = -n2mHDG(HDG)
+
+
 def n2mHDG(nHDG: int):  # It returns the correct Aeronautical Heading
     return 90 - nHDG

@@ -30,7 +30,6 @@ from scriptgen import script, script_s, script_n, script_ov
 class PyroServer:
     def __init__(self):
         # initialize just the values but not start the server on init for now
-        # Solve TIMEOUT issue:
 
         self.timeout_value = 86400  # 1yr in seconds
 
@@ -93,13 +92,6 @@ class PyroServer:
 
     @pyro.expose
     def close(self, phase):
-        # self.daemon.shutdown()
-        # if phase == 0:  # Close both result files
-        #     self.csv_prt.close_file(0)
-        #     self.csv_prt.close_file(1)
-        # elif phase == 1:  # Close the last result file remained
-        #     self.csv_prt.close_file(1)
-
         for proc in psutil.process_iter():
             if proc.name() == 'pyro4-ns.exe':
                 proc.terminate()
@@ -226,14 +218,10 @@ class PyroServer:
             self.scr_dir[ph].WPY[it] = 'N/A'  # Placeholder value
         elif self.scr_dir[ph].TASK[it] == 6:  # WPY
             self.scr_dir[ph].HDG[it] = -1  # Placeholder value
-            # WPY = self.scr_dir[ph].sel_cell(x_lbl=self.x_lbl, y_lbl=self.y_lbl)
-            # self.scr_dir[ph].WPY[it] = WPY[0]
-            # self.scr_dir[ph].WPY_tuple[it] = WPY[1]
         else:
             self.scr_dir[ph].HDG[it] = -1  # Placeholder value
             self.scr_dir[ph].WPY[it] = 'N/A'  # Placeholder value
         out_pack.HDG = self.scr_dir[ph].HDG[it]
-        # out_pack.WPY = self.scr_dir[ph].WPY[it]
 
         if it != 0 and (it < out_pack.Tot_iters and self.case != 6) and self.case in [1,2,4]:  # Exclude ending and pause cases
             out_pack.pImgs = deepcopy(self.scr_dir[ph].IMGS[it-1])
@@ -289,11 +277,6 @@ class PyroServer:
         wrk_pack.case = w_pack['case']
         self.case = w_pack['case']
 
-        # if self.case == 2:  # Only SRC
-        #     self.NAVPackOUT = True
-        # elif self.case == 3:  # Only NAV
-        #     self.SRCPackOUT = True
-
         wrk_pack.iter = w_pack['iter']
         wrk_pack.Tot_iters = w_pack['Tot_iters']
         if wrk_pack.INorOUT == 1:
@@ -344,11 +327,9 @@ class PyroServer:
 
         if (self.SRCPackOUT and self.NAVPackOUT) or self.case in [2, 3]:  # XOR condition
             if (self.SRClastPacket.iter == self.NAVlastPacket.iter) or self.case in [2, 3]:
-                #print(f'VERIFIED: GO TO MERGE ITER {self.SRClastPacket.iter if self.case != 3 else self.NAVlastPacket.iter}')
                 self.merge_packs()  # Executing as separate thread
             else:
-                pass #DEBUG PRETEST
-                #print(f'ERROR: ITER ARE NOT EQUAL SRC: {self.SRClastPacket.iter} NAV: {self.NAVlastPacket.iter}')
+                pass
         else: pass
         return
 

@@ -176,7 +176,6 @@ class SRCWindow(visual.Window):
                 else:
                     pass
             # Led activity changes just at every new step
-            #self.good_choice = self.pack.GoodCh
             self.ACC = self.pack.OvTrue - self.pack.GoodCh
             if self.pack.Task in [1, 4]:
                 self.FDir.led_on()
@@ -221,7 +220,6 @@ class SRCWindow(visual.Window):
         # from stimuli import Rects
         # Graphical Runtime
         pos = 1
-        once = False
         p_once = False
         pack = [2, 3, 4, 1]
         p_idx = 0
@@ -238,10 +236,7 @@ class SRCWindow(visual.Window):
         exp_step = 0
         elapsed_time = -1  # msec
         self.duration = self.pack.Time  # msec
-        react_clock = core.Clock()
-        #latency_clock = core.Clock()
-        #t1_lat = 0
-        # filetxt = open('latency_test.txt', 'w', newline='') # DEBUG PURPOSE: Latency Test
+        print('SRCWin Charged')
         while self.alive:
             self.t.tic()
             self.cycle += 1
@@ -271,8 +266,6 @@ class SRCWindow(visual.Window):
                 self.inject = True
 
             if elapsed_time >= self.duration and self.case in [1, 2, 3, 4] and exp_step <= self.total_it:
-                #self.SRCLatency = (latency_clock.getTime() * 1000 - t1_lat) - self.delta_t
-                #self.SRCLatency = self.t.tocvalue() * 1000 - self.pack.delta_t  # ((self.pkproxy.get_time() - self.pkproxy.get_actual_delta()) * 1000) - self.duration
                 if self.case != 3:
                     self.send_pkg()  # I send the packet here!
                 # RESET PARAMS
@@ -288,7 +281,6 @@ class SRCWindow(visual.Window):
                 # Timers restart
                 self.t.tic()  # Start timer
                 self.RTt.tic()  # Reset the Reaction Time clock!
-                # react_clock.reset()  # Reset the Reaction Time clock!
                 self.update_stim(exp_step, change=True)
                 if exp_step != 0:
                     self.render(update_step=exp_step-1, do=True)
@@ -300,8 +292,6 @@ class SRCWindow(visual.Window):
                 if self.last_TASK != self.pack.Task and self.pack.Task in [1, 4]:
                     self.keyLog = [0 for _ in range(9)]
                 changed = True if self.case != 8 else False
-                # print('Image changed in ', "{:.3f}".format(elapsed_time), ' msec,', "{:.3f}".format(elapsed_time-self.duration), ' msec late.')
-                # filetxt.write("{:.3f}".format(elapsed_time-self.duration)+'\n') # DEBUG PURPOSE: Latency Test
             else:
                 pass
 
@@ -313,7 +303,6 @@ class SRCWindow(visual.Window):
                 if self.count_ones(self.keyLog) == 1:  # I take the first and last keypresses
                     self.Tnum[0] = self.pkproxy.get_time() * 1000
                     self.RT = self.RTt.tocvalue()*1000 - key[1]  # Catch the Reaction Time - the response time of the keyboard
-                    #self.RT = react_clock.getTime() * 1000 - key[1] # Catch the Reaction Time - the response time of the keyboard
                 else:
                     self.Tnum[1] = self.pkproxy.get_time() * 1000
             elif key[0] == 'escape' or set.close is True:
@@ -343,11 +332,9 @@ class SRCWindow(visual.Window):
                         self.request_pkg(exp_step)  # request first iteration ever
                         self.duration = self.pack.Time
                         self.LSLHldr.send_mrk(typ='SRT', wht=self.ex_order[self.last_pos])
-                        #self.LSLHldr.send_mrk(typ='SND')
                         self.update_stim(exp_step, change=True)
                         self.render(do=True)
                         # Timers Restart
-                        #self.t.tic()  # Start timer
                         self.RTt.tic()
                         exp_step = 1  # Reset of the Experiment Steps
                     self.nexts = 100
@@ -355,35 +342,30 @@ class SRCWindow(visual.Window):
                 if self.case in [-4, -3, -2, -1]:  # only in slide modes
                     self.nexts -= 1
 
-                #self.duration = self.pack.Time
-
                     # I need to put the pause case here
                 if self.case in [1, 2, 3, 4, 6, 7] and self.pack.case != 8 and elapsed_time != 0:
                     if self.pause is False and self.checkVAS is False:  # This will be the pause case
                         self.pkproxy.pause_time()
                         self.pause = True
                         self.LSLHldr.send_mrk(typ='PSE', wht=self.pause, it=self.pack.iter - 1)
-                        #self.LSLHldr.send_mrk(typ='SND')
                         if self.case == 1 and self.VASEnabled is True:
                             self.VASt1pause = self.VASClock.getTime()
                         self.case = 6
                     elif self.pause is True and self.checkVAS is False:
-                        elapsed_time = self.pkproxy.get_time() * 1000 #- self.SRCLatency
+                        elapsed_time = self.pkproxy.get_time() * 1000
                         self.pkproxy.send_tstamp(elapsed_time)
                         self.pause = False
                         self.LSLHldr.send_mrk(typ='PSE', wht=self.pause, it=self.pack.iter - 1)
-                        #self.LSLHldr.send_mrk(typ='SND')
                         if self.ex_order[self.last_pos] == 1 and self.VASEnabled is True:
                             self.VASpause += self.VASClock.getTime() - self.VASt1pause
                         if self.case == 6:
                             self.case = self.ex_order[self.last_pos]
                     elif self.checkVAS is True:
                         self.VASpause += self.VASClock.getTime() - self.VASt1pause
-                        elapsed_time = self.pkproxy.get_time(dtime=(self.VASClock.getTime() - self.VASt1pause)) * 1000 #- self.SRCLatency
+                        elapsed_time = self.pkproxy.get_time(dtime=(self.VASClock.getTime() - self.VASt1pause)) * 1000
                         self.pkproxy.send_tstamp(elapsed_time)
                         self.checkVAS = False
                         self.LSLHldr.send_mrk(typ='VAS', wht=self.checkVAS, it=self.pack.iter - 1)
-                        #self.LSLHldr.send_mrk(typ='SND')
                         if self.case == 7:
                             self.case = self.ex_order[self.last_pos]
                     else:
@@ -411,7 +393,6 @@ class SRCWindow(visual.Window):
             if self.VASEnabled is True and self.case == 1 and self.checkVAS is False and (self.VASClock.getTime() - self.VASpause) >= self.no_vas * self.VAStime * 60:
                 self.pkproxy.pause_time()
                 self.LSLHldr.send_mrk(typ='VAS', wht=self.checkVAS, it=self.pack.iter - 1)
-                #self.LSLHldr.send_mrk(typ='SND')
                 self.VASt1pause = self.VASClock.getTime()
                 self.case = 7
                 self.render()
@@ -422,13 +403,11 @@ class SRCWindow(visual.Window):
             # This charges the next packet or closes the experiment
             if changed:
                 self.charged = False
-                #t1_lat = latency_clock.getTime() * 1000
                 if (exp_step <= self.total_it-1 and self.case != self.back_case) or (exp_step < self.total_it - 1 and self.backup is True and self.case == self.back_case):
                     exp_step += 1
                     self.duration = self.pack.Time
                     self.delta_t = self.pack.delta_t
                     changed = False
-                    #p_once = False
                 elif (exp_step == self.total_it and self.case != self.back_case) or (exp_step == self.total_it and self.backup is True and self.case == self.back_case):
                     exp_step += 1
                     self.last_TASK = self.pack.Task
@@ -438,32 +417,22 @@ class SRCWindow(visual.Window):
                     self.pack.Time = self.duration
                     changed = False
                 else:
-                    # if not once:
-                    #
-                    #     #self.LSLHldr.send_mrk(typ='SND')
-                    #     once = True
                     if self.case in [2, 3, 4]:
                         self.case = 8
-                        questions.subject_endform()  # Last set of questions
                     elif self.case == 1:
                         self.case = 5  # Thank you
                         self.render()
-                        questions.subject_endform()  # Last set of questions
+                        questions.subject_endform(id=self.USER_ID, lang=langue.lang)  # Last set of questions
                     exp_step = 0
 
             if self.case == 8 and not p_once:
-                #self.start_case = False
                 self.LSLHldr.send_mrk(typ='STP', wht=self.ex_order[self.last_pos])
                 elapsed_time = 0
                 self.pkproxy.send_tstamp(elapsed_time)
                 self.pkproxy.reset_actual_delta()
-                #self.duration = 250
                 self.reset_all()
                 p_idx += 1
-                #self.request_pkg(0, case=pack[p_idx])
                 p_once = True
-                once = False
-                #exp_step = 1
             self.update_stim(exp_step, change=False)
 
             if self.duration != 0 and self.pause is False and self.checkVAS is False:  # we don't want to have updates where we are in waiting
@@ -480,8 +449,6 @@ class SRCWindow(visual.Window):
 
     def request_pkg(self, it,  case=None):
         # Function to retrieve the packet
-        # if self.spack:
-        #     del self.spack
         if self.pack:
             del self.pack
         self.pack = Packet()  # Reset of the packet
@@ -584,8 +551,6 @@ class SRCWindow(visual.Window):
         self.Ov_choice = 0
         self.RT = 0
         self.ACC = 0
-        #self.pkproxy.send_status(case=self.case, nexts=self.nexts, pause=False) # Let's try like that, It should not be necessary
-        #self.pkproxy.send_tstamp(0)
 
     def send_config(self, ans=None):
         if ans.type == 'FULL':
@@ -598,7 +563,6 @@ class SRCWindow(visual.Window):
             if ans.case in [1, 2, 3, 4]:
                 # add src config for backup, considering that the pos value of the ex_order should be set accordingly
                 self.extra_time = ans.time  # time to add to the packet
-                #self.request_pkg(it=1, case=ans.case)
                 self.back_case = ans.case
                 self.case = self.back_case
                 self.back_step = ans.step
@@ -619,8 +583,6 @@ class SRCWindow(visual.Window):
                     self.back_case = 4
                 elif ans.case in [-1, 0]:
                     self.back_case = 1
-                #self.case = ans.case
-                #self.request_pkg(it=1, case=ans.case)
                 self.last_pos = self.ex_order.index(ans.case)
                 self.VASEnabled = ans.VAS
                 if self.VASEnabled is True:

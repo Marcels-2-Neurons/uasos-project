@@ -15,7 +15,7 @@ class settings:
     def __init__(self):
         self.mon = screeninfo.get_monitors()
         self.SRCwin = 1  # It should be your LEFT SCREEN
-        self.NAVwin = 0  # It should be your RIGHT SCREEN
+        self.NAVwin = 1  # It should be your RIGHT SCREEN
         self.processes = []
 
         # Experiment Settings:

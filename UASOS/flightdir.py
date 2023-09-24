@@ -212,13 +212,13 @@ class flightdir:
         self.monitor = None
         if self.type == 'SRC':
             if set.n_mon != 1:
-                self.monitor = 1
+                self.monitor = set.SRCwin
             else:
-                self.monitor = 0
+                self.monitor = set.SRCwin
             self.generate(self.monitor)
         elif self.type == 'NAV':
-            self.monitor = 0  # TODO RETURN IT TO 0 WHEN DONE WITH DEBUGGING
-            self.generate(self.monitor)  # TODO RETURN IT TO 0 WHEN DONE WITH DEBUGGING
+            self.monitor = set.NAVwin
+            self.generate(self.monitor)
 
     def generate(self, n_monitor):
         # generate on the screen the flight director interface
@@ -257,10 +257,8 @@ class flightdir:
             self.text_item.pos = (-(1 - (w_rect - 16 * w_space)), (1 - 9 * h_space))
 
     def draw(self, case=0, nexts=-1):
-        # I will pass also monitor, so I can eventually handle the 2 separated monitors: -1 Single Mon / 0 Monitor SRC / 1 Monitor NAVs
+        # I will pass also monitor, so I can eventually handle the 2 separated monitors
         from local import langue
-        # RT and ACC
-        # if n_mon is the one for SRC
 
         if set.n_mon != 1:
             screenSRC = 1
@@ -283,7 +281,6 @@ class flightdir:
             self.text_src.draw()
             self.text_item.draw()
         elif case == -5:  # Fill the forms please <string>
-            #if not self.correct_lang and langue.lang != 'fr':
             self.update_graphics(type_m=self.type)
             self.form_txt.draw()
         elif case == -4:  # Welcome UASOS & SEARCH TUTORIAL SLIDES <graphics>
@@ -315,7 +312,6 @@ class flightdir:
             if self.type == 'SRC':
                 if nexts == 99:
                     nexts = 5  # Dims of the slides
-                #tot = 10
 
                 if nexts == 0:  # No more slides to present
                     return -1
@@ -346,7 +342,6 @@ class flightdir:
             if self.type == 'SRC':
                 if nexts == 99:
                     nexts = 1  # Dims of the slides
-                # tot = 10
 
                 if nexts == 0:  # No more slides to present
                     return -1
@@ -376,7 +371,6 @@ class flightdir:
             if self.type == 'SRC':
                 if nexts == 99:
                     nexts = 2  # Dims of the slides
-                # tot = 10
 
                 if nexts == 0:  # No more slides to present
                     return -1
@@ -616,6 +610,3 @@ class flightdir:
 
     def led_off(self):
         self.led.color = Colors.dgreen
-
-
-#FDir = flightdir()

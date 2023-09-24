@@ -189,7 +189,6 @@ class NAVWindow(visual.Window):
         if self.case in [1, 3, 4]:
             map.draw(task=self.pack.Task)
             if self.case in [3, 4]:  # Only for training phase
-                # TODO ADD CORRECT/WRONG DIRECTION, DEV FROM HDG
                 if self.pack.Task == 5:
                     if self.cor_dir == -2 or self.usr_dir == -2:
                         self.FDir.make_na()
@@ -217,10 +216,7 @@ class NAVWindow(visual.Window):
 
     def run(self):
         import NAVstimuli as stim
-        # Debug purpose
-        # usr = 100  # RETRIEVE USER INFO FROM PYROSERVER
-        # self.pkproxy.set_USER_info(usr)
-        #
+
         self.check_status()
         if self.backup is False:
             self.request_pkg(it=0, case=3 if self.back_case is None else self.back_case)  # request first iteration ever
@@ -229,32 +225,27 @@ class NAVWindow(visual.Window):
             self.request_pkg(it=1, case=self.back_case)
             self.exp_step = 2
         stim.draw_map()
-        # self.mouse.setPos(newPos=stim.map.mouse_pos)
         self.mouse.getPos()
         # All the clocks here will be unified in the core clock of Pyro Server
         elapsed_time = -1
         self.exp_step = 1
-        exp_delay = 0
         pack = [2, 3, 4, 1]
         p_idx = 0
         p_once = False
         once = False  # For blocking a current freezing of the coords
         changed = False
         self.duration = self.pack.Time  # msec
-        react_clock = core.Clock()
         react_once = False  # Reaction clock flag
         press_once = False  # Mouse click just once
-        take_once = False
         self.ts_mouse = 0  # Start mouse usage timestamp
         self.te_mouse = 0  # End mouse usage timestamp
         self.ts_fstick = 0  # Start mouse usage timestamp
         self.te_fstick = 0  # End mouse usage timestamp
-
+        print('NAVWin Charged')
         while self.alive:
             self.t.tic()
             self.cycle += 1
             if self.backup is True and self.inject is False:
-                #self.case = self.back_case
                 if self.case in [1, 2, 3, 4]:
                     p_idx = pack.index(self.case)
                 elif self.case == -4:  # SRC
@@ -278,12 +269,7 @@ class NAVWindow(visual.Window):
                 self.inject = True
 
             # Update of the packet
-            # if self.delay_taken is False and self.case in [1, 3, 4]:  #(self.exp_step == 0 and self.inject is False) or (self.exp_step == 1 and self.inject is True):
-            #     exp_delay = elapsed_time  # Cut the standard delay as first call
-            #     self.delay_taken = True
-
             if elapsed_time >= self.duration and self.case in [1, 3, 4] and self.exp_step <= self.total_it:
-                #self.NAVLatency = self.t.tocvalue()*1000 - self.pack.delta_t  #(self.pkproxy.check_tstamp()) - self.duration  # self.pkproxy.get_time() * 1000
                 self.last_TASK = self.pack.Task
                 self.send_pkg()  # I send the packet here!
                 #-- RESET PARAMS
@@ -305,12 +291,9 @@ class NAVWindow(visual.Window):
                     self.y_wpy = self.map_y
                     stim.map.get_labels(x=self.x_wpy % 5824, y=self.y_wpy % 5824)  # Update the frozen labels for the wpy selection
                     once = True
-                #self.render()  # do=True is for LSL markers sending
                 # Reset timers
-                #self.t.tic()
                 self.RTt.tic()
                 changed = True if self.case != 8 else False
-                #react_clock.reset()  # Reset the Reaction Time clock!
                 react_once = False
                 press_once = False
             else:
@@ -318,7 +301,6 @@ class NAVWindow(visual.Window):
 
             # Controls of the experiment
             if self.case in [1, 3, 4]:
-                #self.duration = self.pack.Time
                 if self.exp_step != 0 and changed is True:
                     self.update_stim(change=True, exp_it=self.exp_step-1)
                     self.render()
@@ -337,9 +319,6 @@ class NAVWindow(visual.Window):
                     self.mouse.setVisible(visible=True)
                     self.te_mouse = self.pkproxy.check_tstamp()
                 else:
-                    # if take_once is False:
-                    #     self.te_mouse = self.pkproxy.check_tstamp()
-                    #     take_once = True
                     if self.mouse.getPressed()[0] and press_once is False:
                         for i in range(0, 16):
                             if self.mouse.isPressedIn(stim.map.tiles[i].rect) is True:
@@ -364,12 +343,11 @@ class NAVWindow(visual.Window):
                     stim.update_needle(self.needleHDG)
                     if self.pkproxy.check_tstamp() - self.te_mouse > 600 and press_once is False:  # 2 sec delay
                         self.te_mouse = self.pkproxy.check_tstamp() - 600
-                        # Send here lsl marker with its -2s timestamp
+                        # Send here lsl marker with its -0.6s timestamp
                         if self.devices[0] is True:
                             self.devices[0] = False
                             self.LSLHldr.send_mrk(typ='MOV', wht=self.devices[0], it=self.pack.iter - 1, cut_seconds=0.6)
-                        # self.mouse.setVisible(visible=False)
-                        # self.mouse.setPos(newPos=stim.map.mouse_pos)
+
 
                 # Add FlightStick
                 if self.fs.get_finput(0.2) is True:
@@ -397,7 +375,7 @@ class NAVWindow(visual.Window):
                     stim.update_needle(self.needleHDG)
                 else:
                     if self.devices[1] is True:
-                        self.te_fstick = self.pkproxy.check_tstamp() #self.pkproxy.get_time() * 1000
+                        self.te_fstick = self.pkproxy.check_tstamp()
                         if self.pack.Task == 5:
                             self.dev = (self.pack.HDG - self.usr_nHDG) # % 180
                         self.devices[1] = False
@@ -436,7 +414,6 @@ class NAVWindow(visual.Window):
                         self.pack.Time = self.duration
                         changed = False
                         once = False
-                        #p_once = False
                     else:  # Override of the stop condition
                         if self.case in [2, 3, 4]:
                             self.case = 8
@@ -445,10 +422,8 @@ class NAVWindow(visual.Window):
 
             if self.case == 8 and not p_once:
                 self.exp_step = 0
-                exp_delay = 0
                 self.delay_taken = False
                 elapsed_time = 0
-                #self.duration = 250
                 self.reset_all()
                 p_idx += 1
                 self.request_pkg(self.exp_step, pack[p_idx])
@@ -471,18 +446,11 @@ class NAVWindow(visual.Window):
 
     def get_rand_WPY(self, x, y):
         from NAVstimuli import map
-        # x_coord = int((map.w_img / 4 + x) / (225))
-        # y_coord = int((map.h_img / 4 - y) / (225))
 
         seed1 = randint(0, 3)
         seed2 = randint(0, 3)
 
         # # Generate the waypoint from the randomized value
-        # # It needs a circular vector
-        # charWPY = string.ascii_uppercase[(x_coord - (+1 - seed1)) % 26]
-        #
-        # num = (y_coord - (+1 - seed2)) % 26 + 1
-        #
         if map.y_lbls[seed2] in range(1, 10):
             numWPY = f'0{map.y_lbls[seed2]}'
         else:
@@ -503,7 +471,6 @@ class NAVWindow(visual.Window):
         # Exit: Aeronautical HDG
         # Pos 0 - x, Pos 1 - y, Pos 2 - HDG
         # Acquire the turn speed
-        import NAVstimuli as stim
         vdHDG = self.calc_vHDG(HDG, nHDG, dir, dTIME)
         # Define the speed components
         u = V * np.cos(self.mathHDG(HDG) * np.pi / 180)
@@ -518,7 +485,6 @@ class NAVWindow(visual.Window):
         self.map_y = y
         self.HDG = HDG % 360
         self.needleHDG -= (vdHDG[0] * (dt/1000)) * (180 / np.pi)
-        # out_pos = [x, y, HDG]
         return True
 
     # COMPLETE WHEN TIEN WILL FINISH
@@ -547,9 +513,6 @@ class NAVWindow(visual.Window):
             else:  # Straight flight
                 dHDG = 0
                 vHDG = 0
-
-        # dHDG = (((nHDG-HDG)+180) % 360) - 180
-        # vHDG = (dHDG * (np.pi/180))/abs(dTIME)
 
         if abs(vHDG) > self.mvHDG:
             if vHDG < 0:
@@ -602,8 +565,6 @@ class NAVWindow(visual.Window):
 
     def request_pkg(self, it: int, case=None):
         # Function to retrieve the packet
-        # if self.spack:
-        #     del self.spack
         if self.pack:
             del self.pack
         self.pack = Packet()  # Reset of the packet
@@ -628,7 +589,6 @@ class NAVWindow(visual.Window):
             self.pack.HDG = dicts['HDG']
             if self.pack.Task == 5:
                 self.cor_dir = self.check_dir(nHDG=self.pack.HDG, HDG=self.nHDG)
-            # self.pack.WPY = dicts['WPY'] # Unfortunately, WAYPOINT SHOULD BE SELECTED ON TIME
         elif it == self.total_it:
             if self.case in [2, 3, 4]:
                 self.case = 8  # Command the end of phase
@@ -637,7 +597,6 @@ class NAVWindow(visual.Window):
 
     def send_pkg(self):
         # Function for sending the packet to the server to print
-        #self.pack.USER_ID = self.USER_ID
         if self.backup is True and self.case == self.back_case:
             self.pack.Time += self.extra_time
         self.pack.INorOUT = 2  # It defines the package from SRCTask

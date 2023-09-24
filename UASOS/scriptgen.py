@@ -113,8 +113,6 @@ class ScriptGen:
         # adaptation for using debug and batch modes
         global val_m  # recall of the global value inside
         if self.mode_sel == 'DEBUG':
-            # self.threshold = 0.05
-
             self.gen_time()
             self.task_sorting()
             # these steps will not be made for NAVI_TRAIN
@@ -122,8 +120,8 @@ class ScriptGen:
                 self.generate_imgs()
                 self.final_cor_chk()
             else:
-                pass  # TODO I will add here the HDG and WPY generation
-        elif self.mode_sel == 'BATCH':  # TODO ADD THE NEW SCRIPTS DSETS
+                pass
+        elif self.mode_sel == 'BATCH':
             if self.phase == 'MAIN' or self.phase == 'OV_TRAIN':
                 scriptsDb = "./scripts/scripts_dset.csv"
             elif self.phase == 'SRC_TRAIN':
@@ -184,7 +182,6 @@ class ScriptGen:
                 self.generate_imgs()
                 self.final_cor_chk()
             elif self.phase != 'SRC_TRAIN':
-                # TODO This is to generate the NAVI Requests
                 pass
 
             # Calculate durations
@@ -348,10 +345,7 @@ class ScriptGen:
             print("Vector ultimated in ", "{:.3f}".format(time.time() - start), " sec, after ", k, " iterations.")
             print("Deviation: ", "{:.3f}".format(self.dev_per * 100), " %")
             return True
-        # For DEBUG Purpose
-        # print("SWITCH", "\t", "1", "\t", "4", "\t", "5", "\t", "6")
-        # for i in range(0,3):
-        #    print(i+1,"\t\t",occurrences[i][0],"\t",occurrences[i][1],"\t",occurrences[i][2],"\t",occurrences[i][3])
+
 
     def generate_imgs(self):
         i = 0  # counter of the position in the vector
@@ -384,7 +378,6 @@ class ScriptGen:
                                 av = aval_img[1]
 
                         dice = choices([True, False], weights=[0.25 * av, 0.25 * (4 - av)])[0]
-                        # dice = choices([True, False], weights=[0.125 * av, 0.125 * (4 + (4 - av))])[0]
                         # Dice that will select if it should be selected a target or no
 
                         if dice:  # Case TRUE: I have to add a target
@@ -511,7 +504,6 @@ class ScriptGen:
 
                         av = aval_img[0] if self.TASK[i] == 1 else aval_img[1]
                         dice = choices([True, False], weights=[0.25 * av, 0.25 * (4 - av)])[0]
-                        # dice = choices([True, False], weights=[0.125 * av, 0.125 * (4 + (4 - av))])[0]
                         # Dice that will select if it should be selected a target or not
                         if dice:
                             check = False
@@ -636,7 +628,6 @@ class ScriptGen:
 
                         av = aval_img[0] if self.TASK[next] == 1 else aval_img[1]
                         dice = choices([True, False], weights=[0.25 * av, 0.25 * (4 - av)])[0]
-                        # dice = choices([True, False], weights=[0.125 * av, 0.125 * (4 + (4 - av))])[0]
                         # Dice that will select if it should be selected a target or not
 
                         if dice:
@@ -810,13 +801,7 @@ class ScriptGen:
     def sel_cell(self, x_lbl=None, y_lbl=None):
         # Enter Aeronautical HDG and Returns Aeronautical Heading
         # Change it following the px dimension of the map image
-        # w_img = 11684
-        # h_img = 11684
         out_WPY = [None, None]
-        # pos 0 - WPY string, pos 1 - HDG float
-        # x_coord = (w_img / 4 + x) / (225)
-        # y_coord = (h_img / 4 - y) / (225)
-
         seed1 = randint(0, 3)
         seed2 = randint(0, 3)
         seed = (seed1+1, seed2+1)
@@ -868,9 +853,6 @@ class ScriptGen:
         elif dir > 0:  # Case Right Turn
             dHDG = rdHDG
             vHDG = (dHDG * (np.pi / 180)) / abs(dTIME)
-
-        # dHDG = (((nHDG-HDG)+180) % 360) - 180
-        # vHDG = (dHDG * (np.pi/180))/abs(dTIME)
 
         if abs(vHDG) > self.mvHDG:
             if vHDG < 0:
