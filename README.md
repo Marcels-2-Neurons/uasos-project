@@ -57,7 +57,7 @@ We guarantee the full functionality of UASOS under the following requirements:
 * GPU: at least 1GB GDDR4 - >OpenGL 2.0 for PsychoPy compatibility 
 * RAM: at least 6 GB
 * Storage: At least 512 MB
-* 2 Monitors - Resolution: 1920x1080 px
+* 2 Monitors - Resolution should be equal between the screens
 * A keyboard, a pointing device and Flight Stick (See You have another Flight Stick? section)
 
 #### You have another Flight Stick?
