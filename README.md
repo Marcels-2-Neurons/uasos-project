@@ -22,9 +22,8 @@ UASOS Project - UAS Operator Simulator
   * [Usage](#usage)
     + [UASOS](#uasos)
     + [Need personalized scripts? Use scriptgen4HPC](#need-personalized-scripts-use-scriptgen4hpc)
-      - [Prerequirements](#prerequirements)
-      - [If you use an Home PC](#if-you-use-an-home-pc)
-      - [If you use an HPC Node](#if-you-use-an-hpc-node)
+      - [Prerequirements: If you use an Home PC](#prerequirements-if-you-use-an-home-pc)
+      - [Prerequirements: If you use an HPC Node](#prerequirements-if-you-use-an-hpc-node)
       - [Parameters to change and run](#parameters-to-change-and-run)
   * [License](#license)
 
@@ -129,16 +128,16 @@ For a Demo, you can simply start UASOS experiment directly and follow the experi
 Have fun! 😉
 
 ### Need personalized scripts? Use scriptgen4HPC
+---
 **scriptgen4HPC** can work both on a house PC and on HPC Node.
-#### Prerequirements
 
-#### If you use an Home PC
+#### Prerequirements: If you use an Home PC
 ---
 In order to avoid stutters when using your PC, maintain one logical core available for essential processes:
 
 Modify in `main.py` at `line 26`: `num_threads = mp.cpu_count() - 1`
 
-#### If you use an HPC Node
+#### Prerequirements: If you use an HPC Node
 ---
 No modifications necessary, just go to the next to [Parameters to change](#parameters-to-change)
 
