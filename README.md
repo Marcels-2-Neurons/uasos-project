@@ -12,10 +12,11 @@ UASOS Project - UAS Operator Simulator
 
 ---
 ## TOC
-- [UASOS Project - UAS Operator Simulator](#uasos-project---uas-operator-simulator)
   * [Scope of the project](#scope-of-the-project)
   * [Minimum and Recommended Requirements](#minimum-and-recommended-requirements)
-      - [Recommended Flight Stick](#recommended-flight-stick)
+      - [Recommended Requirements](#recommended-requirements)
+      - [Minimum Requirements](#minimum-requirements)
+      - [You have another Flight Stick?](#you-have-another-flight-stick)
   * [Python Modules used](#python-modules-used)
   * [Setup](#setup)
   * [Usage](#usage)
@@ -38,7 +39,8 @@ The Repository includes:
 
 ---
 ## Minimum and Recommended Requirements
-**Recommended Requirements**
+#### Recommended Requirements
+
 We guarantee the full functionality of UASOS under the following requirements:
 
 * CPU: Intel Core i7-8700 @3.20GHz
@@ -49,17 +51,17 @@ We guarantee the full functionality of UASOS under the following requirements:
 * A keyboard, Trackball for best experience
 * Flight Stick: Logitech Extreme 3D Pro
 
-**Minimum Requirements**
+#### Minimum Requirements
 
 * CPU: at least a Quad-Core CPU
 * GPU: at least 1GB GDDR4 - >OpenGL 2.0 for PsychoPy compatibility 
 * RAM: at least 6 GB
 * Storage: At least 512 MB
-* 2 Monitors - Resolution: 1920x1080 px
-* A keyboard, a pointing device and Flight Stick (See Recommended Flight Stick section)
+* 2 Monitors - Resolution should be equal between the screens
+* A keyboard, a pointing device and Flight Stick (See You have another Flight Stick? section)
 
-#### Recommended Flight Stick
-UASOS uses for listening the Flight Stick the library [PySticks](https://github.com/simondlevy/PySticks) from [Pr. Simon D. LEVY](https://simondlevy.academic.wlu.edu/) of Computer Science Department, Washington and Lee University (*Thank you Simon*, Devs. Note).
+#### You have another Flight Stick?
+UASOS uses for listening the Flight Stick the library [PySticks](https://github.com/simondlevy/PySticks) from [Pr. Simon D. LEVY](https://simondlevy.academic.wlu.edu/) of Computer Science Department, Washington and Lee University. (*Thank you Simon*, Devs. Note)
 
 Following PySticks Release Notes, the compatible controllers are:
 
@@ -76,7 +78,7 @@ If you want to add a new controller, you can use the *joyreporter.py* given with
 1. Run on python console `joyreporter.py` available in `./UASOS/utilities/joyreporter`
 2. Identify
    * The Name of the device (ex. `Controller (Xbox One For Windows)`)
-   * the Axis that you want to use as Roll Axis (the only one that UASOS will use)
+   * the Axis that you want to use as Roll Axis (you can identify it by checking the console: it changes between [-1,+1], it will be the only one that UASOS will use)
 4. Update at `line 148` with a new line your controller as:
   `'<CONTROLLER_NAME>': _Xbox360((-1, <AXIS_ID_ROLL>, -3, 0), 0)`
 
