@@ -72,7 +72,7 @@ Following PySticks Release Notes, the compatible controllers are:
 * Spektrum transmitter with WS1000 wireless simulator dongle
 * FrSky Taranis TX9 RC transmitter with mini USB cable
 
-I personally added the support for Controller Xbox One (Elite Series 2).
+The support for Controller Xbox One (Elite Series 2) has been added.
 
 If you want to add a new controller, you can use the *joyreporter.py* given with PySticks repo by Pr. Simon D. LEVY:
 1. Run on python console `joyreporter.py` available in `./UASOS/utilities/joyreporter`
@@ -140,7 +140,7 @@ Modify in `main.py` at `line 26`: `num_threads = mp.cpu_count() - 1`
 
 #### Prerequirements: If you use an HPC Node
 ---
-No modifications necessary, just go to the next to [Parameters to change](#parameters-to-change)
+No modifications necessary, just go to [Parameters to change](#parameters-to-change)
 
 Remember to build your own Slurm file to organize your simulation.
 
@@ -156,8 +156,8 @@ exp_time_main = 2*60*min2ms # Modify just the first integer if you want to modif
 exp_time_train = 3*min2ms # Modify just the first integer if you want to modify the minutes
 it_time = 7000 # Mean iteration time in ms
 jitter = 1000 # Jitter range in ms [-jitter,+jitter]
-treshold = 0.03  # Default <3% for convergence in 2hrs 7 (+/-1) sec [DO NOT GO < 2%]
-treshold_train = 0.5  # Stay large, it's just training [DO NOT GO < 15%]
+treshold = 0.03  # Default < 0.03 for convergence in 2hrs 7 (+/-1) sec [DO NOT GO < 0.02]
+treshold_train = 0.5  # Stay large, it's just training [DO NOT GO < 0.15]
 ```
 And then you are ready to run.
 
