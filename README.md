@@ -1,4 +1,4 @@
-![uasos logo](https://media.githubusercontent.com/media/Marcels-2-Neurons/Reaper/main/UASOS/imgs/UASOS%20Banner.png)
+![uasos logo](https://media.githubusercontent.com/media/Marcels-2-Neurons/uasos-project/main/UASOS/imgs/UASOS%20Banner.png)
 
 
 *A project on behalf of Fédération de recherche ONERA - ISAE SUPAERO - ENAC ([FONISEN](https://hal.science/FONISEN))*
