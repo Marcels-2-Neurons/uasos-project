@@ -258,10 +258,10 @@ class QLang(QWidget):
         screen_size = QDesktopWidget().screenGeometry()
         screen_X = round(screen_size.width()/1920)
         screen_Y = round(screen_size.height()/1080)
-        Tsize: int = 18 * screen_Y/2
+        Tsize: int = 18 if screen_Y == 1 else 18 * screen_Y/2
         Tfont = QFont("Calibri", Tsize)
         Tfont.setBold(True)
-        tsize: int = 14 * screen_Y/2
+        tsize: int = 12 if screen_Y == 1 else 12 * screen_Y/2
         tfont = QFont("Calibri", tsize)
 
 
@@ -470,10 +470,10 @@ class QDemo(QWidget):
         screen_size = QDesktopWidget().screenGeometry()
         screen_X = round(screen_size.width() / 1920)
         screen_Y = round(screen_size.height() / 1080)
-        Tsize: int = 18 * screen_Y / 2
+        Tsize: int = 18 if screen_Y == 1 else 18 * screen_Y/2
         Tfont = QFont("Calibri", Tsize)
         Tfont.setBold(True)
-        tsize: int = 14 * screen_Y / 2
+        tsize: int = 12 if screen_Y == 1 else 12 * screen_Y/2
         tfont = QFont("Calibri", tsize)
 
         if ans.lang == 'en' or ans.lang == 'fr':
@@ -616,10 +616,10 @@ class QEHI(QWidget):
         screen_size = QDesktopWidget().screenGeometry()
         screen_X = round(screen_size.width() / 1920)
         screen_Y = round(screen_size.height() / 1080)
-        Tsize: int = 18 * screen_Y / 2
+        Tsize: int = 18 if screen_Y == 1 else 18 * screen_Y/2
         Tfont = QFont("Calibri", Tsize)
         Tfont.setBold(True)
-        tsize: int = 14 * screen_Y / 2
+        tsize: int = 12 if screen_Y == 1 else 12 * screen_Y/2
         tfont = QFont("Calibri", tsize)
         if ans.lang == 'it' or ans.lang == 'fr':
             self.setFixedSize(800*screen_X, 320*screen_X)
@@ -724,10 +724,10 @@ class QKSS(QWidget):
         screen_size = QDesktopWidget().screenGeometry()
         screen_X = round(screen_size.width() / 1920)
         screen_Y = round(screen_size.height() / 1080)
-        Tsize: int = 18 * screen_Y / 2
+        Tsize: int = 18 if screen_Y == 1 else 18 * screen_Y/2
         Tfont = QFont("Calibri", Tsize)
         Tfont.setBold(True)
-        tsize: int = 14 * screen_Y / 2
+        tsize: int = 12 if screen_Y == 1 else 12 * screen_Y/2
         tfont = QFont("Calibri", tsize)
         if ans.lang == 'fr':
             self.setFixedSize(580*screen_X, 400*screen_Y)
@@ -822,17 +822,12 @@ class QSPS(QWidget):
         screen_size = QDesktopWidget().screenGeometry()
         screen_X = round(screen_size.width() / 1920)
         screen_Y = round(screen_size.height() / 1080)
-        Tsize: int = 18 * screen_Y / 2
+        Tsize: int = 18 if screen_Y == 1 else 18 * screen_Y/2
         Tfont = QFont("Calibri", Tsize)
         Tfont.setBold(True)
-        tsize: int = 14 * screen_Y / 2
+        tsize: int = 12 if screen_Y == 1 else 12 * screen_Y/2
         tfont = QFont("Calibri", tsize)
-        if ans.lang == 'fr':
-            self.setFixedSize(410*screen_X, 300*screen_Y)
-        if ans.lang == 'it':
-            self.setFixedSize(430*screen_X, 300*screen_Y)
-        elif ans.lang == 'en':
-            self.setFixedSize(470*screen_X, 300*screen_Y)
+        self.setFixedSize(600*screen_X, 350*screen_Y)
 
         self.layout = QVBoxLayout()
         # Set Title
@@ -856,6 +851,7 @@ class QSPS(QWidget):
 
         for idx in range(7):
             lbl = QLabel(f"{idx + 1}")
+            lbl.setAlignment(Qt.AlignRight)
             lbl.setFont(tfont)
             self.nqst.addWidget(lbl)
             opt = QVRadioButton(langue.get_string(f"SPS_{idx + 1}"), idx + 1)
@@ -919,10 +915,10 @@ class QRSME(QWidget):
         screen_size = QDesktopWidget().screenGeometry()
         screen_X = round(screen_size.width() / 1920)
         screen_Y = round(screen_size.height() / 1080)
-        Tsize: int = 18 * screen_Y / 2
+        Tsize: int = 18 if screen_Y == 1 else 18 * screen_Y/2
         Tfont = QFont("Calibri", Tsize)
         Tfont.setBold(True)
-        tsize: int = 14 * screen_Y / 2
+        tsize: int = 12 if screen_Y == 1 else 12 * screen_Y/2
         tfont = QFont("Calibri", tsize)
 
         self.layout = QHBoxLayout()
@@ -991,10 +987,10 @@ class QVAS(QWidget):
         screen_size = QDesktopWidget().screenGeometry()
         screen_X = round(screen_size.width() / 1920)
         screen_Y = round(screen_size.height() / 1080)
-        Tsize: int = 18 * screen_Y / 2
+        Tsize: int = 18 if screen_Y == 1 else 18 * screen_Y/2
         Tfont = QFont("Calibri", Tsize)
         Tfont.setBold(True)
-        tsize: int = 14 * screen_Y / 2
+        tsize: int = 12 if screen_Y == 1 else 12 * screen_Y/2
         tfont = QFont("Calibri", tsize)
         itfont = QFont("Calibri", tsize)
         itfont.setItalic(True)
@@ -1089,10 +1085,10 @@ class QVAS_ingame(QWidget):
         screen_size = QDesktopWidget().screenGeometry()
         screen_X = round(screen_size.width() / 1920)
         screen_Y = round(screen_size.height() / 1080)
-        Tsize: int = 36 * screen_Y / 2
+        Tsize: int = 30 if screen_Y == 1 else 30 * screen_Y/2
         Tfont = QFont("Calibri", Tsize)
         Tfont.setBold(True)
-        tsize: int = 28 * screen_Y / 2
+        tsize: int = 20 if screen_Y == 1 else 20 * screen_Y/2
         tfont = QFont("Calibri", tsize)
         itfont = QFont("Calibri", tsize)
         itfont.setItalic(True)
@@ -1103,16 +1099,6 @@ class QVAS_ingame(QWidget):
         self.setWindowFlags(Qt.CustomizeWindowHint | Qt.WindowTitleHint)
         self.setWindowFlags(
             self.windowFlags() & ~Qt.WindowCloseButtonHint & ~Qt.WindowMaximizeButtonHint & ~Qt.WindowMinimizeButtonHint)
-
-        font = "Calibri"
-        Ttype = "bold"
-        htype = "italic"
-        Tsize: int = 36
-        tsize: int = 28
-        self.titleconfig = f"font-family: {font}; font-weight: {Ttype}; font-size: {Tsize}px"
-        self.qconfig = f"font-family: {font}; font-weight: {Ttype}; font-size: {tsize}px"
-        self.hintsconfig = f"font-family: {font}; font-style: {htype}; font-size: {tsize}px"
-        self.textconfig = f"font-family: {font}; font-size: {tsize}px"
 
         self.layout = QVBoxLayout()
         # Set Title

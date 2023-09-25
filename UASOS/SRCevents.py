@@ -117,7 +117,7 @@ class SRCWindow(visual.Window):
         self.last_IMGS = None
 
         # Pyro Client Init
-        pyro4_path = which('pyro4-ns.exe',path='./utilities/pyro4/')
+        pyro4_path = which('pyro4-ns.exe')
         if pyro4_path:
             start_subp([pyro4_path])
             start_subp(["python", "pyro_server.py"])
