@@ -25,6 +25,7 @@ UASOS Project - UAS Operator Simulator
       - [Prerequirements: If you use an Home PC](#prerequirements-if-you-use-an-home-pc)
       - [Prerequirements: If you use an HPC Node](#prerequirements-if-you-use-an-hpc-node)
       - [Parameters to change and run](#parameters-to-change-and-run)
+  * [FAQ](#faq)
   * [License](#license)
 
 ---
@@ -102,7 +103,7 @@ At the startup, **UASOS** will check the presence of the following modules:
 * pylsl 1.15.0
 * PyQt5 5.15.9
 * PyQt5_sip 12.12.2
-* Pyro4 4.82 (obtained from `./UASOS/utilities/pyro4`)
+* Pyro4 4.82 (.exes availables in `./UASOS/utilities/pyro4`)
 * pytictoc 1.5.3
 * scipy 1.7.2
 * screeninfo 0.8.1
@@ -163,6 +164,25 @@ And then you are ready to run.
 You will obtain your new scripts on `./scriptgen4HPC/final`.
 
 Overwrite them on `./UASOS/scripts` and remember to update with the parameters you have chosen in `settings.py` from `line 23` to `line 28`.
+
+---
+## FAQ
+
+1. When I launch UASOS, after the first Window the execution crashes. The Command Outlet says: "Please, install pyro4==4.82 through pip", but I already have it. What I need to do?
+
+   It falls down 2 potential cases:
+
+   * **The interpreter does not have the Pyro4 executables in `./Scripts` folder**: just copy and paste the content within `./UASOS/utilities/pyro4` to your interpreter folder `<Interpreter>/Scripts`.
+   
+   * **The intepreter you set up for UASOS is not the declared one in the `PATH` environment variable**: use the interpreter declared in your `PATH` environment variable or declare your current interpreter in the environment variable `PATH`.
+
+   Performing one of these 2 should resolve most of the issues.
+
+3. When I launch UASOS, after the first Window the execution crashes. The Command Outlet express `[WinError10061]`. What I need to do?
+
+   Unfortunately, this error happens when the interpreter tries to launch pyro4 NameServer without success.
+
+   Try to set your interpreter as the one declared within the environment variable `PATH` and reinstall Pyro4.
 
 ---
 ## License
