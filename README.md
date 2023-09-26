@@ -149,7 +149,7 @@ Remember to build your own Slurm file to organize your simulation.
 From `line 37` to `line 46`
 ```python
 max_size_dset = 1000  # indicative, pc needs to do a round number of scripts
-max_time = 167  # Max time allowable to run, useful to cut before HPC cuts the allocation time
+max_time = 167  # Max time allowable to run in hours, useful to cut before HPC cuts the allocation time
 # Related to the script_dset.csv gen
 phase_gen = 'MAIN'  # choose between 'MAIN', 'SRC_TRAIN', 'NAVI_TRAIN'
 exp_time_main = 2*60*min2ms # Modify just the first integer if you want to modify the hours
