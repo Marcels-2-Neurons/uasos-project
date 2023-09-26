@@ -161,7 +161,9 @@ treshold_train = 0.5  # Stay large, it's just training [DO NOT GO < 0.15]
 ```
 And then you are ready to run.
 
-You will obtain your new scripts on `./scriptgen4HPC/final`, based on the `phase_gen` parameter you have chosen, the final csv file will have the proper name for substitute the current dataset.
+You will obtain your new scripts on `./scriptgen4HPC/final`.
+
+Based on the `phase_gen` parameter you have chosen, the final csv file will have the proper name for substitute the current dataset.
 
 Overwrite them on `./UASOS/scripts` and remember to update with the parameters you have chosen in `settings.py` from `line 23` to `line 28`.
 
