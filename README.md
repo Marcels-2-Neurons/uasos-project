@@ -178,11 +178,19 @@ Overwrite them on `./UASOS/scripts` and remember to update with the parameters y
 
    Performing one of these 2 should resolve most of the issues.
 
-3. When I launch UASOS, after the first Window the execution crashes. The Command Outlet express `[WinError10061]`. What I need to do?
+2. When I launch UASOS, after the first Window the execution crashes. The Command Outlet express `[WinError10061]`. What I need to do?
 
    Unfortunately, this error happens when the interpreter tries to launch pyro4 NameServer without success.
 
    Try to set your interpreter as the one declared within the environment variable `PATH` and reinstall Pyro4.
+
+3. When I launch UASOS, I rapidly have a crash slightly after the Language selection or when I ask to restart from the ID folder:
+
+   That may occur during the Navigation Task Window is not fully charged. We are sorry for that and we are still working on finding the best solution to avoid this funny behavior.
+
+   Our suggestion is to wait a little more (about 7 sec) from the opening of all instances before entering any data.
+
+   Generally, the complete startup of the program takes up to 20 sec before starting entering your data.
 
 ---
 ## License
