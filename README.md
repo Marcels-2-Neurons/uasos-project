@@ -1,4 +1,4 @@
-![uasos logo](https://media.githubusercontent.com/media/Marcels-2-Neurons/Reaper/main/UASOS/imgs/UASOS%20Banner.png)
+![uasos logo](https://media.githubusercontent.com/media/Marcels-2-Neurons/uasos-project/main/UASOS/imgs/UASOS%20Banner.png)
 
 
 *A project on behalf of Fédération de recherche ONERA - ISAE SUPAERO - ENAC ([FONISEN](https://hal.science/FONISEN))*
@@ -25,6 +25,7 @@ UASOS Project - UAS Operator Simulator
       - [Prerequirements: If you use an Home PC](#prerequirements-if-you-use-an-home-pc)
       - [Prerequirements: If you use an HPC Node](#prerequirements-if-you-use-an-hpc-node)
       - [Parameters to change and run](#parameters-to-change-and-run)
+  * [FAQ](#faq)
   * [License](#license)
 
 ---
@@ -71,7 +72,7 @@ Following PySticks Release Notes, the compatible controllers are:
 * Spektrum transmitter with WS1000 wireless simulator dongle
 * FrSky Taranis TX9 RC transmitter with mini USB cable
 
-I personally added the support for Controller Xbox One (Elite Series 2).
+The support for Controller Xbox One (Elite Series 2) has been added.
 
 If you want to add a new controller, you can use the *joyreporter.py* given with PySticks repo by Pr. Simon D. LEVY:
 1. Run on python console `joyreporter.py` available in `./UASOS/utilities/joyreporter`
@@ -102,7 +103,7 @@ At the startup, **UASOS** will check the presence of the following modules:
 * pylsl 1.15.0
 * PyQt5 5.15.9
 * PyQt5_sip 12.12.2
-* Pyro4 4.82 (obtained from `./UASOS/utilities/pyro4`)
+* Pyro4 4.82 (.exes availables in `./UASOS/utilities/pyro4`)
 * pytictoc 1.5.3
 * scipy 1.7.2
 * screeninfo 0.8.1
@@ -139,7 +140,7 @@ Modify in `main.py` at `line 26`: `num_threads = mp.cpu_count() - 1`
 
 #### Prerequirements: If you use an HPC Node
 ---
-No modifications necessary, just go to the next to [Parameters to change](#parameters-to-change)
+No modifications necessary, just go to [Parameters to change](#parameters-to-change)
 
 Remember to build your own Slurm file to organize your simulation.
 
@@ -148,21 +149,50 @@ Remember to build your own Slurm file to organize your simulation.
 From `line 37` to `line 46`
 ```python
 max_size_dset = 1000  # indicative, pc needs to do a round number of scripts
-max_time = 167  # Max time allowable to run, useful to cut before HPC cuts the allocation time
+max_time = 167  # Max time allowable to run in hours, useful to cut before HPC cuts the allocation time
 # Related to the script_dset.csv gen
 phase_gen = 'MAIN'  # choose between 'MAIN', 'SRC_TRAIN', 'NAVI_TRAIN'
 exp_time_main = 2*60*min2ms # Modify just the first integer if you want to modify the hours
 exp_time_train = 3*min2ms # Modify just the first integer if you want to modify the minutes
 it_time = 7000 # Mean iteration time in ms
 jitter = 1000 # Jitter range in ms [-jitter,+jitter]
-treshold = 0.03  # Default <3% for convergence in 2hrs 7 (+/-1) sec [DO NOT GO < 2%]
-treshold_train = 0.5  # Stay large, it's just training [DO NOT GO < 15%]
+treshold = 0.03  # Default < 0.03 for convergence in 2hrs 7 (+/-1) sec [DO NOT GO < 0.02]
+treshold_train = 0.5  # Stay large, it's just training [DO NOT GO < 0.15]
 ```
 And then you are ready to run.
 
 You will obtain your new scripts on `./scriptgen4HPC/final`.
 
+Based on the `phase_gen` parameter you have chosen, the final csv file will have the proper name for substitute the current dataset.
+
 Overwrite them on `./UASOS/scripts` and remember to update with the parameters you have chosen in `settings.py` from `line 23` to `line 28`.
+
+---
+## FAQ
+
+1. When I launch UASOS, after the first Window the execution crashes. The Command Outlet says: "Please, install pyro4==4.82 through pip", but I already have it. What I need to do?
+
+   It falls down 2 potential cases:
+
+   * **The interpreter does not have the Pyro4 executables in `./Scripts` folder**: just copy and paste the content within `./UASOS/utilities/pyro4` to your interpreter folder `<Interpreter>/Scripts`.
+   
+   * **The intepreter you set up for UASOS is not the declared one in the `PATH` environment variable**: use the interpreter declared in your `PATH` environment variable or declare your current interpreter in the environment variable `PATH`.
+
+   Performing one of these 2 should resolve most of the issues.
+
+2. When I launch UASOS, after the first Window the execution crashes. The Command Outlet express `[WinError10061]`. What I need to do?
+
+   Unfortunately, this error happens when the interpreter tries to launch pyro4 NameServer without success.
+
+   Try to set your interpreter as the one declared within the environment variable `PATH` and reinstall Pyro4.
+
+3. When I launch UASOS, I rapidly have a crash slightly after the Language selection or when I ask to restart from the ID folder:
+
+   That may occur during the Navigation Task Window is not fully charged. We are sorry for that and we are still working on finding the best solution to avoid this funny behavior.
+
+   Our suggestion is to wait a little more (about 7 sec) from the opening of all instances before entering any data.
+
+   Generally, the complete startup of the program takes up to 20 sec before starting entering your data.
 
 ---
 ## License
