@@ -38,7 +38,7 @@ class ScriptGen:
         self.CORSt = [0, 0, 0, 0, 0, 0, 0, 0, 0]  # last correct iteration in case of NAV
         self.threshold = 0.05
         self.dev_per = 0
-        self.mode_sel = 'DEBUG'  # 'BATCH' / 'DEBUG'
+        self.mode_sel = 'DEBUG'  # 'DSET' / 'DEBUG'
         # Probability Table for the Task Cases - Condition Balancing
         # ______________________________________________________________________________________
         # |                |   SRC - 1 25% |   SRC - 4 25% |   FLY - HDG 25% |   FLY - WPT 25% |
