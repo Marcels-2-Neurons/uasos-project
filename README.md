@@ -12,21 +12,22 @@ UASOS Project - UAS Operator Simulator
 
 ---
 ## TOC
-  * [Scope of the project](#scope-of-the-project)
-  * [Minimum and Recommended Requirements](#minimum-and-recommended-requirements)
-      - [Recommended Requirements](#recommended-requirements)
-      - [Minimum Requirements](#minimum-requirements)
-      - [You have another Flight Stick?](#you-have-another-flight-stick)
-  * [Python Modules used](#python-modules-used)
-  * [Setup](#setup)
-  * [Usage](#usage)
-    + [UASOS](#uasos)
-    + [Need personalized scripts? Use scriptgen4HPC](#need-personalized-scripts-use-scriptgen4hpc)
-      - [Prerequirements: If you use an Home PC](#prerequirements-if-you-use-an-home-pc)
-      - [Prerequirements: If you use an HPC Node](#prerequirements-if-you-use-an-hpc-node)
-      - [Parameters to change and run](#parameters-to-change-and-run)
-  * [FAQ](#faq)
-  * [License](#license)
+- [Scope of the project](#scope-of-the-project)
+- [Minimum and Recommended Requirements](#minimum-and-recommended-requirements)
+    + [Recommended Requirements](#recommended-requirements)
+    + [Minimum Requirements](#minimum-requirements)
+    + [You have another Flight Stick?](#you-have-another-flight-stick)
+- [Python Modules used](#python-modules-used)
+- [Setup](#setup)
+- [Usage](#usage)
+  * [UASOS](#uasos)
+    + [List of Hotkeys](#list-of-hotkeys)
+  * [Need personalized scripts? Use scriptgen4HPC](#need-personalized-scripts-use-scriptgen4hpc)
+    + [Prerequirements: If you use an Home PC](#prerequirements-if-you-use-an-home-pc)
+    + [Prerequirements: If you use an HPC Node](#prerequirements-if-you-use-an-hpc-node)
+    + [Parameters to change and run](#parameters-to-change-and-run)
+- [FAQ](#faq)
+- [License](#license)
 
 ---
 ## Scope of the project
@@ -127,6 +128,12 @@ and enjoy the experiment by running `main.py` on UASOS folder.
 ### UASOS
 For a Demo, you can simply start UASOS experiment directly and follow the experience.
 Have fun! 😉
+
+#### List of Hotkeys
+- Escape: Force Close of the Experiment
+- S: advance through Tutorial slides and phases / if during experimental phase it commands the Pause
+
+**NOTE: At the RESTING STATE slide, please press S to advance.** 
 
 ### Need personalized scripts? Use scriptgen4HPC
 ---
