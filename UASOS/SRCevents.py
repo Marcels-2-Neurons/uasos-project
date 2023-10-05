@@ -287,8 +287,7 @@ class SRCWindow(visual.Window):
                 else:
                     self.render(do=True)
                 if self.newpics:
-                    thread = Thread(target=self.exec_send)
-                    thread.start()
+                    self.exec_send()
                 if self.last_TASK != self.pack.Task and self.pack.Task in [1, 4]:
                     self.keyLog = [0 for _ in range(9)]
                 changed = True if self.case != 8 else False

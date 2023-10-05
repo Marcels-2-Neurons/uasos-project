@@ -49,7 +49,7 @@ class ScriptGen:
         self.CORSt = [0, 0, 0, 0, 0, 0, 0, 0, 0]  # last correct iteration in case of NAV
         self.threshold = 0.03
         self.dev_per = 0
-        self.mode_sel = 'BATCH'  # 'BATCH'
+        self.mode_sel = 'DSET'  # 'DSET'
         # Probability Table for the Task Cases - Condition Balancing
         # ______________________________________________________________________________________
         # |                |   SRC - 1 25% |   SRC - 4 25% |   FLY - HDG 25% |   FLY - WPT 25% |
@@ -70,28 +70,28 @@ class ScriptGen:
         # Profile settings
         if phase == 'MAIN':  # The experiment
             self.exp_time = set.exp_time_main  # time in ms
-            self.mode_sel = 'BATCH'
+            self.mode_sel = 'DSET'
             self.it_time = set.it_time  # average iteration time in ms (it was 625 ms)
             self.jitter = set.jitter  # jitter time in ms
             self.T = [0.34, 0.33, 0.33]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
             self.ST = [0.25, 0.25, 0.25, 0.25]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
         elif phase == 'SRC_TRAIN':  # The Time Training Phase
             self.exp_time = set.exp_time_srct  # 3 mins time in ms
-            self.mode_sel = 'BATCH'
+            self.mode_sel = 'DSET'
             self.it_time = set.it_time  # average iteration time in ms (it was 625 ms)
             self.jitter = set.jitter  # jitter time in ms
             self.T = [0.5, 0.5, 0.0]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
             self.ST = [0.5, 0.5, 0.0, 0.0]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
         elif phase == 'NAVI_TRAIN':  # The Navigation Training Phase
             self.exp_time = set.exp_time_navt  # 3 mins time in ms
-            self.mode_sel = 'BATCH'
+            self.mode_sel = 'DSET'
             self.it_time = set.it_time  # average iteration time in ms (it was 625 ms)
             self.jitter = set.jitter  # jitter time in ms
             self.T = [0.5, 0.5, 0.0]  # REPEAT TASK/INTERNAL TASK SWITCH/EXTERNAL TASK SWITCH
             self.ST = [0.0, 0.0, 0.5, 0.5]  # SEARCH PEOPLE/SEARCH VEHICLES/FLY BY HEADING/FLY BY WAYPOINTS
         elif phase == 'OV_TRAIN':  # The complete training phase
             self.exp_time = set.exp_time_ovt  # 10 mins time in ms
-            self.mode_sel = 'BATCH'
+            self.mode_sel = 'DSET'
             self.threshold = 0.03
             self.train_maxtime = set.exp_time_ovt  # 20 mins in ms, it can be changed
             self.it_time = set.it_time  # average iteration time in ms (it was 625 ms)
@@ -121,7 +121,7 @@ class ScriptGen:
                 self.final_cor_chk()
             else:
                 pass
-        elif self.mode_sel == 'BATCH':
+        elif self.mode_sel == 'DSET':
             if self.phase == 'MAIN' or self.phase == 'OV_TRAIN':
                 scriptsDb = "./scripts/scripts_dset.csv"
             elif self.phase == 'SRC_TRAIN':
