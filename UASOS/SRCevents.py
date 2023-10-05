@@ -502,7 +502,9 @@ class SRCWindow(visual.Window):
             self.pack.num_ON = 1
             self.pack.ts_num = self.Tnum[0]  # I take the one from the first keypress
             self.pack.te_num = self.Tnum[1] if self.Tnum[1] != 0 else self.Tnum[0]  # I take the one from the last keypress
-
+            if self.backup is True and self.case == self.back_case:
+                self.pack.ts_num += self.extra_time
+                self.pack.te_num += self.extra_time
         self.good_choice += self.count_match()
         self.pack.GoodCh = self.good_choice
         self.Ov_choice += self.count_ones(self.keyLog)

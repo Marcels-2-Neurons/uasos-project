@@ -18,7 +18,7 @@ class local:
 
     def load_translations(self):
         with open(self.file_path, 'rb') as file:
-            self.translations = json.load(file, encoding='utf-8')
+            self.translations = json.load(file)
 
     def set_language(self, lang):
         langs = {'fr': 'Change la langue en Français',

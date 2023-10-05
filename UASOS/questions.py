@@ -8,7 +8,7 @@ import re
 import signal
 
 from PyQt5.QtWidgets import QWidget, QSlider, QRadioButton, QLabel, QLineEdit, QVBoxLayout, QHBoxLayout, \
-    QPushButton, QStyleOptionSlider, QStyle, QButtonGroup, QApplication, QCheckBox, QDesktopWidget
+    QPushButton, QStyleOptionSlider, QStyle, QButtonGroup, QApplication, QCheckBox, QDesktopWidget, QSizePolicy
 from PyQt5.QtGui import QPainter, QPixmap, QIcon, QIntValidator, QFontMetrics, QFont, QKeyEvent
 from PyQt5.QtCore import Qt, QPoint, QRect
 
@@ -622,7 +622,7 @@ class QEHI(QWidget):
         tsize: int = 12 if screen_Y == 1 else 12 * screen_Y/2
         tfont = QFont("Calibri", tsize)
         if ans.lang == 'it' or ans.lang == 'fr':
-            self.setFixedSize(800*screen_X, 320*screen_X)
+            self.setFixedSize(900*screen_X, 320*screen_X)
         elif ans.lang == 'en':
             self.setFixedSize(750*screen_X, 320*screen_X)
 
@@ -730,11 +730,11 @@ class QKSS(QWidget):
         tsize: int = 12 if screen_Y == 1 else 12 * screen_Y/2
         tfont = QFont("Calibri", tsize)
         if ans.lang == 'fr':
-            self.setFixedSize(580*screen_X, 400*screen_Y)
+            self.setFixedSize(670*screen_X, 400*screen_Y)
         if ans.lang == 'it':
-            self.setFixedSize(530*screen_X, 400*screen_Y)
+            self.setFixedSize(600*screen_X, 400*screen_Y)
         elif ans.lang == 'en':
-            self.setFixedSize(480*screen_X, 400*screen_Y)
+            self.setFixedSize(550*screen_X, 400*screen_Y)
 
         self.layout = QVBoxLayout()
         # Set Title
@@ -827,7 +827,7 @@ class QSPS(QWidget):
         Tfont.setBold(True)
         tsize: int = 12 if screen_Y == 1 else 12 * screen_Y/2
         tfont = QFont("Calibri", tsize)
-        self.setFixedSize(600*screen_X, 350*screen_Y)
+        self.setFixedSize(550*screen_X, 350*screen_Y)
 
         self.layout = QVBoxLayout()
         # Set Title
@@ -853,6 +853,7 @@ class QSPS(QWidget):
             lbl = QLabel(f"{idx + 1}")
             lbl.setAlignment(Qt.AlignRight)
             lbl.setFont(tfont)
+            lbl.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
             self.nqst.addWidget(lbl)
             opt = QVRadioButton(langue.get_string(f"SPS_{idx + 1}"), idx + 1)
             opt.setFont(tfont)

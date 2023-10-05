@@ -612,6 +612,9 @@ class NAVWindow(visual.Window):
             self.pack.fstick_ON = 1  # Fstick used 1 / Not used 0
             self.pack.ts_fstick = self.ts_fstick  # Clock Time of the last fstick stroke / first fstick stroke
             self.pack.te_fstick = self.te_fstick
+            if self.backup is True and self.case == self.back_case:
+                self.pack.ts_fstick += self.extra_time
+                self.pack.te_fstick += self.extra_time
             self.pack.usrHDG = self.usr_nHDG  # Just will show the HDG as integer
             self.pack.usrDIR = self.usr_dir  # User Direction
 
@@ -629,6 +632,9 @@ class NAVWindow(visual.Window):
             self.pack.mouse_ON = 1  # Mouse used 1 / Not used 0
             self.pack.ts_mouse = self.ts_mouse  # Clock Time of the mouse movement
             self.pack.te_mouse = self.te_mouse
+            if self.backup is True and self.case == self.back_case:
+                self.pack.ts_mouse += self.extra_time
+                self.pack.te_mouse += self.extra_time
             if self.usr_WPY[1] != (0, 0):
                 self.pack.usr_WPY = self.WPY[0]  # None if not selected, value if selected
                 self.pack.usr_WPYTuple = self.WPY[1]
