@@ -203,6 +203,6 @@ Overwrite them on `./UASOS/scripts` and remember to update with the parameters y
 
 ---
 ## License
->You can check out the full license [here](https://github.com/Marcels-2-Neurons/Reaper/blob/main/LICENSE)
+>You can check out the full license [here](https://anonymous.4open.science/r/uasos-project/LICENSE)
 
 This project is licensed under the terms of the **MIT** license.
