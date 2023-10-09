@@ -51,7 +51,7 @@ We guarantee the full functionality of UASOS under the following requirements:
 * 2 Identical Monitors - Resolution: 1920x1080 px
 * A keyboard, Trackball for best experience
 * Flight Stick: Logitech Extreme 3D Pro
-* * Any sensor compatible with LSL can be used
+* Any sensor compatible with LSL can be used
 
 #### Minimum Requirements
 
