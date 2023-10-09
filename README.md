@@ -51,6 +51,7 @@ We guarantee the full functionality of UASOS under the following requirements:
 * 2 Identical Monitors - Resolution: 1920x1080 px
 * A keyboard, Trackball for best experience
 * Flight Stick: Logitech Extreme 3D Pro
+* * Any sensor compatible with LSL can be used
 
 #### Minimum Requirements
 
@@ -60,6 +61,7 @@ We guarantee the full functionality of UASOS under the following requirements:
 * Storage: At least 512 MB
 * 2 Monitors - Resolution should be equal between the screens
 * A keyboard, a pointing device and Flight Stick (See You have another Flight Stick? section)
+* Any sensor compatible with LSL can be used
 
 #### You have another Flight Stick?
 UASOS uses for listening the Flight Stick the library [PySticks](https://github.com/simondlevy/PySticks) from [Pr. Simon D. LEVY](https://simondlevy.academic.wlu.edu/) of Computer Science Department, Washington and Lee University. (*Thank you Simon*, Devs. Note)
