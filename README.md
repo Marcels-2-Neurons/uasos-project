@@ -121,7 +121,9 @@ Meanwhile **scriptgen4HPC** requires only:
 **Before cloning our repo from GitHub**: please install PsychoPy >2023.2.2 from PsychoPy Project site ([here](https://www.psychopy.org/download.html))
 and **install it for all users**.
 
-Then, clone our repo from GitHub, set on your IDE (we used PyCharm Community Edition) the interpreter targeted to PsychoPy install dir 
+Then, clone our repo from GitHub **USING ONLY Github Desktop App or Git from Command Line ([see details in FAQ](#faq))**, 
+
+set on your IDE (we used PyCharm Community Edition) the interpreter targeted to PsychoPy install dir 
 
 and enjoy the experiment by running `main.py` on UASOS folder.
 
@@ -178,8 +180,17 @@ Overwrite them on `./UASOS/scripts` and remember to update with the parameters y
 
 ---
 ## FAQ
+1. When I launch UASOS, some errors shows up saying that some files are missing/unreadable. What I need to do?
 
-1. When I launch UASOS, after the first Window the execution crashes. The Command Outlet says: "Please, install pyro4==4.82 through pip", but I already have it. What I need to do?
+   All the `.png` and `.mat` files are uploaded on this repository using the GLF (Git Large File) system.
+
+   Several user noticed that downloading the repository directly as `.zip` from this page retrieves a corrupted copy of UASOS due to Github large filesize limitation.
+
+   Please, **Clone this repository using the Github Desktop or Git from Command Line, BUT DO NOT DOWNLOAD DIRECTLY THE REPOSITORY!**
+
+   We are deeply sorry for this inconvenience!
+
+3. When I launch UASOS, after the first Window the execution crashes. The Command Outlet says: "Please, install pyro4==4.82 through pip", but I already have it. What I need to do?
 
    It falls down 2 potential cases:
 
@@ -189,13 +200,13 @@ Overwrite them on `./UASOS/scripts` and remember to update with the parameters y
 
    Performing one of these 2 should resolve most of the issues.
 
-2. When I launch UASOS, after the first Window the execution crashes. The Command Outlet express `[WinError10061]`. What I need to do?
+4. When I launch UASOS, after the first Window the execution crashes. The Command Outlet express `[WinError10061]`. What I need to do?
 
    Unfortunately, this error happens when the interpreter tries to launch pyro4 NameServer without success.
 
    Try to set your interpreter as the one declared within the environment variable `PATH` and reinstall Pyro4.
 
-3. When I launch UASOS, I rapidly have a crash slightly after the Language selection or when I ask to restart from the ID folder:
+5. When I launch UASOS, I rapidly have a crash slightly after the Language selection or when I ask to restart from the ID folder:
 
    That may occur during the Navigation Task Window is not fully charged. We are sorry for that and we are still working on finding the best solution to avoid this funny behavior.
 
