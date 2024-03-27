@@ -17,7 +17,11 @@ Any commercial reuse, copying, alteration, or reverse engineering of the code is
 
 - Any reuse of the code, partially or in its totality in further studies 
 or publications should be cited as:
-<Add citation APA>
+
+Marcel F. Hinss, Vincenzo Maria Vitale, Nhat Tien Phan, Raphaëlle N. Roy, and Anke M. Brock. 2024. 
+UASOS: An Experimental Environment For Assessing Mental Fatigue & Cognitive Flexibility During Drone Operations.
+In Proceedings of the 2024 ACM/IEEE International Conference on Human-Robot Interaction (HRI ’24), 
+March 11–14, 2024, Boulder, CO, USA. ACM, New York, NY, USA, 4 pages. https://doi.org/10.1145/3610977.3637484
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
